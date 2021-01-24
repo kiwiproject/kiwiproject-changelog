@@ -2,9 +2,10 @@ package org.kiwiproject.changelog
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.kiwiproject.changelog.config.GithubConfig
 import java.lang.IllegalStateException
 
-class GithubListFetcher(apiUrl: String, repository: String, val githubToken: String) {
+class GithubListFetcher(private val githubConfig: GithubConfig) {
 
     // see API doc: https://developer.github.com/v3/issues/
     // Default query params from docs:
@@ -12,8 +13,8 @@ class GithubListFetcher(apiUrl: String, repository: String, val githubToken: Str
     //     state = open
     //     filter = all
     //     direction = desc
-    var nextPageUrl = "$apiUrl/repos/$repository/issues?page=1&per_page=100&state=closed&filter=all&direction=desc"
-    val mapper = jacksonObjectMapper()
+    private var nextPageUrl = "${githubConfig.apiUrl}/repos/${githubConfig.repository}/issues?page=1&per_page=100&state=closed&filter=all&direction=desc"
+    private val mapper = jacksonObjectMapper()
 
     fun hasNextPage() : Boolean {
         return "none" != nextPageUrl
@@ -24,7 +25,7 @@ class GithubListFetcher(apiUrl: String, repository: String, val githubToken: Str
             throw IllegalStateException("Github API has no more issues to fetch. Did you run 'hasNextPage()' method?")
         }
 
-        val api = GithubApi(githubToken)
+        val api = GithubApi(githubConfig.token)
         val response = api.get(nextPageUrl)
 
         nextPageUrl = getNextPageUrl(response.linkHeader)

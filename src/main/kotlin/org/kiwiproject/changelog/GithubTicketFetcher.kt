@@ -1,12 +1,18 @@
 package org.kiwiproject.changelog
 
+import org.kiwiproject.changelog.config.ChangelogConfig
+import org.kiwiproject.changelog.config.GithubConfig
 import java.util.Collections
 import java.util.PriorityQueue
 import java.util.Queue
 
-class GithubTicketFetcher(apiUrl: String, repository: String, githubToken: String) {
+class GithubTicketFetcher(
+    githubConfig: GithubConfig,
+    private val changelogConfig: ChangelogConfig) {
 
-    private val listFetcher = GithubListFetcher(apiUrl, repository, githubToken)
+    private val listFetcher = GithubListFetcher(githubConfig)
+    private val defaultCategory = changelogConfig.categoryConfig.defaultCategory
+    private val labelMapping = changelogConfig.categoryConfig.labelToCategoryMapping
 
     fun fetchTickets(ticketIds: List<String>) : List<Ticket> {
         if (ticketIds.isEmpty()) {
@@ -49,28 +55,40 @@ class GithubTicketFetcher(apiUrl: String, repository: String, githubToken: Strin
         return tickets
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun extractImprovements(tickets: Queue<Long>, issues: List<Map<String, Any>>) : List<Ticket> {
         if (tickets.isEmpty()) {
             return emptyList()
         }
 
-//        val pagedTickets : MutableList<Ticket> = mutableListOf()
-
         return issues
-            .map { issue -> Ticket(issue["number"] as Int?, issue["title"] as String?, issue["html_url"] as String?) }
+            .filter(this::isIssueOrLonePr)
+            .map { issue ->
+                Ticket(issue["number"] as Int?, issue["title"] as String?, issue["html_url"] as String?,
+                    calculateCategory((issue["labels"] as List<Map<String, String>>).map { it["name"]!! })) }
             .filter { issue -> tickets.contains(issue.id?.toLong()) }
             .toList()
 
-//        for(issue in issues) {
-//            val ticket = Ticket(issue["number"] as Int?, issue["title"] as String?, issue["html_url"] as String?)
-//            if (tickets.remove(ticket.id)) {
-//                pagedTickets.add(ticket)
-//                if (tickets.isEmpty()) {
-//                    return pagedTickets
-//                }
-//            }
-//        }
-//
-//        return pagedTickets
+    }
+
+    private fun isIssueOrLonePr(issue: Map<String, Any>) : Boolean {
+        return issue["pull_request"] == null || parseTickets(issue["body"] as String).isEmpty() || userIsAlwaysIncluded(issue)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun userIsAlwaysIncluded(issue: Map<String, Any>) : Boolean {
+        val user = issue["user"] as Map<String, String>
+        val userName = user["login"]
+
+        return changelogConfig.categoryConfig.alwaysIncludePRsFrom?.contains(userName) ?: false
+    }
+
+    private fun calculateCategory(labels: List<String>) : String {
+        if (labels.isEmpty() || labelMapping == null) {
+            return defaultCategory
+        }
+
+        val matchingLabel = labels.intersect(labelMapping.keys).firstOrNull() ?: return defaultCategory
+        return labelMapping[matchingLabel]!!
     }
 }
