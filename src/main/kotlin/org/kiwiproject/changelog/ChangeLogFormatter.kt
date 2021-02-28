@@ -26,7 +26,7 @@ fun formatChangeLog(contributors: Set<String>,
         "commitCount" to "$commitCount",
         "repoUrl" to githubRepoUrl,
         "previousRev" to gitRepoConfig.previousRevision,
-        "newRev" to "v${gitRepoConfig.revision}",
+        "newRev" to gitRepoConfig.revision,
         "contributors" to contributors.joinToString(", "),
         "improvements" to formatImprovements(tickets, changelogConfig.categoryConfig.categoryOrder)
     )
