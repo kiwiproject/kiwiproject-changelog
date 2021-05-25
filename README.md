@@ -12,6 +12,8 @@ Here is a sample argument list that generates a changelog for the kiwi project (
 --version v0.22.0
 --working-dir /home/users/bob/projects/kiwiproject/kiwi
 -m bug:Bugs
+-m "code cleanup:Assorted"
+-m "new feature:Improvements"
 -m enhancement:Improvements
 -m "dependencies:Dependency Updates"
 -i dependabot[bot]
