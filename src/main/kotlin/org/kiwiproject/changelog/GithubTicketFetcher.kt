@@ -2,7 +2,9 @@ package org.kiwiproject.changelog
 
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.GithubConfig
-import java.util.*
+import java.util.Collections
+import java.util.PriorityQueue
+import java.util.Queue
 
 class GithubTicketFetcher(
     githubConfig: GithubConfig,
