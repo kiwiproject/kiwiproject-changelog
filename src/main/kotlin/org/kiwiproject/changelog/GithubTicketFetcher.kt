@@ -72,7 +72,8 @@ class GithubTicketFetcher(
     }
 
     private fun isIssueOrLonePr(issue: Map<String, Any>) : Boolean {
-        return issue["pull_request"] == null || parseTickets(issue["body"] as String).isEmpty() || userIsAlwaysIncluded(issue)
+        val bodyText = issue["body"] as String? ?: ""
+        return issue["pull_request"] == null || parseTickets(bodyText).isEmpty() || userIsAlwaysIncluded(issue)
     }
 
     @Suppress("UNCHECKED_CAST")
