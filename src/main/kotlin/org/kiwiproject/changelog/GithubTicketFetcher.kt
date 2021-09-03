@@ -2,9 +2,7 @@ package org.kiwiproject.changelog
 
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.GithubConfig
-import java.util.Collections
-import java.util.PriorityQueue
-import java.util.Queue
+import java.util.*
 
 class GithubTicketFetcher(
     githubConfig: GithubConfig,
@@ -72,7 +70,8 @@ class GithubTicketFetcher(
     }
 
     private fun isIssueOrLonePr(issue: Map<String, Any>) : Boolean {
-        return issue["pull_request"] == null || parseTickets(issue["body"] as String).isEmpty() || userIsAlwaysIncluded(issue)
+        val bodyText = issue["body"] as String? ?: ""
+        return issue["pull_request"] == null || parseTickets(bodyText).isEmpty() || userIsAlwaysIncluded(issue)
     }
 
     @Suppress("UNCHECKED_CAST")
