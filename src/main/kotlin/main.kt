@@ -1,4 +1,5 @@
 import com.xenomachina.argparser.ArgParser
+import com.xenomachina.argparser.mainBody
 import org.kiwiproject.changelog.CommandLineArgs
 import org.kiwiproject.changelog.GenerateChangelog
 import org.kiwiproject.changelog.config.CategoryConfig
@@ -7,7 +8,7 @@ import org.kiwiproject.changelog.config.GitRepoConfig
 import org.kiwiproject.changelog.config.GithubConfig
 import java.io.File
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>) = mainBody {
     ArgParser(args).parseInto(::CommandLineArgs).run {
         val githubConfig = GithubConfig(githubUrl, githubApi, githubToken, repository)
         val gitRepoConfig = GitRepoConfig(workingDir, previousRevision, revision)
