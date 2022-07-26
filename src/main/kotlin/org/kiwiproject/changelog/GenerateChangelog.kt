@@ -1,34 +1,40 @@
 package org.kiwiproject.changelog
 
 import org.kiwiproject.changelog.config.ChangelogConfig
-import org.kiwiproject.changelog.config.GitRepoConfig
-import org.kiwiproject.changelog.config.GithubConfig
 import org.kiwiproject.changelog.config.OutputType
+import org.kiwiproject.changelog.config.RepoConfig
+import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.github.GithubTicketFetcher
+import org.kiwiproject.changelog.gitlab.GitlabTicketFetcher
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.nio.charset.StandardCharsets
 
 class GenerateChangelog(
-    private val githubConfig: GithubConfig,
-    private val gitRepoConfig: GitRepoConfig,
+    private val repoHostConfig: RepoHostConfig,
+    private val repoConfig: RepoConfig,
     private val changeLogConfig: ChangelogConfig
 ) {
 
     fun generate() {
-        println("Finding commits between ${gitRepoConfig.previousRevision}..${gitRepoConfig.revision} in dir: ${gitRepoConfig.workingDir}")
+        println("Finding commits between ${repoConfig.previousRevision}..${repoConfig.revision} in dir: ${repoConfig.workingDir}")
         val commits = commits()
 
         println("Collecting ticket ids from ${commits.size} commits.")
         val tickets : List<String> = commits.flatMap(GitCommit::tickets)
         val contributors : Set<String> = commits.map(GitCommit::author).toSet()
 
-        println("Fetching ticket info from ${githubConfig.fullRepoUrl()} based on ${tickets.size} ids $tickets")
-        val improvements = GithubTicketFetcher(githubConfig, changeLogConfig).fetchTickets(tickets)
+        println("Fetching ticket info from ${repoHostConfig.fullRepoUrl()} based on ${tickets.size} ids $tickets")
+        val improvements = if (repoHostConfig.url.contains("github")) {
+            GithubTicketFetcher(repoHostConfig, changeLogConfig).fetchTickets(tickets)
+        } else {
+            GitlabTicketFetcher(repoHostConfig, changeLogConfig).fetchTickets(tickets)
+        }
 
         println("Generating changelog based on ${improvements.size} tickets from Github")
-        val githubUrl = "${githubConfig.url}/${githubConfig.repository}"
-        val changeLog = formatChangeLog(contributors, improvements, commits.size, gitRepoConfig, changeLogConfig, githubUrl)
+        val githubUrl = "${repoHostConfig.url}/${repoHostConfig.repository}"
+        val changeLog = formatChangeLog(contributors, improvements, commits.size, repoConfig, changeLogConfig, githubUrl)
 
         println("Writing out changelog")
 
@@ -36,11 +42,12 @@ class GenerateChangelog(
             OutputType.CONSOLE -> println(changeLog)
             OutputType.FILE -> writeFile(changeLog)
             OutputType.GITHUB_RELEASE -> println(changeLog) // TODO: Implement this
+            OutputType.GITLAB_RELEASE -> println(changeLog) // TODO: Implement this
         }
     }
 
     private fun commits() : List<GitCommit> {
-        println("Loading all commits between ${gitRepoConfig.previousRevision} and ${gitRepoConfig.revision}")
+        println("Loading all commits between ${repoConfig.previousRevision} and ${repoConfig.revision}")
 
         val infoToken = "@@info@@"
         val commitToken = "@@commit@@"
@@ -50,8 +57,8 @@ class GenerateChangelog(
         // %an: author name
         // %B: raw body (unwrapped subject and body)
         // %N: commit notes
-        val log = GitLogProvider(gitRepoConfig.workingDir).getLog(gitRepoConfig.previousRevision,
-            gitRepoConfig.revision, "--pretty=format:%H$infoToken%ae$infoToken%an$infoToken%B%N$commitToken")
+        val log = GitLogProvider(repoConfig.workingDir).getLog(repoConfig.previousRevision,
+            repoConfig.revision, "--pretty=format:%H$infoToken%ae$infoToken%an$infoToken%B%N$commitToken")
 
         return log.split(commitToken)
             .map { entry -> entry.split(infoToken) }

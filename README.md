@@ -5,8 +5,8 @@ Generates changelogs between two versions on GitHub.
 Here is a sample argument list that generates a changelog for the kiwi project (inside the kiwiproject organization) for version v0.22.0. It creates the changelog comparing from revision v0.21.0 to v0.22.0 using the given working directory. It also maps several labels to categories, e.g. `-m bug:Bugs` maps from the GitHub label `bugs` to the changelog category "Bugs". And finally, it uses the `-O` option (you can also use `--category-order`) to specify the order of the categories in the generated changelog.
 
 ```
---github-repository kiwiproject/kiwi
---github-token [YOUR_GITHUB_ACCESS_TOKEN]
+--repository kiwiproject/kiwi
+--repo-host-token [YOUR_GITHUB_ACCESS_TOKEN]
 --previous-rev v0.21.0
 --rev v0.22.0
 --version v0.22.0
