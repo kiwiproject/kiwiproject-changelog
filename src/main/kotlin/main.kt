@@ -29,35 +29,42 @@ fun main(args: Array<String>) = mainBody {
 }
 
 private fun buildRepoHostConfig(args: CommandLineArgs) : RepoHostConfig {
-    val repoHostUrl = if (args.githubUrl.isNotBlank()) {
-        println("WARNING: --github-url is deprecated and will be removed one day. Please use --repo-host-url")
-        args.githubUrl
-    } else {
-        args.repoHostUrl
-    }
-
-    val repoHostApi = if (args.githubApi.isNotBlank()) {
-        println("WARNING: --github-api-url is deprecated and will be removed one day. Please use --repo-host-api-url")
-        args.githubApi
-    } else {
-        args.repoHostApi
-    }
-
-    val repoHostToken = if (args.githubToken.isNotBlank()) {
-        println("WARNING: --github-token is deprecated and will be removed one day. Please use --repo-host-token")
-        args.githubToken
-    } else {
-        args.repoHostToken
-    }
-
-    val repository = if (args.githubRepository.isNotBlank()) {
-        println("WARNING: --github-repository is deprecated and will be removed one day. Please use --repository")
-        args.githubRepository
-    } else {
-        args.repository
-    }
+    val repoHostUrl = resolveHostUrl(args)
+    val repoHostApi = resolveHostAPI(args)
 
     return RepoHostConfig(repoHostUrl, repoHostApi, repoHostToken, repository)
+}
+
+private fun resolveHostUrl(args: CommandLineArgs) : String {
+    if (args.repoHostUrl.isNotBlank()) {
+        return args.repoHostUrl
+    }
+
+    if (args.useGithub as Boolean) {
+        return "https://github.com"
+    }
+
+    if (args.useGithub as Boolean) {
+        return "https://gitlab.com"
+    }
+
+    throw IllegalArgumentException("--repo-host-url, --use-github, or --use-gitlab must be provided")
+}
+
+private fun resolveHostAPI(args: CommandLineArgs) : String {
+    if (args.repoHostApi.isNotBlank()) {
+        return args.repoHostApi
+    }
+
+    if (args.useGithub as Boolean) {
+        return "https://api.github.com"
+    }
+
+    if (args.useGithub as Boolean) {
+        return "https://gitlab.com/api/v4"
+    }
+
+    throw IllegalArgumentException("--repo-host--api-url, --use-github, or --use-gitlab must be provided")
 }
 
 private fun convertMappings(labelToCategoryMapping: List<String>?) : Map<String, String> {

@@ -1,7 +1,7 @@
 package org.kiwiproject.changelog.config
 
-data class RepoHostConfig(val url: String = "https://github.com",
-                          val apiUrl: String = "https://api.github.com",
+data class RepoHostConfig(val url: String,
+                          val apiUrl: String,
                           val token: String,
                           val repository: String) {
 
