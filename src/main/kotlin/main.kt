@@ -1,5 +1,7 @@
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
+import org.kiwiproject.base.KiwiPreconditions
+import org.kiwiproject.base.KiwiPreconditions.checkArgumentNotBlank
 import org.kiwiproject.changelog.CommandLineArgs
 import org.kiwiproject.changelog.GenerateChangelog
 import org.kiwiproject.changelog.config.CategoryConfig
@@ -31,6 +33,8 @@ fun main(args: Array<String>) = mainBody {
 private fun buildRepoHostConfig(args: CommandLineArgs) : RepoHostConfig {
     val repoHostUrl = resolveHostUrl(args)
     val repoHostApi = resolveHostAPI(args)
+    val repoHostToken = resolveRepoHostToken(args)
+    val repository = resolveRepository(args)
 
     return RepoHostConfig(repoHostUrl, repoHostApi, repoHostToken, repository)
 }
@@ -44,7 +48,7 @@ private fun resolveHostUrl(args: CommandLineArgs) : String {
         return "https://github.com"
     }
 
-    if (args.useGithub as Boolean) {
+    if (args.useGitlab as Boolean) {
         return "https://gitlab.com"
     }
 
@@ -60,11 +64,23 @@ private fun resolveHostAPI(args: CommandLineArgs) : String {
         return "https://api.github.com"
     }
 
-    if (args.useGithub as Boolean) {
+    if (args.useGitlab as Boolean) {
         return "https://gitlab.com/api/v4"
     }
 
-    throw IllegalArgumentException("--repo-host--api-url, --use-github, or --use-gitlab must be provided")
+    throw IllegalArgumentException("--repo-host-api-url, --use-github, or --use-gitlab must be provided")
+}
+
+private fun resolveRepoHostToken(args: CommandLineArgs) : String {
+    checkArgumentNotBlank(args.repoHostToken, "--repo-host-token is required")
+
+    return args.repoHostToken
+}
+
+private fun resolveRepository(args: CommandLineArgs) : String {
+    checkArgumentNotBlank(args.repository, "--repository is required")
+
+    return args.repository
 }
 
 private fun convertMappings(labelToCategoryMapping: List<String>?) : Map<String, String> {
