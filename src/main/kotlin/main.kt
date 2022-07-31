@@ -1,6 +1,5 @@
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
-import org.kiwiproject.base.KiwiPreconditions
 import org.kiwiproject.base.KiwiPreconditions.checkArgumentNotBlank
 import org.kiwiproject.changelog.CommandLineArgs
 import org.kiwiproject.changelog.GenerateChangelog
