@@ -12,7 +12,6 @@ import java.io.File
 fun main(args: Array<String>) = mainBody {
     ArgParser(args).parseInto(::CommandLineArgs).run {
         val repoHostConfig = buildRepoHostConfig(this)
-        println(repoHostConfig)
         val repoConfig = RepoConfig(workingDir, previousRevision, revision)
 
         val categoryConfig = CategoryConfig(defaultCategory, convertMappings(labelToCategoryMapping), alwaysIncludePRsFrom, categoryOrder)
@@ -43,11 +42,11 @@ private fun resolveHostUrl(args: CommandLineArgs) : String {
         return args.repoHostUrl
     }
 
-    if (args.useGithub as Boolean) {
+    if (args.useGithub || !args.useGitlab) {
         return "https://github.com"
     }
 
-    if (args.useGitlab as Boolean) {
+    if (args.useGitlab) {
         return "https://gitlab.com"
     }
 
@@ -59,11 +58,11 @@ private fun resolveHostAPI(args: CommandLineArgs) : String {
         return args.repoHostApi
     }
 
-    if (args.useGithub as Boolean) {
+    if (args.useGithub || !args.useGitlab) {
         return "https://api.github.com"
     }
 
-    if (args.useGitlab as Boolean) {
+    if (args.useGitlab) {
         return "https://gitlab.com/api/v4"
     }
 
