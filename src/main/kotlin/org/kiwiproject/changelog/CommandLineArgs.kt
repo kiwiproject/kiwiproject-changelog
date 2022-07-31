@@ -14,7 +14,7 @@ class CommandLineArgs(parser: ArgParser) {
     val repoHostApi by parser.storing("-a", "--repo-host-api-url", help = "Url for Github or Gitlab API").default("")
     val repository by parser.storing("-r", "--repository", help = "Name of the Github or Gitlab repository")
     val repoHostToken by parser.storing("-t", "--repo-host-token", help = "Authentication token for Github or Gitlab")
-    val repoHostUrl by parser.storing("-u", "--repo-host-url", help = "Url for Github or Gitlab")
+    val repoHostUrl by parser.storing("-u", "--repo-host-url", help = "Url for Github or Gitlab").default("")
 
     // Git Repo Options
 
