@@ -1,5 +1,3 @@
-import com.xenomachina.argparser.ArgParser
-import com.xenomachina.argparser.mainBody
 import org.kiwiproject.base.KiwiPreconditions.checkArgumentNotBlank
 import org.kiwiproject.changelog.CommandLineArgs
 import org.kiwiproject.changelog.GenerateChangelog
@@ -8,24 +6,28 @@ import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
 import java.io.File
+import kotlinx.cli.ArgParser
 
-fun main(args: Array<String>) = mainBody {
-    ArgParser(args).parseInto(::CommandLineArgs).run {
-        val repoHostConfig = buildRepoHostConfig(this)
-        val repoConfig = RepoConfig(workingDir, previousRevision, revision)
+fun main(args: Array<String>) {
+    val parser = ArgParser("changelog")
+    val cliArgs = CommandLineArgs(parser)
+    
+    parser.parse(args)
 
-        val categoryConfig = CategoryConfig(defaultCategory, convertMappings(labelToCategoryMapping), alwaysIncludePRsFrom, categoryOrder)
+    val repoHostConfig = buildRepoHostConfig(cliArgs)
+    val repoConfig = RepoConfig(cliArgs.workingDir, cliArgs.previousRevision, cliArgs.revision)
 
-        val out = if (outputFile == null) {
-            null
-        } else {
-            File(outputFile!!)
-        }
+    val categoryConfig = CategoryConfig(cliArgs.defaultCategory, convertMappings(cliArgs.mapping), cliArgs.includePrsFrom, cliArgs.categoryOrder)
 
-        val changeLogConfig = ChangelogConfig(version = version, outputType = outputType, outputFile = out, categoryConfig = categoryConfig)
-
-        GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig).generate()
+    val out = if (cliArgs.outputFile == null) {
+        null
+    } else {
+        File(cliArgs.outputFile!!)
     }
+
+    val changeLogConfig = ChangelogConfig(version = cliArgs.version, outputType = cliArgs.outputType, outputFile = out, categoryConfig = categoryConfig)
+
+    GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig).generate()
 }
 
 private fun buildRepoHostConfig(args: CommandLineArgs) : RepoHostConfig {
@@ -38,11 +40,11 @@ private fun buildRepoHostConfig(args: CommandLineArgs) : RepoHostConfig {
 }
 
 private fun resolveHostUrl(args: CommandLineArgs) : String {
-    if (args.repoHostUrl.isNotBlank()) {
-        return args.repoHostUrl
+    if (args.repoHostUrl?.isEmpty() ?: true) {
+        return args.repoHostUrl!!
     }
 
-    if (args.useGithub || !args.useGitlab) {
+    if (args.useGithub) {
         return "https://github.com"
     }
 
@@ -54,11 +56,11 @@ private fun resolveHostUrl(args: CommandLineArgs) : String {
 }
 
 private fun resolveHostAPI(args: CommandLineArgs) : String {
-    if (args.repoHostApi.isNotBlank()) {
-        return args.repoHostApi
+    if (args.repoHostApi?.isEmpty() ?: true) {
+        return args.repoHostApi!!
     }
 
-    if (args.useGithub || !args.useGitlab) {
+    if (args.useGithub) {
         return "https://api.github.com"
     }
 
