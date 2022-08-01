@@ -1,17 +1,18 @@
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
+import org.kiwiproject.base.KiwiPreconditions.checkArgumentNotBlank
 import org.kiwiproject.changelog.CommandLineArgs
 import org.kiwiproject.changelog.GenerateChangelog
 import org.kiwiproject.changelog.config.CategoryConfig
 import org.kiwiproject.changelog.config.ChangelogConfig
-import org.kiwiproject.changelog.config.GitRepoConfig
-import org.kiwiproject.changelog.config.GithubConfig
+import org.kiwiproject.changelog.config.RepoConfig
+import org.kiwiproject.changelog.config.RepoHostConfig
 import java.io.File
 
 fun main(args: Array<String>) = mainBody {
     ArgParser(args).parseInto(::CommandLineArgs).run {
-        val githubConfig = GithubConfig(githubUrl, githubApi, githubToken, repository)
-        val gitRepoConfig = GitRepoConfig(workingDir, previousRevision, revision)
+        val repoHostConfig = buildRepoHostConfig(this)
+        val repoConfig = RepoConfig(workingDir, previousRevision, revision)
 
         val categoryConfig = CategoryConfig(defaultCategory, convertMappings(labelToCategoryMapping), alwaysIncludePRsFrom, categoryOrder)
 
@@ -23,8 +24,61 @@ fun main(args: Array<String>) = mainBody {
 
         val changeLogConfig = ChangelogConfig(version = version, outputType = outputType, outputFile = out, categoryConfig = categoryConfig)
 
-        GenerateChangelog(githubConfig, gitRepoConfig, changeLogConfig).generate()
+        GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig).generate()
     }
+}
+
+private fun buildRepoHostConfig(args: CommandLineArgs) : RepoHostConfig {
+    val repoHostUrl = resolveHostUrl(args)
+    val repoHostApi = resolveHostAPI(args)
+    val repoHostToken = resolveRepoHostToken(args)
+    val repository = resolveRepository(args)
+
+    return RepoHostConfig(repoHostUrl, repoHostApi, repoHostToken, repository)
+}
+
+private fun resolveHostUrl(args: CommandLineArgs) : String {
+    if (args.repoHostUrl.isNotBlank()) {
+        return args.repoHostUrl
+    }
+
+    if (args.useGithub || !args.useGitlab) {
+        return "https://github.com"
+    }
+
+    if (args.useGitlab) {
+        return "https://gitlab.com"
+    }
+
+    throw IllegalArgumentException("--repo-host-url, --use-github, or --use-gitlab must be provided")
+}
+
+private fun resolveHostAPI(args: CommandLineArgs) : String {
+    if (args.repoHostApi.isNotBlank()) {
+        return args.repoHostApi
+    }
+
+    if (args.useGithub || !args.useGitlab) {
+        return "https://api.github.com"
+    }
+
+    if (args.useGitlab) {
+        return "https://gitlab.com/api/v4"
+    }
+
+    throw IllegalArgumentException("--repo-host-api-url, --use-github, or --use-gitlab must be provided")
+}
+
+private fun resolveRepoHostToken(args: CommandLineArgs) : String {
+    checkArgumentNotBlank(args.repoHostToken, "--repo-host-token is required")
+
+    return args.repoHostToken
+}
+
+private fun resolveRepository(args: CommandLineArgs) : String {
+    checkArgumentNotBlank(args.repository, "--repository is required")
+
+    return args.repository
 }
 
 private fun convertMappings(labelToCategoryMapping: List<String>?) : Map<String, String> {

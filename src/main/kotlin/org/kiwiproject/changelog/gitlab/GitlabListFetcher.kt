@@ -1,19 +1,16 @@
-package org.kiwiproject.changelog
+package org.kiwiproject.changelog.gitlab
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.kiwiproject.changelog.config.GithubConfig
-import java.lang.IllegalStateException
+import org.kiwiproject.changelog.config.RepoHostConfig
 
-class GithubListFetcher(private val githubConfig: GithubConfig) {
+class GitlabListFetcher(private val repoHostConfig: RepoHostConfig) {
 
-    // see API doc: https://developer.github.com/v3/issues/
+    // see API doc: https://docs.gitlab.com/ee/api/issues.html
     // Default query params from docs:
-    //     per_page = 30
     //     state = open
-    //     filter = all
     //     direction = desc
-    private var nextPageUrl = "${githubConfig.apiUrl}/repos/${githubConfig.repository}/issues?page=1&per_page=100&state=closed&filter=all&direction=desc"
+    private var nextPageUrl = "${repoHostConfig.apiUrl}/projects/${repoHostConfig.repository}/issues?state=closed"
     private val mapper = jacksonObjectMapper()
 
     fun hasNextPage() : Boolean {
@@ -22,10 +19,10 @@ class GithubListFetcher(private val githubConfig: GithubConfig) {
 
     fun nextPage(): List<Map<String, Any>> {
         if (!hasNextPage()) {
-            throw IllegalStateException("Github API has no more issues to fetch. Did you run 'hasNextPage()' method?")
+            throw IllegalStateException("Gitlab API has no more issues to fetch. Did you run 'hasNextPage()' method?")
         }
 
-        val api = GithubApi(githubConfig.token)
+        val api = GitlabApi(repoHostConfig.token)
         val response = api.get(nextPageUrl)
 
         nextPageUrl = getNextPageUrl(response.linkHeader)

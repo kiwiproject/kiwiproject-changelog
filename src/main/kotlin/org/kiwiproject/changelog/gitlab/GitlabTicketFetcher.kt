@@ -1,16 +1,15 @@
-package org.kiwiproject.changelog
+package org.kiwiproject.changelog.gitlab
 
+import org.kiwiproject.changelog.Ticket
 import org.kiwiproject.changelog.config.ChangelogConfig
-import org.kiwiproject.changelog.config.GithubConfig
-import java.util.Collections
-import java.util.PriorityQueue
-import java.util.Queue
+import org.kiwiproject.changelog.config.RepoHostConfig
+import java.util.*
 
-class GithubTicketFetcher(
-    githubConfig: GithubConfig,
+class GitlabTicketFetcher(
+    repoHostConfig: RepoHostConfig,
     private val changelogConfig: ChangelogConfig) {
 
-    private val listFetcher = GithubListFetcher(githubConfig)
+    private val listFetcher = GitlabListFetcher(repoHostConfig)
     private val defaultCategory = changelogConfig.categoryConfig.defaultCategory
     private val labelMapping = changelogConfig.categoryConfig.labelToCategoryMapping
 
@@ -19,7 +18,7 @@ class GithubTicketFetcher(
             return listOf()
         }
 
-        println("Querying Github API for ${ticketIds.size} tickets.")
+        println("Querying Gitlab API for ${ticketIds.size} tickets.")
         val tickets = queuedTicketNumbers(ticketIds)
 
         val resolvedTickets : MutableList<Ticket> = mutableListOf()
@@ -29,7 +28,7 @@ class GithubTicketFetcher(
                 resolvedTickets.addAll(extractImprovements(dropTicketsAboveMaxInPage(tickets, page), page))
             }
         } catch (e: Exception) {
-            throw RuntimeException("Problems fetching ${ticketIds.size} tickets from Github", e)
+            throw RuntimeException("Problems fetching ${ticketIds.size} tickets from Gitlab", e)
         }
 
         return resolvedTickets
@@ -42,12 +41,13 @@ class GithubTicketFetcher(
         return queue
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun dropTicketsAboveMaxInPage(tickets: Queue<Long>, page: List<Map<String, Any>>) : Queue<Long> {
         if (page.isEmpty()) {
             return tickets
         }
 
-        val highestId = page[0]["number"] as Int?
+        val highestId = page[0]["iid"] as Int?
         while (!tickets.isEmpty() && tickets.peek() > highestId!!) {
             tickets.poll()
         }
@@ -62,26 +62,12 @@ class GithubTicketFetcher(
         }
 
         return issues
-            .filter(this::isIssueOrLonePr)
             .map { issue ->
-                Ticket(issue["number"] as Int?, issue["title"] as String?, issue["html_url"] as String?,
-                    calculateCategory((issue["labels"] as List<Map<String, String>>).map { it["name"]!! })) }
+                Ticket(issue["iid"] as Int?, issue["title"] as String?, issue["web_url"] as String?,
+                    calculateCategory(issue["labels"] as List<String>)) }
             .filter { issue -> tickets.contains(issue.id?.toLong()) }
             .toList()
 
-    }
-
-    private fun isIssueOrLonePr(issue: Map<String, Any>) : Boolean {
-        val bodyText = issue["body"] as String? ?: ""
-        return issue["pull_request"] == null || parseTickets(bodyText).isEmpty() || userIsAlwaysIncluded(issue)
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun userIsAlwaysIncluded(issue: Map<String, Any>) : Boolean {
-        val user = issue["user"] as Map<String, String>
-        val userName = user["login"]
-
-        return changelogConfig.categoryConfig.alwaysIncludePRsFrom?.contains(userName) ?: false
     }
 
     private fun calculateCategory(labels: List<String>) : String {

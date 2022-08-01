@@ -1,4 +1,4 @@
-package org.kiwiproject.changelog
+package org.kiwiproject.changelog.github
 
 import org.kiwiproject.io.KiwiIO
 import java.io.IOException

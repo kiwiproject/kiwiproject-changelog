@@ -1,13 +1,13 @@
 package org.kiwiproject.changelog
 
 import org.kiwiproject.changelog.config.ChangelogConfig
-import org.kiwiproject.changelog.config.GitRepoConfig
+import org.kiwiproject.changelog.config.RepoConfig
 import java.util.regex.Pattern
 
 fun formatChangeLog(contributors: Set<String>,
                     tickets: List<Ticket>,
                     commitCount: Int,
-                    gitRepoConfig: GitRepoConfig,
+                    repoConfig: RepoConfig,
                     changelogConfig: ChangelogConfig,
                     githubRepoUrl: String) : String {
 
@@ -21,8 +21,8 @@ fun formatChangeLog(contributors: Set<String>,
         "date" to changelogConfig.dateString,
         "commitCount" to "$commitCount",
         "repoUrl" to githubRepoUrl,
-        "previousRev" to gitRepoConfig.previousRevision,
-        "newRev" to gitRepoConfig.revision,
+        "previousRev" to repoConfig.previousRevision,
+        "newRev" to repoConfig.revision,
         "contributors" to contributors.joinToString(", "),
         "improvements" to formatImprovements(tickets, changelogConfig.categoryConfig.categoryOrder)
     )
@@ -37,7 +37,8 @@ fun formatImprovements(tickets: List<Ticket>, categoryOrder: List<String>?) : St
 
     val groupedTickets = tickets.groupBy { it.category }.toSortedMap()
 
-    val categories = categoryOrder ?: groupedTickets.keys
+    val categories = if (categoryOrder.isNullOrEmpty()) groupedTickets.keys else categoryOrder
+
     var improvementText = ""
 
     for (category in categories) {

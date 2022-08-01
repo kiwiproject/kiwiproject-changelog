@@ -7,12 +7,14 @@ import java.io.File
 
 class CommandLineArgs(parser: ArgParser) {
 
-    // Github Options
+    // Github/Gitlab Options
+    val useGithub by parser.flagging("--use-github", help = "Use Github default settings")
+    val useGitlab by parser.flagging("--use-gitlab", help = "Use Gitlab default settings")
 
-    val githubApi by parser.storing("-a", "--github-api-url", help = "Url for Github API").default("https://api.github.com")
-    val repository by parser.storing("-r", "--github-repository", help = "Name of the Github repository")
-    val githubToken by parser.storing("-t", "--github-token", help = "Authentication token for Github")
-    val githubUrl by parser.storing("-u", "--github-url", help = "Url for Github").default("https://github.com")
+    val repoHostApi by parser.storing("-a", "--repo-host-api-url", help = "Url for Github or Gitlab API").default("")
+    val repository by parser.storing("-r", "--repository", help = "Name of the Github or Gitlab repository")
+    val repoHostToken by parser.storing("-t", "--repo-host-token", help = "Authentication token for Github or Gitlab")
+    val repoHostUrl by parser.storing("-u", "--repo-host-url", help = "Url for Github or Gitlab").default("")
 
     // Git Repo Options
 
@@ -26,6 +28,7 @@ class CommandLineArgs(parser: ArgParser) {
         "--console" to OutputType.CONSOLE,
         "--file" to OutputType.FILE,
         "--github" to OutputType.GITHUB_RELEASE,
+        "--gitlab" to OutputType.GITLAB_RELEASE,
         help = "How the changelog should be output"
     ).default(OutputType.CONSOLE)
     val outputFile by parser.storing("-o", "--output-file", help = "Location for file to output the change log").default<String?>(null)
