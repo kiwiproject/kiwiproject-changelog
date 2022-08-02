@@ -1,3 +1,4 @@
+import kotlinx.cli.ArgParser
 import org.kiwiproject.base.KiwiPreconditions.checkArgumentNotBlank
 import org.kiwiproject.changelog.CommandLineArgs
 import org.kiwiproject.changelog.GenerateChangelog
@@ -6,7 +7,6 @@ import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
 import java.io.File
-import kotlinx.cli.ArgParser
 
 fun main(args: Array<String>) {
     val parser = ArgParser("changelog")
@@ -15,9 +15,9 @@ fun main(args: Array<String>) {
     parser.parse(args)
 
     val repoHostConfig = buildRepoHostConfig(cliArgs)
-    val repoConfig = RepoConfig(cliArgs.workingDir, cliArgs.previousRevision, cliArgs.revision)
+    val repoConfig = RepoConfig(File(cliArgs.workingDir), cliArgs.previousRevision, cliArgs.revision)
 
-    val categoryConfig = CategoryConfig(cliArgs.defaultCategory, convertMappings(cliArgs.mapping), cliArgs.includePrsFrom, cliArgs.categoryOrder)
+    val categoryConfig = CategoryConfig(cliArgs.defaultCategory, convertMappings(cliArgs.labelToCategoryMapping), cliArgs.alwaysIncludePRsFrom, cliArgs.categoryOrder)
 
     val out = if (cliArgs.outputFile == null) {
         null
@@ -40,35 +40,27 @@ private fun buildRepoHostConfig(args: CommandLineArgs) : RepoHostConfig {
 }
 
 private fun resolveHostUrl(args: CommandLineArgs) : String {
-    if (args.repoHostUrl?.isEmpty() ?: true) {
+    if (args.repoHostUrl?.isNotEmpty() == true) {
         return args.repoHostUrl!!
     }
 
-    if (args.useGithub) {
-        return "https://github.com"
-    }
-
-    if (args.useGitlab) {
+    if (args.provider == CommandLineArgs.Provider.GITLAB) {
         return "https://gitlab.com"
     }
 
-    throw IllegalArgumentException("--repo-host-url, --use-github, or --use-gitlab must be provided")
+    return "https://github.com"
 }
 
 private fun resolveHostAPI(args: CommandLineArgs) : String {
-    if (args.repoHostApi?.isEmpty() ?: true) {
+    if (args.repoHostApi?.isNotEmpty() == true) {
         return args.repoHostApi!!
     }
 
-    if (args.useGithub) {
-        return "https://api.github.com"
-    }
-
-    if (args.useGitlab) {
+    if (args.provider == CommandLineArgs.Provider.GITLAB) {
         return "https://gitlab.com/api/v4"
     }
 
-    throw IllegalArgumentException("--repo-host-api-url, --use-github, or --use-gitlab must be provided")
+    return "https://api.github.com"
 }
 
 private fun resolveRepoHostToken(args: CommandLineArgs) : String {
