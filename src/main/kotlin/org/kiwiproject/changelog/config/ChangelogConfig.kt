@@ -8,8 +8,7 @@ enum class OutputType {
     CONSOLE, FILE, GITHUB_RELEASE, GITLAB_RELEASE
 }
 
-data class ChangelogConfig(val version: String,
-                           val date: ZonedDateTime = ZonedDateTime.now(),
+data class ChangelogConfig(val date: ZonedDateTime = ZonedDateTime.now(),
                            val outputType: OutputType = OutputType.CONSOLE,
                            val outputFile: File?,
                            val categoryConfig: CategoryConfig) {
