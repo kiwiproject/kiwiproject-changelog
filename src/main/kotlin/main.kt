@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
         File(cliArgs.outputFile!!)
     }
 
-    val changeLogConfig = ChangelogConfig(version = cliArgs.version, outputType = cliArgs.outputType, outputFile = out, categoryConfig = categoryConfig)
+    val changeLogConfig = ChangelogConfig(outputType = cliArgs.outputType, outputFile = out, categoryConfig = categoryConfig)
 
     GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig).generate()
 }

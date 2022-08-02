@@ -31,7 +31,6 @@ class CommandLineArgs(parser: ArgParser) {
     // Change Log Options
     val outputType by parser.option(ArgType.Choice<OutputType>(), shortName = "ot", fullName = "output-type", description = "How the changelog should be output").default(OutputType.CONSOLE)
     val outputFile by parser.option(ArgType.String, shortName = "o", fullName = "output-file", description = "Location for file to output the change log. Only needed if output type is file.")
-    val version by parser.option(ArgType.String, shortName = "v", description = "Version of the changelog being generated")
 
     // Category Options
     val defaultCategory by parser.option(ArgType.String, shortName = "c", fullName = "default-category", description = "Default category to put issues into if a mapping is not provided").default("Assorted")
