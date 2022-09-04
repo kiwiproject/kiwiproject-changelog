@@ -36,10 +36,10 @@ class GitlabApi(val gitlabToken: String) {
         val rateRemaining = connection.getHeaderField("RateLimit-Remaining")
         val rateLimit = connection.getHeaderField("RateLimit-Limit")
 
-        println("Gitlab API rate info => Remaining : $rateRemaining, Limit : $rateLimit, Reset at: $rateLimitReset")
+        println("GitLab API rate info => Remaining : $rateRemaining, Limit : $rateLimit, Reset at: $rateLimitReset")
 
         val link = connection.getHeaderField("Link")
-        println("Next page 'Link' from Gitlab: $link")
+        println("Next page 'Link' from GitLab: $link")
 
         val content = call(method, connection)
         return Response(content, link)

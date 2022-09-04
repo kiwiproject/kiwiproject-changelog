@@ -12,7 +12,7 @@ class GitLogProvider(val workingDir: File) {
         try {
             runProcess("git", "fetch", "origin", fetch)
         } catch (e: Exception) {
-            //This is a non blocking problem because we still are able to run git log locally
+            //This is a non-blocking problem because we still are able to run git log locally
             println("'git fetch' did not work, continuing running 'git log' locally.")
 
             //To avoid confusion, no stack trace in debug log, just the message:

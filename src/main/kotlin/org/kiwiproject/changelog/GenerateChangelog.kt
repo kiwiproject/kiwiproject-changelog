@@ -32,7 +32,7 @@ class GenerateChangelog(
             GitlabTicketFetcher(repoHostConfig, changeLogConfig).fetchTickets(tickets)
         }
 
-        println("Generating changelog based on ${improvements.size} tickets from Github")
+        println("Generating changelog based on ${improvements.size} tickets from GitHub")
         val githubUrl = "${repoHostConfig.url}/${repoHostConfig.repository}"
         val changeLog = formatChangeLog(contributors, improvements, commits.size, repoConfig, changeLogConfig, githubUrl)
 
