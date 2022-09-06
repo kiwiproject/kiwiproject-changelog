@@ -18,7 +18,7 @@ class GitlabTicketFetcher(
             return listOf()
         }
 
-        println("Querying Gitlab API for ${ticketIds.size} tickets.")
+        println("Querying GitLab API for ${ticketIds.size} tickets.")
         val tickets = queuedTicketNumbers(ticketIds)
 
         val resolvedTickets : MutableList<Ticket> = mutableListOf()
@@ -28,7 +28,7 @@ class GitlabTicketFetcher(
                 resolvedTickets.addAll(extractImprovements(dropTicketsAboveMaxInPage(tickets, page), page))
             }
         } catch (e: Exception) {
-            throw RuntimeException("Problems fetching ${ticketIds.size} tickets from Gitlab", e)
+            throw RuntimeException("Problems fetching ${ticketIds.size} tickets from GitLab", e)
         }
 
         return resolvedTickets

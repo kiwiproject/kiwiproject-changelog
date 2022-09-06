@@ -36,10 +36,10 @@ class GithubApi(val githubToken: String) {
         val rateRemaining = connection.getHeaderField("X-RateLimit-Remaining")
         val rateLimit = connection.getHeaderField("X-RateLimit-Limit")
 
-        println("Github API rate info => Remaining : $rateRemaining, Limit : $rateLimit, Reset at: $rateLimitReset")
+        println("GitHub API rate info => Remaining : $rateRemaining, Limit : $rateLimit, Reset at: $rateLimitReset")
 
         val link = connection.getHeaderField("Link")
-        println("Next page 'Link' from Github: $link")
+        println("Next page 'Link' from GitHub: $link")
 
         val content = call(method, connection)
         return Response(content, link)

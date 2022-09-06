@@ -15,13 +15,13 @@ class CommandLineArgs(parser: ArgParser) {
         GITLAB
     }
 
-    // Github/Gitlab Options
+    // GitHub/GitLab Options
     val provider by parser.option(ArgType.Choice<Provider>(), shortName = "P", description = "Host Git repository provider").default(Provider.GITHUB)
 
-    val repoHostApi by parser.option(ArgType.String, shortName = "a", fullName = "repo-host-api-url", description = "Url for Github or Gitlab API")
-    val repository by parser.option(ArgType.String, shortName = "r", description = "Name of the Github or Gitlab repository").required()
-    val repoHostToken by parser.option(ArgType.String, shortName = "t", fullName = "repo-host-token", description = "Authentication token for Github or Gitlab").required()
-    val repoHostUrl by parser.option(ArgType.String, shortName = "u", fullName = "repo-host-url", description = "Url for Github or Gitlab")
+    val repoHostApi by parser.option(ArgType.String, shortName = "a", fullName = "repo-host-api-url", description = "Url for GitHub or GitLab API")
+    val repository by parser.option(ArgType.String, shortName = "r", description = "Name of the GitHub or GitLab repository").required()
+    val repoHostToken by parser.option(ArgType.String, shortName = "t", fullName = "repo-host-token", description = "Authentication token for GitHub or GitLab").required()
+    val repoHostUrl by parser.option(ArgType.String, shortName = "u", fullName = "repo-host-url", description = "Url for GitHub or GitLab")
 
     // Git Repo Options
     val previousRevision by parser.option(ArgType.String, shortName = "p", fullName = "previous-rev", description = "Starting revision commit to search for changes").default("master")
