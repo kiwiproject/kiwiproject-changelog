@@ -2,7 +2,7 @@
 
 Generates changelogs between two versions on GitHub or GitLab.  The default options assume GitHub.
 
-Here is a sample argument list that generates a changelog for the kiwi project (inside the kiwiproject organization on GitHub) for version v0.22.0. It creates the changelog comparing from revision v0.21.0 to v0.22.0 using the given working directory. It also maps several labels to categories, e.g. `-m bug:Bugs` maps from the GitHub label `bugs` to the changelog category "Bugs" (you can also use `--mapping`). The `--include-prs-from` (or `-i`) lets you include PRs from specific users, e.g. a bot like dependabot. And finally, it uses the `-O` option (you can also use `--category-order`) to specify the order of the categories in the generated changelog.
+Here is a sample argument list that generates a changelog for the kiwi project (inside the kiwiproject organization on GitHub) for version v1.1.9. It creates the changelog comparing from revision v1.1.8 to v1.1.9 using the given working directory. It also maps several labels to categories, e.g. `-m bug:Bugs` maps from the GitHub label `bugs` to the changelog category "Bugs" (you can also use `--mapping`). The `--include-prs-from` (or `-i`) lets you include PRs from specific users, e.g. a bot like dependabot. And finally, it uses the `-O` option (you can also use `--category-order`) to specify the order of the categories in the generated changelog.
 
 ```
 --repo-host-token [YOUR_GITHUB_ACCESS_TOKEN]
