@@ -8,7 +8,7 @@ Here is a sample argument list that generates a changelog for the kiwi project (
 --repo-host-token [YOUR_GITHUB_ACCESS_TOKEN]
 --repository kiwiproject/kiwi
 --previous-rev v2.4.0
---revision v2.5.9
+--revision v2.5.0
 --working-dir /home/users/bob/projects/kiwiproject/kiwi
 -m bug:Bugs
 -m "new feature:Improvements"
