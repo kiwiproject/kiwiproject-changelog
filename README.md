@@ -23,6 +23,6 @@ Here is a sample argument list that generates a changelog for the kiwi project (
 -O "Dependency Updates"
 ```
 
-The changelog produced using the above resulted in [this](https://github.com/kiwiproject/kiwi/releases/tag/v0.22.0) output.
+The changelog produced using the above resulted in [this](https://github.com/kiwiproject/kiwi/releases/tag/v1.1.9) output.
 
 Note that you need a GitHub or GitLab personal access token that has appropriate access to be able to read issues in the repository.
