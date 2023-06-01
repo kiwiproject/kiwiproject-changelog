@@ -1,6 +1,7 @@
 # Kiwiproject Changelog Generator
 
 [![build](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/build.yml/badge.svg)](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Generates changelogs between two versions on GitHub or GitLab.  The default options assume GitHub.
 
