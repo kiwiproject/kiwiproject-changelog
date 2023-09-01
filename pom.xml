@@ -21,7 +21,7 @@
         <jackson-module-kotlin.version>2.15.2</jackson-module-kotlin.version>
         <kiwi.version>3.0.0</kiwi.version>
         <kotlin.version>1.9.10</kotlin.version>
-        <kotlinx-cli-jvm.version>0.3.5</kotlinx-cli-jvm.version>
+        <kotlinx-cli-jvm.version>0.3.6</kotlinx-cli-jvm.version>
         <logback-classic.version>1.4.11</logback-classic.version>
         <slf4j-api.version>2.0.7</slf4j-api.version>
 
