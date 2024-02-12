@@ -23,7 +23,7 @@
         <kotlin.version>1.9.22</kotlin.version>
         <kotlinx-cli-jvm.version>0.3.6</kotlinx-cli-jvm.version>
         <logback-classic.version>1.4.14</logback-classic.version>
-        <slf4j-api.version>2.0.11</slf4j-api.version>
+        <slf4j-api.version>2.0.12</slf4j-api.version>
 
         <!-- Versions for test dependencies -->
         <!-- nothing here yet that isn't defined by kotlin or inherited from the parent POM. Move along... -->
