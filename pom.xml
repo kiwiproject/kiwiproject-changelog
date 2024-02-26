@@ -34,7 +34,7 @@
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-        <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
+        <maven-shade-plugin.version>3.5.2</maven-shade-plugin.version>
 
         <!-- Kotlin settings -->
         <kotlin.code.style>official</kotlin.code.style>
