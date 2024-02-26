@@ -29,7 +29,7 @@
         <!-- nothing here yet that isn't defined by kotlin or inherited from the parent POM. Move along... -->
 
         <!-- Versions for plugins -->
-        <exec-maven-plugin.version>3.1.1</exec-maven-plugin.version>
+        <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
