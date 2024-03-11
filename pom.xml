@@ -18,7 +18,7 @@
 
     <properties>
         <!-- Versions for required dependencies -->
-        <jackson-module-kotlin.version>2.16.1</jackson-module-kotlin.version>
+        <jackson-module-kotlin.version>2.16.2</jackson-module-kotlin.version>
         <kiwi.version>3.3.0</kiwi.version>
         <kotlin.version>1.9.23</kotlin.version>
         <kotlinx-cli-jvm.version>0.3.6</kotlinx-cli-jvm.version>
