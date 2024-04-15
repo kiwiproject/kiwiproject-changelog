@@ -22,7 +22,7 @@
         <kiwi.version>3.3.0</kiwi.version>
         <kotlin.version>1.9.23</kotlin.version>
         <kotlinx-cli-jvm.version>0.3.6</kotlinx-cli-jvm.version>
-        <logback-classic.version>1.5.3</logback-classic.version>
+        <logback-classic.version>1.5.5</logback-classic.version>
         <slf4j-api.version>2.0.13</slf4j-api.version>
 
         <!-- Versions for test dependencies -->
