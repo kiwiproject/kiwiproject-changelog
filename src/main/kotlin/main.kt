@@ -11,7 +11,7 @@ import java.io.File
 fun main(args: Array<String>) {
     val parser = ArgParser("changelog")
     val cliArgs = CommandLineArgs(parser)
-    
+
     parser.parse(args)
 
     val repoHostConfig = buildRepoHostConfig(cliArgs)
@@ -44,20 +44,12 @@ private fun resolveHostUrl(args: CommandLineArgs) : String {
         return args.repoHostUrl!!
     }
 
-    if (args.provider == CommandLineArgs.Provider.GITLAB) {
-        return "https://gitlab.com"
-    }
-
     return "https://github.com"
 }
 
 private fun resolveHostAPI(args: CommandLineArgs) : String {
     if (args.repoHostApi?.isNotEmpty() == true) {
         return args.repoHostApi!!
-    }
-
-    if (args.provider == CommandLineArgs.Provider.GITLAB) {
-        return "https://gitlab.com/api/v4"
     }
 
     return "https://api.github.com"

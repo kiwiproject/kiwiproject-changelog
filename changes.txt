@@ -1,0 +1,32 @@
+## Summary
+- 2024-05-02T19:04:17.473389003 - [28 commit(s)](https://github.com/kiwiproject/dropwizard-service-utilities/compare/v3.4.0...v3.5.0) by Scott Leberknight, dependabot[bot]
+## Improvements
+* Add methods to convert between PortAssigner.PortSecurity and Port.Security [(#465)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/465)
+*  Add factory method to create PortAssigner.PortSecurity from a boolean [(#464)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/464)
+* Add factory method to create PortAssigner.PortAssignment from a boolean [(#463)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/463)
+* Add bundle that acquires a distributed lock during startup [(#460)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/460)
+* Add bundle to assign random ports dynamically [(#458)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/458)
+* Change return type for factory methods in ExecutionStrategies to concrete type [(#456)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/456)
+* Add method to get the scheme (http/https) from ConnectorType enum [(#453)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/453)
+* Improve ServicePingHealthCheckTest [(#451)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/451)
+* More utilities to get ports in DropwizardConnectors [(#450)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/450)
+* SystemExecutioner constructor should validate ExecutionStrategy is not null [(#447)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/447)
+* PortAssigner#assignDynamicPorts should return a value [(#444)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/444)
+## Assorted
+* Misc code cleanup [(#477)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/477)
+* Fix Javadoc in StartupLockBundle [(#476)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/476)
+* Fix Javadoc in DropwizardConnectors [(#467)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/467)
+* Enhance DynamicPortsConfiguration javadocs [(#462)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/462)
+* Add dynamic ports bundle [(#459)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/459)
+* PortAssigner javadoc should explain restriction on ServerFactory [(#445)](https://github.com/kiwiproject/dropwizard-service-utilities/issues/445)
+## Dependency Updates
+* Bump org.kiwiproject:dropwizard-curator from 2.1.1 to 2.1.2 [(#475)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/475)
+* Bump org.kiwiproject:metrics-healthchecks-severity from 2.0.2 to 2.0.3 [(#474)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/474)
+* Bump org.kiwiproject:service-discovery-client from 2.0.3 to 2.1.0 [(#473)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/473)
+* Bump org.kiwiproject:kiwi-bom from 2.0.10 to 2.0.11 [(#472)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/472)
+* Bump org.kiwiproject:kiwi from 3.3.0 to 3.4.0 [(#471)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/471)
+* Bump org.kiwiproject:kiwi-test from 3.2.1 to 3.3.0 [(#470)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/470)
+* Bump org.kiwiproject:registry-aware-jersey-client from 2.0.4 to 2.0.5 [(#469)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/469)
+* Bump org.kiwiproject:kiwi-parent from 3.0.13 to 3.0.14 [(#468)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/468)
+* Bump org.kiwiproject:kiwi-parent from 3.0.12 to 3.0.13 [(#443)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/443)
+* Bump org.kiwiproject:kiwi-bom from 2.0.9 to 2.0.10 [(#442)](https://github.com/kiwiproject/dropwizard-service-utilities/pull/442)

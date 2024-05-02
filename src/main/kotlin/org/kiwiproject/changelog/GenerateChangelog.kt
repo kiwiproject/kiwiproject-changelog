@@ -5,7 +5,6 @@ import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
 import org.kiwiproject.changelog.github.GithubTicketFetcher
-import org.kiwiproject.changelog.gitlab.GitlabTicketFetcher
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
@@ -26,23 +25,21 @@ class GenerateChangelog(
         val contributors : Set<String> = commits.map(GitCommit::author).toSet()
 
         println("Fetching ticket info from ${repoHostConfig.fullRepoUrl()} based on ${tickets.size} ids $tickets")
-        val improvements = if (repoHostConfig.url.contains("github")) {
-            GithubTicketFetcher(repoHostConfig, changeLogConfig).fetchTickets(tickets)
-        } else {
-            GitlabTicketFetcher(repoHostConfig, changeLogConfig).fetchTickets(tickets)
-        }
+        val improvements = GithubTicketFetcher(repoHostConfig, changeLogConfig).fetchTickets(tickets)
 
         println("Generating changelog based on ${improvements.size} tickets from GitHub")
         val githubUrl = "${repoHostConfig.url}/${repoHostConfig.repository}"
         val changeLog = formatChangeLog(contributors, improvements, commits.size, repoConfig, changeLogConfig, githubUrl)
 
-        println("Writing out changelog")
+        println("Writing out changelog to ${changeLogConfig.outputType}")
 
         when(changeLogConfig.outputType) {
             OutputType.CONSOLE -> println(changeLog)
             OutputType.FILE -> writeFile(changeLog)
-            OutputType.GITHUB_RELEASE -> println(changeLog) // TODO: Implement this
-            OutputType.GITLAB_RELEASE -> println(changeLog) // TODO: Implement this
+            OutputType.GITHUB_RELEASE -> {  // TODO: Implement this
+                println("*** GitHub Release Not Implemented Yet. Printing to console. ***")
+                println(changeLog)
+            }
         }
     }
 
