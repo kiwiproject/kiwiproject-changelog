@@ -10,18 +10,10 @@ import java.nio.file.Paths
 
 class CommandLineArgs(parser: ArgParser) {
 
-    enum class Provider {
-        GITHUB,
-        GITLAB
-    }
-
-    // GitHub/GitLab Options
-    val provider by parser.option(ArgType.Choice<Provider>(), shortName = "P", description = "Host Git repository provider").default(Provider.GITHUB)
-
-    val repoHostApi by parser.option(ArgType.String, shortName = "a", fullName = "repo-host-api-url", description = "Url for GitHub or GitLab API")
-    val repository by parser.option(ArgType.String, shortName = "r", description = "Name of the GitHub or GitLab repository").required()
-    val repoHostToken by parser.option(ArgType.String, shortName = "t", fullName = "repo-host-token", description = "Authentication token for GitHub or GitLab").required()
-    val repoHostUrl by parser.option(ArgType.String, shortName = "u", fullName = "repo-host-url", description = "Url for GitHub or GitLab")
+    val repoHostApi by parser.option(ArgType.String, shortName = "a", fullName = "repo-host-api-url", description = "Url for GitHub API")
+    val repository by parser.option(ArgType.String, shortName = "r", description = "Name of the GitHub repository").required()
+    val repoHostToken by parser.option(ArgType.String, shortName = "t", fullName = "repo-host-token", description = "Authentication token for GitHub").required()
+    val repoHostUrl by parser.option(ArgType.String, shortName = "u", fullName = "repo-host-url", description = "Url for GitHub")
 
     // Git Repo Options
     val previousRevision by parser.option(ArgType.String, shortName = "p", fullName = "previous-rev", description = "Starting revision commit to search for changes").default("master")

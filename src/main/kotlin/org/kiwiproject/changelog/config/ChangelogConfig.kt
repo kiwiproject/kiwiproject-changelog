@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 enum class OutputType {
-    CONSOLE, FILE, GITHUB_RELEASE, GITLAB_RELEASE
+    CONSOLE, FILE, GITHUB_RELEASE
 }
 
 data class ChangelogConfig(val date: ZonedDateTime = ZonedDateTime.now(),
