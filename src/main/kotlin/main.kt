@@ -8,6 +8,7 @@ import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
 import java.io.File
 
+// TODO: Remove as this is now obsolete (keeping temporarily for reference)
 fun main(args: Array<String>) {
     val parser = ArgParser("changelog")
     val cliArgs = CommandLineArgs(parser)
