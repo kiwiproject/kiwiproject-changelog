@@ -3,7 +3,7 @@ package org.kiwiproject.changelog
 import org.kiwiproject.io.KiwiIO
 import java.io.File
 
-class GitLogProvider(val workingDir: File) {
+class GitLogProvider(private val workingDir: File) {
 
     fun getLog(from: String, to: String, format: String): String {
         val fetch = "+refs/tags/$from:refs/tags/$from"
@@ -30,7 +30,7 @@ class GitLogProvider(val workingDir: File) {
         try {
             val process = ProcessBuilder(commandLine.asList()).directory(workingDir).redirectErrorStream(true).start()
             output = KiwiIO.readInputStreamOf(process)
-            exitValue = process.waitFor();
+            exitValue = process.waitFor()
         } catch (e: Exception) {
             throw RuntimeException("Problems executing command:\n  ${commandLine.joinToString(separator = "\n")}", e)
         }

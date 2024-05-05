@@ -8,7 +8,6 @@ enum class OutputType {
     CONSOLE, FILE, GITHUB;
 
     companion object {
-        @Suppress("unused")
         fun entriesAsString() = entries.toTypedArray().contentToString()
     }
 }

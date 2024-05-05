@@ -62,7 +62,7 @@ fun replaceTokens(template: String, data: Map<String, String>) : String {
     val buffer = StringBuffer()
 
     while (matcher.find()) {
-        val replacement: String? = data.get(matcher.group(1))
+        val replacement: String? = data[matcher.group(1)]
         if (replacement != null) {
             matcher.appendReplacement(buffer, "")
             buffer.append(replacement)

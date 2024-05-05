@@ -20,9 +20,7 @@ class GithubListFetcher(private val repoHostConfig: RepoHostConfig) {
     }
 
     fun nextPage(): List<Map<String, Any>> {
-        if (!hasNextPage()) {
-            throw IllegalStateException("GitHub API has no more issues to fetch. Did you run 'hasNextPage()' method?")
-        }
+        check(hasNextPage()) { "GitHub API has no more issues to fetch. Did you run 'hasNextPage()' method?" }
 
         val api = GithubApi(repoHostConfig.token)
         val response = api.get(nextPageUrl)
