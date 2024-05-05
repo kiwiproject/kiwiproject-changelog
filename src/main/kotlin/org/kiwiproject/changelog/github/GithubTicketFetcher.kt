@@ -4,7 +4,9 @@ import org.kiwiproject.changelog.Ticket
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
 import org.kiwiproject.changelog.parseTickets
-import java.util.*
+import java.util.Collections
+import java.util.PriorityQueue
+import java.util.Queue
 
 class GithubTicketFetcher(
     repoHostConfig: RepoHostConfig,
@@ -48,7 +50,7 @@ class GithubTicketFetcher(
         }
 
         val highestId = page[0]["number"] as Int?
-        while (!tickets.isEmpty() && tickets.peek() > highestId!!) {
+        while (tickets.isNotEmpty() && tickets.peek() > highestId!!) {
             tickets.poll()
         }
 

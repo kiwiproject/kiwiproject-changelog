@@ -10,7 +10,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.net.ssl.HttpsURLConnection
 
-class GithubApi(val githubToken: String) {
+class GithubApi(private val githubToken: String) {
     fun get(url: String): Response {
         return doRequest(url, "GET")
     }
