@@ -36,7 +36,7 @@ class GenerateChangelog(
         when(changeLogConfig.outputType) {
             OutputType.CONSOLE -> println(changeLog)
             OutputType.FILE -> writeFile(changeLog)
-            OutputType.GITHUB_RELEASE -> {  // TODO: Implement this
+            OutputType.GITHUB -> {  // TODO: Implement this
                 println("*** GitHub Release Not Implemented Yet. Printing to console. ***")
                 println(changeLog)
             }

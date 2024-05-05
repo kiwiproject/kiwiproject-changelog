@@ -5,7 +5,12 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 enum class OutputType {
-    CONSOLE, FILE, GITHUB_RELEASE
+    CONSOLE, FILE, GITHUB;
+
+    companion object {
+        @Suppress("unused")
+        fun entriesAsString() = entries.toTypedArray().contentToString()
+    }
 }
 
 data class ChangelogConfig(val date: ZonedDateTime = ZonedDateTime.now(),

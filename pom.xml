@@ -23,6 +23,7 @@
         <kotlin.version>1.9.23</kotlin.version>
         <kotlinx-cli-jvm.version>0.3.6</kotlinx-cli-jvm.version>
         <logback-classic.version>1.5.6</logback-classic.version>
+        <picocli.version>4.7.5</picocli.version>
         <slf4j-api.version>2.0.13</slf4j-api.version>
 
         <!-- Versions for test dependencies -->
@@ -95,6 +96,12 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback-classic.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>${picocli.version}</version>
         </dependency>
 
         <!-- Test dependencies -->
@@ -202,7 +209,7 @@
                 <configuration>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                          <mainClass>MainKt</mainClass>
+                          <mainClass>org.kiwiproject.changelog.ChangelogGeneratorMain</mainClass>
                         </transformer>
                       </transformers>
                 </configuration>
