@@ -36,4 +36,6 @@ the categories in the generated changelog.
 The changelog produced using the above resulted in [this](https://github.com/kiwiproject/kiwi/releases/tag/v2.5.0) output.
 
 Note that you need a [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-that has appropriate access to be able to read issues in the repository.
+that has appropriate access to be able to read issues in the repository. 
+You can also supply this token using the command line, or by setting an environment variable
+named `KIWI_CHANGELOG_TOKEN`.
