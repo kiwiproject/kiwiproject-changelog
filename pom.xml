@@ -21,7 +21,6 @@
         <jackson-module-kotlin.version>2.17.0</jackson-module-kotlin.version>
         <kiwi.version>3.4.0</kiwi.version>
         <kotlin.version>1.9.23</kotlin.version>
-        <kotlinx-cli-jvm.version>0.3.6</kotlinx-cli-jvm.version>
         <logback-classic.version>1.5.6</logback-classic.version>
         <picocli.version>4.7.5</picocli.version>
         <slf4j-api.version>2.0.13</slf4j-api.version>
@@ -84,12 +83,6 @@
             <groupId>org.kiwiproject</groupId>
             <artifactId>kiwi</artifactId>
             <version>${kiwi.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-cli-jvm</artifactId>
-            <version>${kotlinx-cli-jvm.version}</version>
         </dependency>
 
         <dependency>
