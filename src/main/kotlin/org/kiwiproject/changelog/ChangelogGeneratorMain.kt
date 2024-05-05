@@ -42,10 +42,9 @@ class ChangelogGeneratorMain : Runnable {
     // Authentication options
     @Option(
         names = ["-t", "--repo-host-token"],
-        description = ["GitHub access token"],
-        required = true
+        description = ["GitHub access token (can also be set via KIWI_CHANGELOG_TOKEN environment variable)"],
     )
-    lateinit var token: String
+    var token: String? = null
 
     // Repository options
     @Option(
@@ -145,7 +144,12 @@ class ChangelogGeneratorMain : Runnable {
             return
         }
 
-        val repoHostConfig = RepoHostConfig(repoHostUrl, repoHostApi, token, repository)
+        val githubToken = token ?: System.getenv("KIWI_CHANGELOG_TOKEN")
+        check(githubToken != null) {
+            "GitHub token must be provided as command line option or KIWI_CHANGELOG_TOKEN environment variable"
+        }
+
+        val repoHostConfig = RepoHostConfig(repoHostUrl, repoHostApi, githubToken, repository)
         val repoConfig = RepoConfig(File(workingDir), previousRevision, revision)
         val categoryConfig = CategoryConfig(
             defaultCategory,
