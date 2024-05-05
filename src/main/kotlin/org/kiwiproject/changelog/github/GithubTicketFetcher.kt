@@ -66,9 +66,12 @@ class GithubTicketFetcher(
         return issues
             .filter(this::isIssueOrLonePr)
             .map { issue ->
-                Ticket(issue["number"] as Int?, issue["title"] as String?, issue["html_url"] as String?,
-                    calculateCategory((issue["labels"] as List<Map<String, String>>).map { it["name"]!! })) }
-            .filter { issue -> tickets.contains(issue.id?.toLong()) }
+                val labels = issue["labels"] as List<Map<String, String>>
+                val labelNames = labels.map { it["name"] as String }
+                val category = findCategory(labelNames)
+                Ticket(issue["number"] as Int, issue["title"] as String, issue["html_url"] as String, category)
+            }
+            .filter { issue -> tickets.contains(issue.id.toLong()) }
             .toList()
 
     }
@@ -83,15 +86,15 @@ class GithubTicketFetcher(
         val user = issue["user"] as Map<String, String>
         val userName = user["login"]
 
-        return changelogConfig.categoryConfig.alwaysIncludePRsFrom?.contains(userName) ?: false
+        return changelogConfig.categoryConfig.alwaysIncludePRsFrom.contains(userName)
     }
 
-    private fun calculateCategory(labels: List<String>) : String {
-        if (labels.isEmpty() || labelMapping == null) {
+    private fun findCategory(labels: List<String>) : String {
+        if (labels.isEmpty()) {
             return defaultCategory
         }
 
         val matchingLabel = labels.intersect(labelMapping.keys).firstOrNull() ?: return defaultCategory
-        return labelMapping[matchingLabel]!!
+        return labelMapping[matchingLabel] ?: error("matchingLabel should never be null here")
     }
 }
