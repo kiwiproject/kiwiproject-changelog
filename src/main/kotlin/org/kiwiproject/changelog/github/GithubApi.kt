@@ -3,7 +3,7 @@ package org.kiwiproject.changelog.github
 import org.kiwiproject.io.KiwiIO
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
-import java.net.URL
+import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.time.ZoneId
@@ -17,7 +17,7 @@ class GithubApi(private val githubToken: String) {
 
     private fun doRequest(urlString: String, method: String, body: String? = null) : Response {
         println("Request url: $urlString")
-        val url = URL(urlString)
+        val url = URI(urlString).toURL()
 
         val connection : HttpsURLConnection = url.openConnection() as HttpsURLConnection
         connection.requestMethod = method

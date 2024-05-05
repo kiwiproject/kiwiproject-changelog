@@ -30,14 +30,14 @@ fun formatChangeLog(contributors: Set<String>,
     return replaceTokens(template, logData)
 }
 
-fun formatImprovements(tickets: List<Ticket>, categoryOrder: List<String>?) : String {
+fun formatImprovements(tickets: List<Ticket>, categoryOrder: List<String>) : String {
     if (tickets.isEmpty()) {
         return " - No notable improvements. No pull requests (issues) were referenced from commits."
     }
 
     val groupedTickets = tickets.groupBy { it.category }.toSortedMap()
 
-    val categories = if (categoryOrder.isNullOrEmpty()) groupedTickets.keys else categoryOrder
+    val categories = categoryOrder.ifEmpty { groupedTickets.keys }
 
     var improvementText = ""
 
