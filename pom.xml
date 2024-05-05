@@ -15,6 +15,18 @@
     <packaging>jar</packaging>
 
     <name>Changelog Generator</name>
+    <description>
+        Generates GitHub change logs.
+    </description>
+    <url>https://github.com/kiwiproject/kiwiproject-changelog</url>
+    <inceptionYear>2021</inceptionYear>
+
+    <scm>
+        <connection>scm:git:https://github.com/kiwiproject/kiwiproject-changelog.git</connection>
+        <developerConnection>scm:git:git@github.com:kiwiproject/kiwiproject-changelog.git</developerConnection>
+        <url>https://github.com/kiwiproject/kiwiproject-changelog</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <!-- Versions for required dependencies -->
