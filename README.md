@@ -33,9 +33,34 @@ the categories in the generated changelog.
 -O "Dependency Updates"
 ```
 
-The changelog produced using the above resulted in [this](https://github.com/kiwiproject/kiwi/releases/tag/v2.5.0) output.
+In the `-m` options, the GitHub label comes first, then a colon, and finally the category name.
+When a label or category name contains a space, you'll need to enclose the entire argument in
+quotes.
+
+The changelog that was produced using the above arguments is
+[here](https://github.com/kiwiproject/kiwi/releases/tag/v2.5.0).
 
 Note that you need a [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 that has appropriate access to be able to read issues in the repository. 
-You can also supply this token using the command line, or by setting an environment variable
+You can supply this token using the command line (as shown above), or by setting an environment variable
 named `KIWI_CHANGELOG_TOKEN`.
+
+You can also add some 🌶️ to your change logs using emoji.
+In label-to category mappings and category order arguments, add emoji.
+For example:
+
+```
+-m "bug:Bugs 🐛"
+-m "new feature:Improvements 🚀"
+-m "enhancement:Improvements 🚀"
+-m "dependencies:Dependency Updates ⬆️"
+-m "code cleanup:Assorted 👜"
+-m "refactoring:Assorted 👜"
+--include-prs-from dependabot[bot]
+-O "Improvements 🚀"
+-O "Bugs 🐛"
+-O "Assorted 👜"
+-O "Dependency Updates ⬆️"
+```
+
+Make sure to use the same _exact_ same category names so that they are grouped together.
