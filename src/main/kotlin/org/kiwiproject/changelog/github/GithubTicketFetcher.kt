@@ -94,7 +94,12 @@ class GithubTicketFetcher(
             return defaultCategory
         }
 
-        val matchingLabel = labels.intersect(labelMapping.keys).firstOrNull() ?: return defaultCategory
-        return labelMapping[matchingLabel] ?: error("matchingLabel should never be null here")
+        val foundLabel = labels.intersect(labelMapping.keys).firstOrNull()
+        if (foundLabel == null) {
+            println("WARN: Using default category ($defaultCategory) b/c no mapping found for label(s): $labels")
+            return defaultCategory
+        }
+
+        return labelMapping[foundLabel] ?: error("matchingLabel should never be null here")
     }
 }
