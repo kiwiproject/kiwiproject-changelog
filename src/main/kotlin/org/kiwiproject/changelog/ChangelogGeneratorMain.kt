@@ -1,7 +1,8 @@
 package org.kiwiproject.changelog
 
-import org.kiwiproject.changelog.config.CategoryConfig
 import org.kiwiproject.changelog.config.ChangelogConfig
+import org.kiwiproject.changelog.config.ConfigHelpers.buildCategoryConfig
+import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
@@ -23,6 +24,14 @@ import kotlin.system.exitProcess
         ""]
 )
 class ChangelogGeneratorMain : Runnable {
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val exitCode = CommandLine(ChangelogGeneratorMain()).execute(*args)
+            exitProcess(exitCode)
+        }
+    }
 
     // GitHub options
     @Option(
@@ -105,9 +114,8 @@ class ChangelogGeneratorMain : Runnable {
     @Option(
         names = ["-c", "--default-category"],
         description = ["Default category to put issues into if a mapping is not provided"],
-        defaultValue = "Assorted"
     )
-    lateinit var defaultCategory: String
+    var defaultCategory: String? = null
 
     @Option(
         names = ["-m", "--mapping"],
@@ -126,6 +134,26 @@ class ChangelogGeneratorMain : Runnable {
         description = ["The order to display the categories. Order is the order of these options"]
     )
     var categoryOrder: List<String> = listOf()
+
+    @Option(
+        names = ["-e", "--emoji-mapping"],
+        description = ["Map a category to an emoji"]
+    )
+    var categoryToEmojiMappings: List<String> = listOf()
+
+    // External configuration
+
+    @Option(
+        names = ["-n", "--config-file"],
+        description = ["The configuration file to use"]
+    )
+    var configFile: String? = null
+
+    @Option(
+        names = ["-g", "--ignore-config-files"],
+        description = ["When set, ignores standard configuration file locations"],
+    )
+    var ignoreConfigFiles: Boolean = false
 
     // Debug options
 
@@ -149,14 +177,21 @@ class ChangelogGeneratorMain : Runnable {
             "GitHub token must be provided as command line option or KIWI_CHANGELOG_TOKEN environment variable"
         }
 
+        // Get external configuration if one exists
+        val currentDirectory = File(".").absoluteFile.parentFile
+        val userHomeDirectory = File(System.getProperty("user.home"))
+        val externalConfig = externalConfig(currentDirectory, userHomeDirectory, configFile, ignoreConfigFiles)
+
+        val categoryConfig = buildCategoryConfig(
+            labelToCategoryMappings,
+            categoryToEmojiMappings,
+            categoryOrder,
+            defaultCategory,
+            alwaysIncludePRsFrom,
+            externalConfig
+        )
         val repoHostConfig = RepoHostConfig(repoHostUrl, repoHostApi, githubToken, repository)
         val repoConfig = RepoConfig(File(workingDir), previousRevision, revision)
-        val categoryConfig = CategoryConfig(
-            defaultCategory,
-            convertMappings(labelToCategoryMappings),
-            alwaysIncludePRsFrom,
-            categoryOrder
-        )
 
         if (outputType == OutputType.FILE) {
             check(outputFile != null) { "output file is required when output type is FILE" }
@@ -186,28 +221,10 @@ class ChangelogGeneratorMain : Runnable {
         println("outputFile = $outputFile")
         println("defaultCategory = $defaultCategory")
         println("labelToCategoryMappings = $labelToCategoryMappings")
+        println("categoryToEmojiMappings = $categoryToEmojiMappings")
         println("alwaysIncludePRsFrom = $alwaysIncludePRsFrom")
         println("categoryOrder = $categoryOrder")
+        println("configFile = $configFile")
         println("----------")
-    }
-
-    private fun convertMappings(labelToCategoryMapping: List<String>?): Map<String, String> {
-        if (labelToCategoryMapping == null) {
-            return emptyMap()
-        }
-
-        return labelToCategoryMapping
-            .asSequence()
-            .map { opt -> opt.split(":") }
-            .map { parts -> parts[0] to parts[1] }
-            .toMap()
-    }
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val exitCode = CommandLine(ChangelogGeneratorMain()).execute(*args)
-            exitProcess(exitCode)
-        }
     }
 }
