@@ -15,7 +15,7 @@ import kotlin.system.exitProcess
 
 @Command(
     name = "ChangelogGenerator",
-    version = ["0.5.0"],
+    version = ["0.7.0"],
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     description = [
