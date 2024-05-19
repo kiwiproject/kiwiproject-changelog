@@ -53,6 +53,11 @@
         <!-- Kotlin settings -->
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
+
+        <!-- Sonar properties -->
+        <sonar.projectKey>kiwiproject_kiwiproject-changelog</sonar.projectKey>
+        <sonar.organization>kiwiproject</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencyManagement>
