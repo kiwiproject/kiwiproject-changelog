@@ -79,7 +79,7 @@ fun ensureAllCategories(
     require(ticketCategories.isNotEmpty()) { "ticketCategories must not be empty" }
 
     val initialCategories = categoryOrder.ifEmpty { ticketCategories }
-    val missingCategories = ticketCategories - initialCategories.toSet();
+    val missingCategories = ticketCategories - initialCategories.toSet()
     if (missingCategories.isNotEmpty()) {
         println("WARN: Missing categories ${missingCategories.joinToString()} (they will be added after other categories)")
     }
