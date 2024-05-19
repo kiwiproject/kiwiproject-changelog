@@ -131,6 +131,9 @@ categories:
     emoji: ⬆️
     labels:
       - dependencies
+
+alwaysIncludePRsFrom:
+  - dependabot[bot]
 ```
 
 This file is searched for in the following order (relative to the directory where the changelog generator JAR is executed):
