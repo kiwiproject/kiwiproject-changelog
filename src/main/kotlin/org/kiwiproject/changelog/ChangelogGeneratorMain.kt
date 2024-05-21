@@ -9,13 +9,14 @@ import org.kiwiproject.changelog.config.RepoHostConfig
 import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.ITypeConverter
+import picocli.CommandLine.IVersionProvider
 import picocli.CommandLine.Option
 import java.io.File
 import kotlin.system.exitProcess
 
 @Command(
     name = "ChangelogGenerator",
-    version = ["0.7.0"],
+    versionProvider = ChangelogGeneratorMain.VersionProvider::class,
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     description = [
@@ -24,6 +25,14 @@ import kotlin.system.exitProcess
         ""]
 )
 class ChangelogGeneratorMain : Runnable {
+
+    class VersionProvider : IVersionProvider {
+        override fun getVersion(): Array<String> {
+            val implVersion = ChangelogGeneratorMain::class.java.`package`.implementationVersion
+            val version = implVersion ?: "[unknown]"
+            return arrayOf(version)
+        }
+    }
 
     companion object {
         @JvmStatic
