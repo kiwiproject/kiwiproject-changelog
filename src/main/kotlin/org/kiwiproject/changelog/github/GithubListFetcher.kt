@@ -2,6 +2,7 @@ package org.kiwiproject.changelog.github
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.common.annotations.VisibleForTesting
 import org.kiwiproject.changelog.config.RepoHostConfig
 
 class GithubListFetcher(private val repoHostConfig: RepoHostConfig) {
@@ -30,14 +31,18 @@ class GithubListFetcher(private val repoHostConfig: RepoHostConfig) {
         return mapper.readValue(response.content)
     }
 
-    private fun getNextPageUrl(linkHeader: String?) : String {
+    @VisibleForTesting
+    fun getNextPageUrl(linkHeader: String?) : String {
         if (linkHeader == null) {
             return "none"
         }
 
-        // See GitHub API doc : https://developer.github.com/guides/traversing-with-pagination/
+        // See GitHub API doc : https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api
+
+        // Example Link header and value:
         // Link: <https://api.github.com/repositories/6207167/issues?access_token=a0a4c0f41c200f7c653323014d6a72a127764e17&state=closed&filter=all&page=2>; rel="next",
         //       <https://api.github.com/repositories/62207167/issues?access_token=a0a4c0f41c200f7c653323014d6a72a127764e17&state=closed&filter=all&page=4>; rel="last"
+
         val linkRel = linkHeader.split(",")
             .firstOrNull { url -> url.contains("rel=\"next\"") }
 
