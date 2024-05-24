@@ -1,62 +1,67 @@
 package org.kiwiproject.changelog.github
 
-import org.kiwiproject.io.KiwiIO
+import com.google.common.annotations.VisibleForTesting
 import java.io.IOException
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.URI
-import java.nio.charset.StandardCharsets
+import java.net.http.HttpClient
+import java.net.http.HttpHeaders
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse.BodyHandlers
 import java.time.Instant
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import javax.net.ssl.HttpsURLConnection
+import java.time.temporal.ChronoUnit
 
-class GithubApi(private val githubToken: String) {
+class GithubApi(
+    private val githubToken: String,
+    private val httpClient: HttpClient = HttpClient.newHttpClient()
+) {
+
+    // TODO Enhance the Response type:
+    //  - Rename to GithubResponse (or GitHubResponse, in which case rename everything with Github to GitHub)
+    //  - Add statusCode and don't throw I/O exception when get non-2xx response
+    //  - Add other headers to GitHubResponse (rateLimitReset, rateLimitLimit, rateLimitRemaining)
+
     fun get(url: String): Response {
-        return doRequest(url, "GET")
-    }
+        println("GET: $url")
 
-    private fun doRequest(urlString: String, method: String, body: String? = null) : Response {
-        println("Request url: $urlString")
-        val url = URI(urlString).toURL()
+        val httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .header("Content-Type", "application/json")
+            .header("Authorization", "token $githubToken")
+            .GET()
+            .build()
+        val httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString())
 
-        val connection : HttpsURLConnection = url.openConnection() as HttpsURLConnection
-        connection.requestMethod = method
-        connection.doOutput = true
-        connection.setRequestProperty("Content-Type", "application/json")
-        connection.setRequestProperty("Authorization", "token $githubToken")
-
-        if (body != null) {
-            connection.outputStream.use { out ->
-                out.write(body.toByteArray(StandardCharsets.UTF_8))
-                out.flush()
-            }
+        val statusCode = httpResponse.statusCode()
+        if (statusCode != 200) {
+            throw IOException("GET ${httpRequest.uri()} failed, response code $statusCode, response body\n:${httpResponse.body()}")
         }
 
-        val rateLimitReset = resetLimitInLocalTimeOrEmpty(connection)
-        val rateRemaining = connection.getHeaderField("X-RateLimit-Remaining")
-        val rateLimit = connection.getHeaderField("X-RateLimit-Limit")
+        val responseHeaders = httpResponse.headers()
+        val rateLimitReset = resetLimitInLocalTimeOrEmpty(responseHeaders)
+        val rateRemaining = responseHeaders.firstValue("X-RateLimit-Remaining").orElse(null)
+        val rateLimit = responseHeaders.firstValue("X-RateLimit-Limit").orElse(null)
 
-        println("GitHub API rate info => Remaining : $rateRemaining, Limit : $rateLimit, Reset at: $rateLimitReset")
+        val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
+            ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
+        )
+        println("GitHub API rate info => Limit : $rateLimit, Remaining : $rateRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset")
 
-        val link = connection.getHeaderField("Link")
-        println("Next page 'Link' from GitHub: $link")
+        val link = responseHeaders.firstValue("Link").orElse(null)
+        println("GitHub 'Link' header: $link")
 
-        val content = call(method, connection)
-        return Response(content, link)
+        return Response(httpResponse.body(), link)
     }
 
-    private fun resetLimitInLocalTimeOrEmpty(connection: HttpsURLConnection) : String {
-        val rateLimitReset : String = connection.getHeaderField("X-RateLimit-Reset") ?: return ""
-        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(Instant.ofEpochSecond(rateLimitReset.toLong()).atZone(ZoneId.of("UTC")))
-    }
-
-    private fun call(method: String, connection: HttpsURLConnection) : String {
-        if (connection.responseCode < HTTP_BAD_REQUEST) {
-            return KiwiIO.readInputStreamAsString(connection.inputStream)
-        }
-
-        val errorBody = KiwiIO.readInputStreamAsString(connection.errorStream)
-        throw IOException("$method ${connection.url} failed, response code = ${connection.responseCode}, response body:\n$errorBody")
+    @VisibleForTesting
+    fun resetLimitInLocalTimeOrEmpty(responseHeaders: HttpHeaders): String {
+        val rateLimitReset: String = responseHeaders.firstValue("X-RateLimit-Reset").orElse(null) ?: return ""
+        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
+            Instant.ofEpochSecond(rateLimitReset.toLong()).atZone(ZoneId.of("UTC"))
+        )
     }
 
     class Response(val content: String, val linkHeader: String?)
