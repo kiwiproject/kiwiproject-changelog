@@ -15,6 +15,7 @@ fun formatChangeLog(contributors: Set<String>,
     val template = """
         ## Summary
         - @date@ - [@commitCount@ commit(s)](@repoUrl@/compare/@previousRev@...@newRev@) by @contributors@
+        
         @improvements@
     """.trimIndent()
 
@@ -67,6 +68,7 @@ fun formatImprovements(
         for (ticket in groupedTickets[category] ?: listOf()) {
             improvementText += "* ${ticket.title} [(#${ticket.id})](${ticket.url})\n"
         }
+        improvementText += "\n"
     }
 
     return improvementText
