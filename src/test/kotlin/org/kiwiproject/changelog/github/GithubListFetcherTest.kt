@@ -1,13 +1,20 @@
 package org.kiwiproject.changelog.github
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
+import org.junit.jupiter.params.provider.ValueSource
 import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.github.GithubApi.GitHubResponse
+import java.net.URI
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @DisplayName("GithubListFetcher")
 class GithubListFetcherTest {
@@ -23,6 +30,37 @@ class GithubListFetcherTest {
                 "12345",
                 "kiwiproject/kiwi"
             )
+        )
+    }
+
+    @Nested
+    inner class CheckOkResponse {
+
+        @Test
+        fun shouldNotThrowException_WhenStatusCodeIs200() {
+            val response = newGitHubResponse(200)
+
+            assertThatCode { fetcher.checkOkResponse(response) }.doesNotThrowAnyException()
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [100, 201, 202, 204, 300, 301, 400, 500])
+        fun shouldThrowIllegalStateException_WhenUnsuccessfulResponse(statusCode: Int) {
+            val response = newGitHubResponse(statusCode)
+
+            assertThatIllegalStateException()
+                .isThrownBy { fetcher.checkOkResponse(response) }
+                .withMessage("GET ${response.requestUri} failed, response code ${response.statusCode}, response body\n:${response.content}")
+        }
+
+        private fun newGitHubResponse(statusCode: Int) = GitHubResponse(
+            statusCode,
+            URI.create("https://acme.com:4242/test"),
+            "the content",
+            null,
+            60,
+            42,
+            Instant.now().plus(30, ChronoUnit.MINUTES).epochSecond
         )
     }
 
