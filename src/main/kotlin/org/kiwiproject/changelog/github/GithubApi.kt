@@ -1,12 +1,17 @@
 package org.kiwiproject.changelog.github
 
 import com.google.common.annotations.VisibleForTesting
-import java.io.IOException
+import org.kiwiproject.changelog.extension.firstValueAsLongOrThrow
+import org.kiwiproject.changelog.extension.firstValueOrNull
+import org.kiwiproject.time.KiwiDurationFormatters
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpHeaders
 import java.net.http.HttpRequest
+import java.net.http.HttpRequest.BodyPublishers
+import java.net.http.HttpResponse
 import java.net.http.HttpResponse.BodyHandlers
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -19,50 +24,96 @@ class GithubApi(
     private val httpClient: HttpClient = HttpClient.newHttpClient()
 ) {
 
-    // TODO Enhance the Response type:
-    //  - Rename to GithubResponse (or GitHubResponse, in which case rename everything with Github to GitHub)
-    //  - Add statusCode and don't throw I/O exception when get non-2xx response
-    //  - Add other headers to GitHubResponse (rateLimitReset, rateLimitLimit, rateLimitRemaining)
-
-    fun get(url: String): Response {
+    /**
+     * Generic method to make a GET request to any GitHub REST API endpoint.
+     */
+    fun get(url: String): GitHubResponse {
         println("GET: $url")
 
-        val httpRequest = HttpRequest.newBuilder()
+        val httpRequest = newRequestBuilder(url).GET().build()
+        return sendRequest(httpRequest)
+    }
+
+    /**
+     * Generic method to make a POST request to any GitHub REST API endpoint.
+     */
+    fun post(url: String, bodyJson: String): GitHubResponse {
+        println("POST: $url")
+
+        val bodyPublisher = BodyPublishers.ofString(bodyJson)
+        val httpRequest = newRequestBuilder(url).POST(bodyPublisher).build()
+        return sendRequest(httpRequest)
+    }
+
+    private fun newRequestBuilder(url: String): HttpRequest.Builder =
+        HttpRequest.newBuilder()
             .uri(URI.create(url))
-            .header("Content-Type", "application/json")
+            .header("Content-Type", "application/vnd.github+json")
             .header("Authorization", "token $githubToken")
-            .GET()
-            .build()
+
+    private fun sendRequest(httpRequest: HttpRequest): GitHubResponse {
         val httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString())
+        return GitHubResponse.from(httpResponse)
+    }
 
-        val statusCode = httpResponse.statusCode()
-        if (statusCode != 200) {
-            throw IOException("GET ${httpRequest.uri()} failed, response code $statusCode, response body\n:${httpResponse.body()}")
+    /**
+     * Represents a generic GitHub response.
+     */
+    class GitHubResponse(
+        val statusCode: Int,
+        val requestUri: URI,
+        val content: String,
+        val linkHeader: String?,
+        val rateLimitLimit: Long,
+        val rateLimitRemaining: Long,
+        val rateLimitResetAt: Long
+    ) {
+
+        companion object {
+
+            /**
+             * Create a new GitHubResponse from the given HttpResponse.
+             */
+            fun from(httpResponse: HttpResponse<String>): GitHubResponse {
+                val responseHeaders = httpResponse.headers()
+                val rateLimitLimit = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Limit")
+                val rateLimitRemaining = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Remaining")
+                val rateLimitResetEpochSeconds = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Reset")
+
+                val now = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
+                val resetAt = Instant.ofEpochSecond(rateLimitResetEpochSeconds).atZone(ZoneId.of("UTC"))
+                val timeUntilReset = Duration.between(now, resetAt)
+                val humanTimeUntilReset = KiwiDurationFormatters.formatDurationWords(timeUntilReset)
+
+                val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(now)
+                val rateLimitReset = epochSecondsAsIsoFormatted(rateLimitResetEpochSeconds)
+                println("GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, Time until reset: $humanTimeUntilReset")
+
+                val link = responseHeaders.firstValueOrNull("Link")
+                println("GitHub 'Link' header: $link")
+
+                return GitHubResponse(
+                    httpResponse.statusCode(),
+                    httpResponse.uri(),
+                    httpResponse.body(),
+                    link,
+                    rateLimitLimit,
+                    rateLimitRemaining,
+                    rateLimitResetEpochSeconds
+                )
+            }
         }
-
-        val responseHeaders = httpResponse.headers()
-        val rateLimitReset = resetLimitInLocalTimeOrEmpty(responseHeaders)
-        val rateRemaining = responseHeaders.firstValue("X-RateLimit-Remaining").orElse(null)
-        val rateLimit = responseHeaders.firstValue("X-RateLimit-Limit").orElse(null)
-
-        val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
-            ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
-        )
-        println("GitHub API rate info => Limit : $rateLimit, Remaining : $rateRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset")
-
-        val link = responseHeaders.firstValue("Link").orElse(null)
-        println("GitHub 'Link' header: $link")
-
-        return Response(httpResponse.body(), link)
     }
+}
 
-    @VisibleForTesting
-    fun resetLimitInLocalTimeOrEmpty(responseHeaders: HttpHeaders): String {
-        val rateLimitReset: String = responseHeaders.firstValue("X-RateLimit-Reset").orElse(null) ?: return ""
-        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
-            Instant.ofEpochSecond(rateLimitReset.toLong()).atZone(ZoneId.of("UTC"))
-        )
-    }
+@VisibleForTesting
+fun resetLimitAsIsoFormatted(responseHeaders: HttpHeaders): String {
+    val rateLimitReset = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Reset")
+    return epochSecondsAsIsoFormatted(rateLimitReset)
+}
 
-    class Response(val content: String, val linkHeader: String?)
+private fun epochSecondsAsIsoFormatted(epochSeconds: Long): String {
+    return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
+        Instant.ofEpochSecond(epochSeconds).atZone(ZoneId.of("UTC"))
+    )
 }

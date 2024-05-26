@@ -3,7 +3,9 @@ package org.kiwiproject.changelog.github
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.common.annotations.VisibleForTesting
+import org.apache.commons.lang3.StringUtils.abbreviate
 import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.github.GithubApi.GitHubResponse
 
 class GithubListFetcher(private val repoHostConfig: RepoHostConfig) {
 
@@ -25,10 +27,19 @@ class GithubListFetcher(private val repoHostConfig: RepoHostConfig) {
 
         val api = GithubApi(repoHostConfig.token)
         val response = api.get(nextPageUrl)
+        checkOkResponse(response)
 
         nextPageUrl = getNextPageUrl(response.linkHeader)
 
         return mapper.readValue(response.content)
+    }
+
+    @VisibleForTesting
+    fun checkOkResponse(response: GitHubResponse) {
+        check(response.statusCode == 200) {
+            val truncatedContent = abbreviate(response.content, 100)
+            "GET ${response.requestUri} failed, response code ${response.statusCode}, response body\n:$truncatedContent"
+        }
     }
 
     @VisibleForTesting
