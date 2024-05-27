@@ -93,7 +93,7 @@ class GitHubReleaseManagerTest {
         val getTagRequest = server.takeRequestWith1SecTimeout()
         assertAll(
             { assertThat(getTagRequest.method).isEqualTo("GET") },
-            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/refs/tags/v0.9.0-alpha") },
+            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/git/ref/tags/v0.9.0-alpha") },
             {
                 assertThat(server.takeRequestWith1MilliTimeout())
                     .describedAs("The 'create release' request should not have happened")
@@ -145,7 +145,7 @@ class GitHubReleaseManagerTest {
 
         assertAll(
             { assertThat(getTagRequest.method).isEqualTo("GET") },
-            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/refs/tags/v0.9.0-alpha") },
+            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/git/ref/tags/v0.9.0-alpha") },
             { assertThat(createReleaseRequest.method).isEqualTo("POST") },
             { assertThat(createReleaseRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/releases") },
             { assertThat(createReleaseRequest.body.readUtf8()).isEqualToIgnoringWhitespace(requestJson) }
