@@ -101,10 +101,10 @@ class GithubApiTest {
             val releaseResponseJson = Fixtures.fixture("github-create-release-response.json")
             `when`(httpResponse.body()).thenReturn(releaseResponseJson)
 
-            val nowAsEpochSeconds = Instant.now().plus(42, ChronoUnit.MINUTES).epochSecond
+            val rateLimitResetAt = Instant.now().plus(42, ChronoUnit.MINUTES).epochSecond
 
             val headerMap = mapOf(
-                "X-RateLimit-Reset" to listOf(nowAsEpochSeconds.toString()),
+                "X-RateLimit-Reset" to listOf(rateLimitResetAt.toString()),
                 "X-RateLimit-Remaining" to listOf("59"),
                 "X-RateLimit-Limit" to listOf("60"),
             )
@@ -124,7 +124,7 @@ class GithubApiTest {
                 { assertThat(response.linkHeader).isNull() },
                 { assertThat(response.rateLimitLimit).isEqualTo(60) },
                 { assertThat(response.rateLimitRemaining).isEqualTo(59) },
-                { assertThat(response.rateLimitResetAt).isEqualTo(nowAsEpochSeconds) }
+                { assertThat(response.rateLimitResetAt).isEqualTo(rateLimitResetAt) }
             )
 
             val httpRequestCaptor = ArgumentCaptor.forClass(HttpRequest::class.java)
