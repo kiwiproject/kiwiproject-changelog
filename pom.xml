@@ -40,6 +40,7 @@
 
         <!-- Versions for test dependencies -->
         <kiwi-test.version>3.3.0</kiwi-test.version>
+        <mockwebserver.version>4.12.0</mockwebserver.version>
 
         <!-- Versions for plugins -->
         <dokka-maven-plugin.version>1.9.20</dokka-maven-plugin.version>
@@ -159,6 +160,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>${mockwebserver.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

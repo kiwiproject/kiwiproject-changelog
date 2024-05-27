@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v0.9.0-alpha",
+  "node_id": "REF_kwDOLab6U7ZyZWZzL3RhZ3MvdjAuOS4wLWFscGhh",
+  "url": "https://api.github.com/repos/sleberknight/kotlin-scratch-pad/git/refs/tags/v0.9.0-alpha",
+  "object": {
+    "sha": "395467dea8959602e64b5a1cfd13964a830a66e7",
+    "type": "commit",
+    "url": "https://api.github.com/repos/sleberknight/kotlin-scratch-pad/git/commits/395467dea8959602e64b5a1cfd13964a830a66e7"
+  }
+}
