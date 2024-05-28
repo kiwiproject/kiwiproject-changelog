@@ -26,6 +26,7 @@ class GitHubReleaseManager(
      */
     fun createRelease(tagName: String, releaseContent: String): GitHubRelease {
         checkTagExists(tagName)
+        // TODO: ensure release does NOT exist already
 
         val bodyParameters = mapOf<String, Any>(
             "tag_name" to tagName,
@@ -51,7 +52,7 @@ class GitHubReleaseManager(
     }
 
     private fun tagUrlFor(tagName: String) =
-        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/refs/tags/$tagName"
+        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/git/ref/tags/$tagName"
 
     class GitHubRelease(val htmlUrl: String) {
         companion object {

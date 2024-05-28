@@ -6,4 +6,16 @@ data class CategoryConfig(
     val alwaysIncludePRsFrom: List<String>,
     val categoryOrder: List<String>,
     val categoryToEmoji: Map<String, String?>
-)
+) {
+    companion object {
+        fun empty(): CategoryConfig {
+            return CategoryConfig(
+                defaultCategory = "Assorted",
+                labelToCategoryMapping = mapOf(),
+                alwaysIncludePRsFrom = listOf(),
+                categoryOrder = listOf(),
+                categoryToEmoji = mapOf()
+            )
+        }
+    }
+}

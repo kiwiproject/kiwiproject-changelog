@@ -1,19 +1,25 @@
 package org.kiwiproject.changelog
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.common.annotations.VisibleForTesting
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.github.GitHubReleaseManager
+import org.kiwiproject.changelog.github.GithubApi
 import org.kiwiproject.changelog.github.GithubTicketFetcher
-import java.io.FileOutputStream
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
-import java.nio.charset.StandardCharsets
+import java.io.File
 
 class GenerateChangelog(
     private val repoHostConfig: RepoHostConfig,
     private val repoConfig: RepoConfig,
-    private val changeLogConfig: ChangelogConfig
+    private val changeLogConfig: ChangelogConfig,
+    internal val releaseManager: GitHubReleaseManager = GitHubReleaseManager(
+        repoHostConfig,
+        GithubApi(repoHostConfig.token),
+        jacksonObjectMapper()
+    )
 ) {
 
     fun generate() {
@@ -32,15 +38,7 @@ class GenerateChangelog(
         val changeLog = formatChangeLog(contributors, improvements, commits.size, repoConfig, changeLogConfig, githubUrl)
 
         println("Writing out changelog to ${changeLogConfig.outputType}")
-
-        when(changeLogConfig.outputType) {
-            OutputType.CONSOLE -> println(changeLog)
-            OutputType.FILE -> writeFile(changeLog)
-            OutputType.GITHUB -> {  // TODO: Implement this
-                println("*** GitHub Release Not Implemented Yet. Printing to console. ***")
-                println(changeLog)
-            }
-        }
+        writeChangeLog(changeLog)
     }
 
     private fun commits() : List<GitCommit> {
@@ -63,16 +61,33 @@ class GenerateChangelog(
             .map { parts -> GitCommit(parts[2].trim(), parts[3].trim()) }
     }
 
-    private fun writeFile(content: String) {
-        val out = changeLogConfig.outputFile ?: return
-
-        out.parentFile?.mkdirs()
-        try {
-            PrintWriter(OutputStreamWriter(FileOutputStream(out), StandardCharsets.UTF_8)).use { p ->
-                p.write(content)
+    @VisibleForTesting
+    fun writeChangeLog(changeLog: String) {
+        when (changeLogConfig.outputType) {
+            OutputType.CONSOLE -> println(changeLog)
+            OutputType.FILE -> {
+                writeFile(changeLog)
+                println("Wrote changelog to ${changeLogConfig.outputFile}")
             }
-        } catch (e: Exception) {
-            throw RuntimeException("Problems writing text to file: $out", e)
+            OutputType.GITHUB -> {
+                val release = releaseManager.createRelease(repoConfig.revision, changeLog)
+                println("Created GitHub release. See it at ${release.htmlUrl}")
+            }
         }
+    }
+
+    private fun writeFile(content: String): File {
+        checkNotNull(changeLogConfig.outputFile) {
+            "changeLogConfig.outputFile must not be null." +
+                    " The --output-file (or -f) option is required when output type is file."
+        }
+        writeFile(content, changeLogConfig.outputFile)
+        return changeLogConfig.outputFile
+    }
+
+    @VisibleForTesting
+    fun writeFile(content: String, out: File) {
+        out.parentFile?.mkdirs()
+        out.writeText(content)
     }
 }
