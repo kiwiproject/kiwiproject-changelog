@@ -181,12 +181,15 @@ class ChangelogGeneratorMain : Runnable {
             return
         }
 
+        println("Generating change log for version $revision")
+
         val githubToken = token ?: System.getenv("KIWI_CHANGELOG_TOKEN")
         check(githubToken != null) {
             "GitHub token must be provided as command line option or KIWI_CHANGELOG_TOKEN environment variable"
         }
 
         // Get external configuration if one exists
+        println("Getting configuration information")
         val currentDirectory = File(".").absoluteFile.parentFile
         val userHomeDirectory = File(System.getProperty("user.home"))
         val externalConfig = externalConfig(currentDirectory, userHomeDirectory, configFile, ignoreConfigFiles)
@@ -213,6 +216,7 @@ class ChangelogGeneratorMain : Runnable {
             categoryConfig = categoryConfig
         )
 
+        println("Gathering information for change log")
         GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig).generate()
     }
 
