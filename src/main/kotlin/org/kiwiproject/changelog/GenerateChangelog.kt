@@ -64,7 +64,11 @@ class GenerateChangelog(
     @VisibleForTesting
     fun writeChangeLog(changeLog: String) {
         when (changeLogConfig.outputType) {
-            OutputType.CONSOLE -> println(changeLog)
+            OutputType.CONSOLE -> {
+                println("---------- Change log ---------- ")
+                println(changeLog)
+                println("---------- End change log ---------- ")
+            }
             OutputType.FILE -> {
                 writeFile(changeLog)
                 println("Wrote changelog to ${changeLogConfig.outputFile}")

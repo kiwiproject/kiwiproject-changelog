@@ -58,7 +58,7 @@ class GenerateChangelogTest {
 
             val output = stdout.capturedLines().toList()
             val expectedStdout = changeLog.split(System.lineSeparator())
-            assertThat(output).containsExactlyElementsOf(expectedStdout)
+            assertThat(output).containsSequence(expectedStdout)
 
             verifyNoInteractions(releaseManager)
         }
