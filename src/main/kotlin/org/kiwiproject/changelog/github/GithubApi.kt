@@ -92,6 +92,7 @@ class GithubApi(
                 val link = responseHeaders.firstValueOrNull("Link")
                 println("GitHub 'Link' header: $link")
 
+                // TODO Check the rate limit remaining? Warn if "close" to zero?
                 return GitHubResponse(
                     httpResponse.statusCode(),
                     httpResponse.uri(),
