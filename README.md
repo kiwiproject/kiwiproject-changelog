@@ -120,7 +120,7 @@ Make sure to use the same _exact_ same category names in the `-m`, `-e`, and `-O
 
 ## External configuration
 
-As of version 0.6.0, you can create a `.kiwiproject-changelog.yml`. Here is a sample configuration
+As of version 0.6.0, you can create a `.kiwi-changelog.yml`. Here is a sample configuration
 that is equivalent to the above command line arguments:
 
 ```yaml
@@ -159,7 +159,7 @@ Using a configuration file is more convenient when you have a common set of cate
 the default category is specified using the `default` property in _one_ of the categories.
 If you specify more than one default category, then the first one is used.
 
-The  `.kiwiproject-changelog.yml` file is searched for in the following order (relative to the directory
+The  `.kiwi-changelog.yml` file is searched for in the following order (relative to the directory
 where the changelog generator JAR is executed):
 
 1. current directory
