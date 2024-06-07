@@ -51,6 +51,11 @@ private const val rateLimitLimit = 5000
  */
 private var rateLimitRemaining = 4999
 
+fun MockResponse.addJsonContentTypeHeader() : MockResponse {
+    addHeader("Content-Type", "application/json; charset=utf-8")
+    return this
+}
+
 /**
  * Adds the GitHub
  * [rate limit headers](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api#checking-the-status-of-your-rate-limit).

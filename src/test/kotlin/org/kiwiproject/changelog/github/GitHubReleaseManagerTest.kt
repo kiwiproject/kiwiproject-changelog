@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.kiwiproject.changelog.config.RepoHostConfig
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
+import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
 import org.kiwiproject.changelog.extension.takeRequestWith1MilliTimeout
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
@@ -61,7 +62,7 @@ class GitHubReleaseManagerTest {
             MockResponse()
                 .setResponseCode(201)
                 .setBody(releaseResponseJson)
-                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
@@ -108,7 +109,7 @@ class GitHubReleaseManagerTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(getTagResponseJson())
-                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
@@ -116,7 +117,7 @@ class GitHubReleaseManagerTest {
             MockResponse()
                 .setResponseCode(422)
                 .setBody("Validation failed")
-                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
