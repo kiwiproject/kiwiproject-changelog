@@ -1,12 +1,19 @@
 package org.kiwiproject.changelog.github
 
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.assertj.core.api.Assertions.within
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
+import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.test.util.Fixtures
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.any
@@ -22,6 +29,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
 private const val ISSUES_URL =
     "https://api.github.com/repos/kiwiproject/dropwizard-service-utilities/issues?page=1&per_page=10&state=closed&filter=all&direction=desc"
@@ -136,6 +144,66 @@ class GithubApiTest {
             assertAll(
                 { assertThat(actualHttpRequest.uri()).hasToString(RELEASES_URL) },
                 { assertThat(bodyPublisher.contentLength()).isEqualTo(bodyJson.length.toLong()) }
+            )
+        }
+    }
+
+    @Nested
+    inner class Patch {
+
+        private lateinit var server: MockWebServer
+        private lateinit var api: GithubApi
+
+        @BeforeEach
+        fun setUp() {
+            server = MockWebServer()
+            server.start()
+
+            val token = RandomStringUtils.randomAlphanumeric(40)
+            api = GithubApi(token)
+        }
+
+        @AfterEach
+        fun tearDown() {
+            server.shutdown()
+        }
+
+        @Test
+        fun shouldSendPatchToGitHub() {
+            val closeMilestoneResponseJson = Fixtures.fixture("github-close-milestone-response.json")
+
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(closeMilestoneResponseJson)
+                    .addGitHubRateLimitHeaders()
+            )
+
+            val url = server.url("/repos/sleberknight/kotlin-scratch-pad/milestones/1").toString()
+
+            val bodyJson = Fixtures.fixture("github-close-milestone-request.json")
+
+            val response = api.patch(url, bodyJson)
+
+            assertAll(
+                { assertThat(response.statusCode).isEqualTo(200) },
+                { assertThat(response.content).isEqualTo(closeMilestoneResponseJson) },
+                { assertThat(response.linkHeader).isNull() },
+                { assertThat(response.rateLimitLimit).isPositive() },
+                { assertThat(response.rateLimitRemaining).isLessThan(response.rateLimitLimit) },
+                { assertThat(response.rateLimitResetAt).isGreaterThan(Instant.now().epochSecond) },
+                {
+                    assertThat(response.rateLimitResetAt).isCloseTo(
+                        Instant.now().epochSecond,
+                        within(TimeUnit.HOURS.toSeconds(1))
+                    )
+                }
+            )
+
+            val patchRequest = server.takeRequestWith1SecTimeout()
+            assertAll(
+                { assertThat(patchRequest.method).isEqualTo("PATCH") },
+                { assertThat(patchRequest.requestUrl).hasToString(url) },
             )
         }
     }

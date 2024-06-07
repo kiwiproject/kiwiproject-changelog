@@ -45,6 +45,17 @@ class GithubApi(
         return sendRequest(httpRequest)
     }
 
+    /**
+     * Generic method to make a PATCH request to any GitHub REST API endpoint.
+     */
+    fun patch(url: String, bodyJson: String): GitHubResponse {
+        println("PATCH: $url")
+
+        val bodyPublisher = BodyPublishers.ofString(bodyJson)
+        val httpRequest = newRequestBuilder(url).method("PATCH", bodyPublisher).build()
+        return sendRequest(httpRequest)
+    }
+
     private fun newRequestBuilder(url: String): HttpRequest.Builder =
         HttpRequest.newBuilder()
             .uri(URI.create(url))
@@ -59,7 +70,7 @@ class GithubApi(
     /**
      * Represents a generic GitHub response.
      */
-    class GitHubResponse(
+    data class GitHubResponse(
         val statusCode: Int,
         val requestUri: URI,
         val content: String,
