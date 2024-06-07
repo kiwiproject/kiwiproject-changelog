@@ -39,7 +39,7 @@ class GitHubReleaseManagerTest {
             "sleberknight/kotlin-scratch-pad"
         )
 
-        releaseManager = GitHubReleaseManager(repoHostConfig, GithubApi(token), jacksonObjectMapper())
+        releaseManager = GitHubReleaseManager(repoHostConfig, GithubApi(token), mapper)
     }
 
     @AfterEach

@@ -54,7 +54,7 @@ class GitHubReleaseManager(
     private fun tagUrlFor(tagName: String) =
         "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/git/ref/tags/$tagName"
 
-    class GitHubRelease(val htmlUrl: String) {
+    data class GitHubRelease(val htmlUrl: String) {
         companion object {
             fun from(responseContent: Map<String, Any>): GitHubRelease {
                 val htmlUrl = responseContent["html_url"] as String
