@@ -30,17 +30,6 @@ import java.nio.file.Path
 @DisplayName("GenerateChangelog")
 class GenerateChangelogTest {
 
-    @Test
-    fun shouldConstructGithubReleaseManager() {
-        val repoHostConfig = repoHostConfig()
-        val repoConfig = repoConfig()
-        val changelogConfig = changelogConfig(OutputType.CONSOLE)
-
-        val generateChangelog = GenerateChangelog(repoHostConfig, repoConfig, changelogConfig)
-
-        assertThat(generateChangelog.releaseManager).isNotNull
-    }
-
     @Nested
     inner class WriteChangeLog {
 
