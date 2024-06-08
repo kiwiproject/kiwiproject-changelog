@@ -1,11 +1,17 @@
 package org.kiwiproject.changelog
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.common.annotations.VisibleForTesting
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.ConfigHelpers.buildCategoryConfig
 import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.github.GitHubMilestoneManager
+import org.kiwiproject.changelog.github.GitHubMilestoneManager.GitHubMilestone
+import org.kiwiproject.changelog.github.GitHubReleaseManager
+import org.kiwiproject.changelog.github.GithubApi
 import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.ITypeConverter
@@ -31,14 +37,6 @@ class ChangelogGeneratorMain : Runnable {
             val implVersion = ChangelogGeneratorMain::class.java.`package`.implementationVersion
             val version = implVersion ?: "[unknown]"
             return arrayOf(version)
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val exitCode = CommandLine(ChangelogGeneratorMain()).execute(*args)
-            exitProcess(exitCode)
         }
     }
 
@@ -164,6 +162,24 @@ class ChangelogGeneratorMain : Runnable {
     )
     var ignoreConfigFiles: Boolean = false
 
+    //  Milestone options
+
+    @Option(
+        names = ["-C", "--close-milestone"],
+        description = ["When set, the milestone associated with the revision is closed"]
+    )
+    var closeMilestone: Boolean = false
+
+    @Option(
+        names = ["-M", "--milestone-to-close"],
+        description = [
+            "This option lets you specify the milestone to close.",
+            "If not specified, the milestone is assumed to be the revision without a leading 'v'.",
+            "For example, the default milestone for revision v1.4.2 is 1.4.2"
+        ]
+    )
+    var milestoneToClose: String? = null
+
     // Debug options
 
     @Option(
@@ -216,8 +232,19 @@ class ChangelogGeneratorMain : Runnable {
             categoryConfig = categoryConfig
         )
 
+        val githubApi = GithubApi(githubToken)
+        val mapper = jacksonObjectMapper()
+        val releaseManager = GitHubReleaseManager(repoHostConfig, githubApi, mapper)
+
         println("Gathering information for change log")
-        GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig).generate()
+        GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig, releaseManager).generate()
+
+        // Optional: close the milestone
+        if (closeMilestone) {
+            val milestoneManager = GitHubMilestoneManager(repoHostConfig, githubApi, mapper)
+            val closedMilestone = closeMilestone(revision, milestoneToClose, milestoneManager)
+            println("Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
+        }
     }
 
     private fun printArgValues() {
@@ -239,5 +266,28 @@ class ChangelogGeneratorMain : Runnable {
         println("categoryOrder = $categoryOrder")
         println("configFile = $configFile")
         println("----------")
+    }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val exitCode = CommandLine(ChangelogGeneratorMain()).execute(*args)
+            exitProcess(exitCode)
+        }
+
+        @VisibleForTesting
+        fun closeMilestone(
+            revision: String,
+            maybeMilestoneTitle: String?,
+            milestoneManager: GitHubMilestoneManager
+        ): GitHubMilestone {
+            val milestoneTitle = maybeMilestoneTitle ?: revision.substring(1)
+            println("Closing milestone $milestoneTitle")
+
+            val milestone = milestoneManager.getOpenMilestoneByTitle(milestoneTitle)
+            val closedMilestone = milestoneManager.closeMilestone(milestone.number)
+
+            return closedMilestone
+        }
     }
 }

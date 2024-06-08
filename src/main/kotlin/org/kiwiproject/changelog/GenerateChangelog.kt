@@ -1,13 +1,11 @@
 package org.kiwiproject.changelog
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.annotations.VisibleForTesting
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.config.RepoHostConfig
 import org.kiwiproject.changelog.github.GitHubReleaseManager
-import org.kiwiproject.changelog.github.GithubApi
 import org.kiwiproject.changelog.github.GithubTicketFetcher
 import java.io.File
 
@@ -15,11 +13,7 @@ class GenerateChangelog(
     private val repoHostConfig: RepoHostConfig,
     private val repoConfig: RepoConfig,
     private val changeLogConfig: ChangelogConfig,
-    internal val releaseManager: GitHubReleaseManager = GitHubReleaseManager(
-        repoHostConfig,
-        GithubApi(repoHostConfig.token),
-        jacksonObjectMapper()
-    )
+    private val releaseManager: GitHubReleaseManager
 ) {
 
     fun generate() {
