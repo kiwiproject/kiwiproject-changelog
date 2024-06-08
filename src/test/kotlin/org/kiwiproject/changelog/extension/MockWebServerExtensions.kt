@@ -43,13 +43,13 @@ fun MockWebServer.takeRequestWith1MilliTimeout() : RecordedRequest? =
 /**
  * Fixed value for the GitHub `X-RateLimit-Limit` header.
  */
-private const val rateLimitLimit = 5000
+const val rateLimitLimit = 5000L
 
 /**
  * A variable for the GitHub `X-RateLimit-Remaining` header.
  * Its value is decremented each time [addGitHubRateLimitHeaders] is called.
  */
-private var rateLimitRemaining = 4999
+private var rateLimitRemaining = 4999L
 
 fun MockResponse.addJsonContentTypeHeader() : MockResponse {
     addHeader("Content-Type", "application/json; charset=utf-8")

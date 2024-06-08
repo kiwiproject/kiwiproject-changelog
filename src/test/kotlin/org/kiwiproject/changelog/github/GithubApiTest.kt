@@ -13,40 +13,41 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
+import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
+import org.kiwiproject.changelog.extension.rateLimitLimit
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
+import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
 import org.kiwiproject.test.util.Fixtures
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito.any
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
-import java.net.URI
-import java.net.http.HttpClient
 import java.net.http.HttpHeaders
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
-private const val ISSUES_URL =
-    "https://api.github.com/repos/kiwiproject/dropwizard-service-utilities/issues?page=1&per_page=10&state=closed&filter=all&direction=desc"
+private const val ISSUES_PATH =
+    "/repos/kiwiproject/dropwizard-service-utilities/issues?page=1&per_page=10&state=closed&filter=all&direction=desc"
 
-private const val RELEASES_URL =
-    "https://api.github.com/repos/sleberknight/kotlin-scratch-pad/releases"
+private const val RELEASES_PATH =
+    "/repos/sleberknight/kotlin-scratch-pad/releases"
 
 @DisplayName("GithubApi")
 class GithubApiTest {
 
-    private lateinit var httpClient: HttpClient
     private lateinit var githubApi: GithubApi
+    private lateinit var server: MockWebServer
 
     @BeforeEach
     fun setUp() {
-        httpClient = mock(HttpClient::class.java)
-        githubApi = GithubApi("12345", httpClient)
+        server = MockWebServer()
+        server.start()
+
+        val token = RandomStringUtils.randomAlphanumeric(40)
+        githubApi = GithubApi(token)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        server.shutdown()
     }
 
     @Nested
@@ -54,45 +55,34 @@ class GithubApiTest {
 
         @Test
         fun shouldGetGithubResource() {
-            val httpResponse = mock(HttpResponse::class.java)
-
-            `when`(httpResponse.statusCode()).thenReturn(200)
-            `when`(httpResponse.uri()).thenReturn(URI.create(ISSUES_URL))
-
             val issueResponseJson = Fixtures.fixture("github-issues-response.json")
-            `when`(httpResponse.body()).thenReturn(issueResponseJson)
+            val link = """<https://api.github.com/repositories/315369011/issues?page=2&per_page=10&state=closed&filter=all&direction=desc>; rel="next", <https://api.github.com/repositories/315369011/issues?page=48&per_page=10&state=closed&filter=all&direction=desc>; rel="last""""
 
-            val nowAsEpochSeconds = Instant.now().plus(42, ChronoUnit.MINUTES).epochSecond
-
-            val headerMap = mapOf(
-                "Link" to listOf("""<https://api.github.com/repositories/315369011/issues?page=2&per_page=10&state=closed&filter=all&direction=desc>; rel="next", <https://api.github.com/repositories/315369011/issues?page=48&per_page=10&state=closed&filter=all&direction=desc>; rel="last""""),
-                "X-RateLimit-Reset" to listOf(nowAsEpochSeconds.toString()),
-                "X-RateLimit-Remaining" to listOf("59"),
-                "X-RateLimit-Limit" to listOf("60"),
+            server.enqueue(MockResponse()
+                .setResponseCode(200)
+                .setBody(issueResponseJson)
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+                .addHeader("Link", link)
             )
-            val headers = HttpHeaders.of(headerMap) { _, _ -> true }
-            `when`(httpResponse.headers()).thenReturn(headers)
 
-            `when`(httpClient.send(any(HttpRequest::class.java), any(HttpResponse.BodyHandler::class.java)))
-                .thenReturn(httpResponse)
-
-            val response = githubApi.get(ISSUES_URL)
+            val url = server.urlWithoutTrailingSlashAsString(ISSUES_PATH)
+            val response = githubApi.get(url)
 
             assertAll(
                 { assertThat(response.statusCode).isEqualTo(200) },
                 { assertThat(response.content).isEqualTo(issueResponseJson) },
-                { assertThat(response.linkHeader).isEqualTo(headerMap["Link"]!!.first()) },
-                { assertThat(response.rateLimitLimit).isEqualTo(60) },
-                { assertThat(response.rateLimitRemaining).isEqualTo(59) },
-                { assertThat(response.rateLimitResetAt).isEqualTo(nowAsEpochSeconds) }
+                { assertThat(response.linkHeader).isEqualTo(link) },
+                { assertThat(response.rateLimitLimit).isEqualTo(rateLimitLimit) },
+                { assertThat(response.rateLimitRemaining).isLessThan(response.rateLimitLimit) },
+                { assertThat(response.rateLimitResetAt).isGreaterThan(Instant.now().epochSecond) }
             )
 
-            val httpRequestCaptor = ArgumentCaptor.forClass(HttpRequest::class.java)
-
-            verify(httpClient).send(httpRequestCaptor.capture(), any(HttpResponse.BodyHandler::class.java))
-
-            val actualHttpRequest = httpRequestCaptor.value
-            assertThat(actualHttpRequest.uri()).hasToString(ISSUES_URL)
+            val getRequest = server.takeRequestWith1SecTimeout()
+            assertAll(
+                { assertThat(getRequest.method).isEqualTo("GET") },
+                { assertThat(getRequest.requestUrl).hasToString(url) },
+            )
         }
     }
 
@@ -101,72 +91,41 @@ class GithubApiTest {
 
         @Test
         fun shouldPostToGitHub() {
-            val httpResponse = mock(HttpResponse::class.java)
-
-            `when`(httpResponse.statusCode()).thenReturn(201)
-            `when`(httpResponse.uri()).thenReturn(URI.create(RELEASES_URL))
-
             val releaseResponseJson = Fixtures.fixture("github-create-release-response.json")
-            `when`(httpResponse.body()).thenReturn(releaseResponseJson)
 
-            val rateLimitResetAt = Instant.now().plus(42, ChronoUnit.MINUTES).epochSecond
-
-            val headerMap = mapOf(
-                "X-RateLimit-Reset" to listOf(rateLimitResetAt.toString()),
-                "X-RateLimit-Remaining" to listOf("59"),
-                "X-RateLimit-Limit" to listOf("60"),
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(201)
+                    .setBody(releaseResponseJson)
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
             )
-            val headers = HttpHeaders.of(headerMap) { _, _ -> true }
-            `when`(httpResponse.headers()).thenReturn(headers)
-
-            `when`(httpClient.send(any(HttpRequest::class.java), any(HttpResponse.BodyHandler::class.java)))
-                .thenReturn(httpResponse)
 
             val bodyJson = Fixtures.fixture("github-create-release-request.json")
+            val url = server.urlWithoutTrailingSlashAsString(RELEASES_PATH)
 
-            val response = githubApi.post(RELEASES_URL, bodyJson)
+            val response = githubApi.post(url, bodyJson)
 
             assertAll(
                 { assertThat(response.statusCode).isEqualTo(201) },
                 { assertThat(response.content).isEqualTo(releaseResponseJson) },
                 { assertThat(response.linkHeader).isNull() },
-                { assertThat(response.rateLimitLimit).isEqualTo(60) },
-                { assertThat(response.rateLimitRemaining).isEqualTo(59) },
-                { assertThat(response.rateLimitResetAt).isEqualTo(rateLimitResetAt) }
+                { assertThat(response.rateLimitLimit).isEqualTo(5000) },
+                { assertThat(response.rateLimitRemaining).isLessThan(response.rateLimitLimit) },
+                { assertThat(response.rateLimitResetAt).isGreaterThan(Instant.now().epochSecond) }
             )
 
-            val httpRequestCaptor = ArgumentCaptor.forClass(HttpRequest::class.java)
-
-            verify(httpClient).send(httpRequestCaptor.capture(), any(HttpResponse.BodyHandler::class.java))
-
-            val actualHttpRequest = httpRequestCaptor.value
-            val bodyPublisher = actualHttpRequest.bodyPublisher().get()
+            val postRequest = server.takeRequestWith1SecTimeout()
             assertAll(
-                { assertThat(actualHttpRequest.uri()).hasToString(RELEASES_URL) },
-                { assertThat(bodyPublisher.contentLength()).isEqualTo(bodyJson.length.toLong()) }
+                { assertThat(postRequest.method).isEqualTo("POST") },
+                { assertThat(postRequest.requestUrl).hasToString(url) },
+                { assertThat(postRequest.body.readUtf8()).isEqualTo(bodyJson) },
             )
         }
     }
 
     @Nested
     inner class Patch {
-
-        private lateinit var server: MockWebServer
-        private lateinit var api: GithubApi
-
-        @BeforeEach
-        fun setUp() {
-            server = MockWebServer()
-            server.start()
-
-            val token = RandomStringUtils.randomAlphanumeric(40)
-            api = GithubApi(token)
-        }
-
-        @AfterEach
-        fun tearDown() {
-            server.shutdown()
-        }
 
         @Test
         fun shouldSendPatchToGitHub() {
@@ -176,14 +135,14 @@ class GithubApiTest {
                 MockResponse()
                     .setResponseCode(200)
                     .setBody(closeMilestoneResponseJson)
+                    .addJsonContentTypeHeader()
                     .addGitHubRateLimitHeaders()
             )
 
             val url = server.url("/repos/sleberknight/kotlin-scratch-pad/milestones/1").toString()
-
             val bodyJson = Fixtures.fixture("github-close-milestone-request.json")
 
-            val response = api.patch(url, bodyJson)
+            val response = githubApi.patch(url, bodyJson)
 
             assertAll(
                 { assertThat(response.statusCode).isEqualTo(200) },
@@ -204,6 +163,7 @@ class GithubApiTest {
             assertAll(
                 { assertThat(patchRequest.method).isEqualTo("PATCH") },
                 { assertThat(patchRequest.requestUrl).hasToString(url) },
+                { assertThat(patchRequest.body.readUtf8()).isEqualTo(bodyJson) },
             )
         }
     }
