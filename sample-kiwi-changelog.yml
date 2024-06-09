@@ -1,0 +1,51 @@
+---
+
+categories:
+
+  - name: Breaking Changes
+    emoji: ⛔️
+    labels:
+      - API change
+
+  - name: Deprecations
+    emoji: ⚠️
+    labels:
+      - deprecation
+
+  - name: Improvements
+    emoji: 🚀
+    labels:
+      - enhancement
+      - new feature
+
+  - name: Bugs
+    emoji: 🐛
+    labels:
+      - bug
+
+  - name: Documentation
+    emoji: 📝
+    labels:
+      - documentation
+
+  - name: Assorted
+    emoji: 👜
+    default: true
+    labels:
+      - code cleanup
+      - investigation
+      - refactoring
+
+  - name: Dependency Updates
+    emoji: ⬆️
+    labels:
+      - dependencies
+
+  - name: Infrastructure
+    emoji: 🚧
+    labels:
+      - infrastructure
+      - github_actions
+
+alwaysIncludePRsFrom:
+  - dependabot[bot]

@@ -118,6 +118,9 @@ For example:
 
 Make sure to use the same _exact_ same category names in the `-m`, `-e`, and `-O` options.
 
+Here is another [sample](sample-kiwi-changelog.yml) changelog configuration. This is the one
+we are currently for kiwiproject releases. 
+
 ## External configuration
 
 As of version 0.6.0, you can create a `.kiwi-changelog.yml`. Here is a sample configuration
