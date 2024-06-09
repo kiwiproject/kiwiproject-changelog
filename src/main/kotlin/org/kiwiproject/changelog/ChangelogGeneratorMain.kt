@@ -180,6 +180,12 @@ class ChangelogGeneratorMain : Runnable {
     )
     var milestoneToClose: String? = null
 
+    @Option(
+        names = ["-N", "--create-next-milestone"],
+        description = ["The title of the milestone to create, e.g., 4.2.0"]
+    )
+    var createNextMilestone: String? = null
+
     // Debug options
 
     @Option(
@@ -240,10 +246,16 @@ class ChangelogGeneratorMain : Runnable {
         GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig, releaseManager).generate()
 
         // Optional: close the milestone
+        val milestoneManager = GitHubMilestoneManager(repoHostConfig, githubApi, mapper)
         if (closeMilestone) {
-            val milestoneManager = GitHubMilestoneManager(repoHostConfig, githubApi, mapper)
             val closedMilestone = closeMilestone(revision, milestoneToClose, milestoneManager)
             println("Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
+        }
+
+        // Optional: create new milestone
+        if (createNextMilestone != null) {
+            val newMilestone = createMilestone(createNextMilestone!!, milestoneManager)
+            println("Created new milestone ${newMilestone.title}. See it at ${newMilestone.htmlUrl}")
         }
     }
 
@@ -288,6 +300,19 @@ class ChangelogGeneratorMain : Runnable {
             val closedMilestone = milestoneManager.closeMilestone(milestone.number)
 
             return closedMilestone
+        }
+
+        @VisibleForTesting
+        fun createMilestone(title: String, milestoneManager: GitHubMilestoneManager): GitHubMilestone {
+            println("Creating new milestone $title")
+
+            val maybeMilestone = milestoneManager.getOpenMilestoneByTitleOrNull(title)
+            if (maybeMilestone != null) {
+                println("Milestone $title already exists. Returning it.")
+                return maybeMilestone
+            }
+
+            return milestoneManager.createMilestone(title)
         }
     }
 }

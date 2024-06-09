@@ -17,6 +17,15 @@ class GitHubMilestoneManager(
         "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/milestones?state=open&per_page=50"
 
     fun getOpenMilestoneByTitle(title: String): GitHubMilestone {
+        val maybeMilestone = getOpenMilestoneByTitleOrNull(title)
+        check(maybeMilestone != null) {
+            "No milestone with title $title was found"
+        }
+
+        return maybeMilestone
+    }
+
+    fun getOpenMilestoneByTitleOrNull(title: String): GitHubMilestone? {
         val response = api.get(listOpenMilestonesUrl)
         check(response.statusCode == 200) {
             "List milestones request failed. Status: ${response.statusCode}. Text: ${response.content}"
@@ -30,11 +39,11 @@ class GitHubMilestoneManager(
 
         val milestones = mapper.readValue<List<Map<String, Any>>>(response.content)
         val foundMilestone: Map<String, Any>? = milestones.firstOrNull { it["title"] as String == title }
-        check(foundMilestone != null) {
-            "No milestone with title $title was found"
-        }
 
-        return GitHubMilestone.from(foundMilestone)
+        return when (foundMilestone) {
+            null -> null
+            else -> GitHubMilestone.from(foundMilestone)
+        }
     }
 
     fun closeMilestone(number: Int): GitHubMilestone {
@@ -55,6 +64,25 @@ class GitHubMilestoneManager(
 
     private fun closeMilestoneUrl(number: Int): String =
         "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/milestones/$number"
+
+    fun createMilestone(title: String): GitHubMilestone {
+        val createUrl = createMilestoneUrl()
+        val bodyParameters = mapOf<String, Any>(
+            "title" to title
+        )
+        val bodyJson = mapper.writeValueAsString(bodyParameters)
+
+        val response = api.post(createUrl, bodyJson)
+        check(response.statusCode == 201) {
+            "Create milestone $title was unsuccessful. Status: ${response.statusCode}. Text: ${response.content}"
+        }
+
+        val responseContent = mapper.readValue<Map<String, Any>>(response.content)
+        return GitHubMilestone.from(responseContent)
+    }
+
+    private fun createMilestoneUrl(): String =
+        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/milestones"
 
     data class GitHubMilestone(val number: Int, val title: String, val htmlUrl: String) {
         companion object {

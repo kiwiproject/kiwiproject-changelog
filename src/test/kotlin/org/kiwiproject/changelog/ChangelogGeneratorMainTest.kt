@@ -10,6 +10,7 @@ import org.kiwiproject.changelog.github.GitHubMilestoneManager.GitHubMilestone
 import org.mockito.Mockito.anyInt
 import org.mockito.Mockito.anyString
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.only
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.Mockito.`when`
@@ -28,7 +29,7 @@ class ChangelogGeneratorMainTest {
     @Nested
     inner class CloseMilestone {
 
-        private val url = "https://github.com/acme/space-modulator/milestone/1"
+        private val urlPrefix = "https://github.com/acme/space-modulator/milestones/"
 
         private lateinit var milestoneManager : GitHubMilestoneManager
 
@@ -41,7 +42,8 @@ class ChangelogGeneratorMainTest {
         fun shouldClose_BasedOnRevision() {
             val number = 1
             val title = "1.4.2"
-            val milestone = GitHubMilestone(number, title, url)
+            val htmlUrl = urlPrefix + number
+            val milestone = GitHubMilestone(number, title, htmlUrl)
             `when`(milestoneManager.getOpenMilestoneByTitle(anyString())).thenReturn(milestone)
             `when`(milestoneManager.closeMilestone(anyInt())).thenReturn(milestone)
 
@@ -53,14 +55,15 @@ class ChangelogGeneratorMainTest {
 
             assertThat(closedMilestone).isSameAs(milestone)
 
-            verifyMilestonManagerCalls(title, number)
+            verifyMilestoneManagerCalls(title, number)
         }
 
         @Test
         fun shouldClose_UsingExplicitMilestone() {
             val number = 4
             val title = "1.5.0"
-            val milestone = GitHubMilestone(number, title, url)
+            val htmlUrl = urlPrefix + number
+            val milestone = GitHubMilestone(number, title, htmlUrl)
             `when`(milestoneManager.getOpenMilestoneByTitle(anyString())).thenReturn(milestone)
             `when`(milestoneManager.closeMilestone(anyInt())).thenReturn(milestone)
 
@@ -72,13 +75,59 @@ class ChangelogGeneratorMainTest {
 
             assertThat(closedMilestone).isSameAs(milestone)
 
-            verifyMilestonManagerCalls(title, number)
+            verifyMilestoneManagerCalls(title, number)
         }
 
-        private fun verifyMilestonManagerCalls(title: String, number: Int) {
+        private fun verifyMilestoneManagerCalls(title: String, number: Int) {
             verify(milestoneManager).getOpenMilestoneByTitle(title)
             verify(milestoneManager).closeMilestone(number)
             verifyNoMoreInteractions(milestoneManager)
+        }
+    }
+
+    @Nested
+    inner class CreateMilestone {
+
+        private val urlPrefix = "https://github.com/acme/space-modulator/milestones/"
+
+        private lateinit var milestoneManager: GitHubMilestoneManager
+
+        @BeforeEach
+        fun setUp() {
+            milestoneManager = mock(GitHubMilestoneManager::class.java)
+        }
+
+        @Test
+        fun shouldCreateNewMilestone() {
+            val number = 3
+            val title = "4.2.0"
+            val htmlUrl = urlPrefix + number
+            val milestone = GitHubMilestone(number, title, htmlUrl)
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(null)
+            `when`(milestoneManager.createMilestone(anyString())).thenReturn(milestone)
+
+            val newMilestone = ChangelogGeneratorMain.createMilestone(title, milestoneManager)
+
+            assertThat(newMilestone).isSameAs(milestone)
+
+            verify(milestoneManager).getOpenMilestoneByTitleOrNull(title)
+            verify(milestoneManager).createMilestone(title)
+            verifyNoMoreInteractions(milestoneManager)
+        }
+
+        @Test
+        fun shouldReturnExistingMilestone_WhenAlreadyExists() {
+            val number = 3
+            val title = "4.2.0"
+            val htmlUrl = urlPrefix + number
+            val milestone = GitHubMilestone(number, title, htmlUrl)
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(milestone)
+
+            val existingMilestone = ChangelogGeneratorMain.createMilestone(title, milestoneManager)
+
+            assertThat(existingMilestone).isSameAs(milestone)
+
+            verify(milestoneManager, only()).getOpenMilestoneByTitleOrNull(title)
         }
     }
 }

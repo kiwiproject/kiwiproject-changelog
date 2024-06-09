@@ -52,21 +52,13 @@ class GitHubMilestoneManagerTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(getOpenMilestonesResponseJson())
+                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
-        val title = "0.9.0-alpha"
-        val milestone = milestoneManager.getOpenMilestoneByTitle(title)
+        val milestone = milestoneManager.getOpenMilestoneByTitle("0.9.0-alpha")
 
-        assertAll(
-            { assertThat(milestone.number).isEqualTo(1) },
-            { assertThat(milestone.title).isEqualTo(title) },
-            {
-                assertThat(milestone.htmlUrl)
-                    .isEqualTo("https://github.com/sleberknight/kotlin-scratch-pad/milestone/1")
-            }
-        )
-
+        assertMilestone(milestone)
         assertListMilestonesRequest()
     }
 
@@ -76,6 +68,7 @@ class GitHubMilestoneManagerTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(getOpenMilestonesResponseJson())
+                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
@@ -87,12 +80,11 @@ class GitHubMilestoneManagerTest {
     }
 
     @Test
-    fun shouldThrowIllegalState_IfListMilestoneRequestFails_WhenGettingOpenMilestoneByTtile() {
+    fun shouldThrowIllegalState_IfListMilestoneRequestFails_WhenGettingOpenMilestoneByTitle() {
         server.enqueue(
             MockResponse()
                 .setResponseCode(500)
                 .setBody("List milestones failed")
-                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
@@ -121,6 +113,73 @@ class GitHubMilestoneManagerTest {
         assertListMilestonesRequest()
     }
 
+    @Test
+    fun shouldGetOpenMilestoneByTitleOrNull_AndReturnMilestone_WhenExists() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(getOpenMilestonesResponseJson())
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        val milestone = milestoneManager.getOpenMilestoneByTitleOrNull("0.9.0-alpha")!!
+
+        assertMilestone(milestone)
+        assertListMilestonesRequest()
+    }
+
+    @Test
+    fun shouldGetOpenMilestoneByTitleOrNull_AndReturnNull_WhenDoesNotExist() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(getOpenMilestonesResponseJson())
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        val title = "0.10.0"
+        val milestone = milestoneManager.getOpenMilestoneByTitleOrNull(title)
+        assertThat(milestone).isNull()
+
+        assertListMilestonesRequest()
+    }
+
+    @Test
+    fun shouldThrowIllegalState_IfListMilestoneRequestFails_WhenGettingOpenMilestoneByTitleOrNull() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(500)
+                .setBody("List milestones failed")
+                .addGitHubRateLimitHeaders()
+        )
+
+        assertThatIllegalStateException()
+            .isThrownBy { milestoneManager.getOpenMilestoneByTitleOrNull("v0.9.0-alpha") }
+            .withMessage("List milestones request failed. Status: 500. Text: List milestones failed")
+
+        assertListMilestonesRequest()
+    }
+
+    @Test
+    fun shouldThrowIllegalState_IfGetLinkHeader_WhenGettingOpenMilestoneByTitleOrNull() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody("[]")
+                .addHeader("Link", "")
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        assertThatIllegalStateException()
+            .isThrownBy { milestoneManager.getOpenMilestoneByTitleOrNull("v0.9.0-alpha") }
+            .withMessage("We received a Link header when we were not expecting it!")
+
+        assertListMilestonesRequest()
+    }
+
     private fun getOpenMilestonesResponseJson() =
         Fixtures.fixture("github-list-open-milestones-response.json")
 
@@ -144,11 +203,17 @@ class GitHubMilestoneManagerTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(closeResponseJson)
+                .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
 
         val milestone = milestoneManager.closeMilestone(1)
 
+        assertMilestone(milestone)
+        assertCloseMilestoneRequest()
+    }
+
+    private fun assertMilestone(milestone: GitHubMilestoneManager.GitHubMilestone) {
         assertAll(
             { assertThat(milestone.number).isEqualTo(1) },
             { assertThat(milestone.title).isEqualTo("0.9.0-alpha") },
@@ -157,8 +222,6 @@ class GitHubMilestoneManagerTest {
                     .isEqualTo("https://github.com/sleberknight/kotlin-scratch-pad/milestone/1")
             }
         )
-
-        assertCloseMilestoneRequest()
     }
 
     @Test
@@ -190,4 +253,60 @@ class GitHubMilestoneManagerTest {
         )
     }
 
+    @Test
+    fun shouldCreateNewMilestone() {
+        val createMilestoneResponseJson = Fixtures.fixture("github-create-milestone-response.json")
+
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(201)
+                .setBody(createMilestoneResponseJson)
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        val milestone = milestoneManager.createMilestone("0.9.0")
+
+        assertAll(
+            { assertThat(milestone.number).isEqualTo(2) },
+            { assertThat(milestone.title).isEqualTo("0.9.0") },
+            {
+                assertThat(milestone.htmlUrl)
+                    .isEqualTo("https://github.com/sleberknight/kotlin-scratch-pad/milestone/2")
+            }
+        )
+
+        assertCreateMilestoneRequest()
+    }
+
+    @Test
+    fun shouldThrowIllegalState_IfReceiveUnsuccessfulResponse_WhenCreatingMilestone() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(422)
+                .setBody("Validation failed")
+                .addGitHubRateLimitHeaders()
+        )
+
+        assertThatIllegalStateException()
+            .isThrownBy { milestoneManager.createMilestone("0.9.0") }
+            .withMessage("Create milestone 0.9.0 was unsuccessful. Status: 422. Text: Validation failed")
+
+        assertCreateMilestoneRequest()
+    }
+
+    private fun assertCreateMilestoneRequest() {
+        val createMilestoneRequest = server.takeRequestWith1SecTimeout()
+        assertAll(
+            { assertThat(createMilestoneRequest.method).isEqualTo("POST") },
+            {
+                assertThat(createMilestoneRequest.path)
+                    .isEqualTo("/repos/sleberknight/kotlin-scratch-pad/milestones")
+            },
+            {
+                assertThat(createMilestoneRequest.body.readUtf8())
+                    .isEqualToIgnoringWhitespace(Fixtures.fixture("github-create-milestone-request.json"))
+            }
+        )
+    }
 }
