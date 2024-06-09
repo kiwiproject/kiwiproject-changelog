@@ -26,7 +26,6 @@ class GitHubReleaseManager(
      */
     fun createRelease(tagName: String, releaseContent: String): GitHubRelease {
         checkTagExists(tagName)
-        // TODO: ensure release does NOT exist already
 
         val bodyParameters = mapOf<String, Any>(
             "tag_name" to tagName,
