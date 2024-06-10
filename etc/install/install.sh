@@ -33,7 +33,7 @@ pushd "$temp_dir" > /dev/null || exit 1
 
 # Clone the repository
 echo "⚙️  Cloning latest kiwiproject-changelog"
-git clone -q git@github.com:kiwiproject/kiwiproject-changelog.git
+git clone -q https://github.com/kiwiproject/kiwiproject-changelog.git
 pushd kiwiproject-changelog > /dev/null || exit 1
 
 # Switch to the latest release version
