@@ -71,6 +71,7 @@ fi
 
 # Get the directory where this script lives
 script_dir="$(cd "$(dirname "$0")" && pwd)"
+echo "ℹ Script directory: ${script_dir}"
 
 
 # Determine if install or upgrade and echo whether we are upgrading or installing for first time
