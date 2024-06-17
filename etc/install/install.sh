@@ -5,26 +5,96 @@
 # Exit on any error
 set -e
 
-# Get the directory where this script lives
-script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # Set default values
 install_dir=$HOME/kiwiproject-changelog-script
 changelog_script_name=.generate-kiwi-changelog
+uninstall=0
+
+
+# Functions
+function print_usage() {
+    echo "🛠  Usage: $0 -h -d -n -u"
+    echo
+    echo "  -h: print this help"
+    echo "  -d: the installation directory (default: ${install_dir})"
+    echo "  -n: the name of the script (default: ${changelog_script_name})"
+    echo "  -u: uninstall the script and remove the installation directory"
+}
+
+
+# Process arguments
+while getopts 'hn:d:u' opt; do
+  case "$opt" in
+    h)
+      print_usage
+      exit 0
+      ;;
+
+    d)
+      install_dir=$OPTARG
+      ;;
+
+    n)
+      changelog_script_name=$OPTARG
+      ;;
+
+    u)
+      uninstall=1
+      ;;
+
+    *)
+      print_usage
+      exit 1
+      ;;
+  esac
+done
+
+
+# If we are uninstalling, confirm and then proceed, then exit
+if [[ "$uninstall" -eq 1 ]]; then
+  echo "🚧  Will uninstall directory ${install_dir}"
+
+  read -r -p 'Really uninstall (yes/no)? ' uninstall_confirmation
+
+  if [[ "$uninstall_confirmation" == 'yes' ]]; then
+    echo "⚙️  Uninstalling..."
+    rm -rf "${install_dir}"
+    echo "✅ Done."
+  else
+    echo "👌  Uninstall not confirmed. Quitting."
+  fi
+
+  exit 0
+fi
+
+
+# Get the directory where this script lives
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+
+
+# Determine if install or upgrade and echo whether we are upgrading or installing for first time
+if [[ -d "$install_dir" ]]; then
+  echo "⛔  Directory $install_dir exists."
+  read -r -p 'Overwrite and re-install latest? (yes/no) ' reinstall_confirmation
+
+  if [[ "$reinstall_confirmation" != 'yes' ]]; then
+    echo "👌  Overwrite existing directory not confirmed. Quitting"
+    exit 0
+  fi
+fi
+
 
 # Gather and report on configuration options
-# TODO arguments, help, etc.
-
-# Start the installation process
 echo "ℹ️️  Using installation directory: ${install_dir}"
-
-# TODO Determine if install or upgrade and echo whether we are upgrading or installing for first time
-mkdir -p "$install_dir"
-
 echo "ℹ️  Using script name: ${changelog_script_name}"
 
-# Start installation
+
+# Start installation process
 echo "ℹ️️  Installing kiwiproject-changelog generator"
+
+# Create the directory (it it already exists, nothing happens)
+ mkdir -p "$install_dir"
 
 # Create a working directory to clone and build the JAR
 temp_dir=$(mktemp -d)
@@ -42,7 +112,7 @@ echo "ℹ️️  Using latest release: ${latest_tag}"
 git switch --detach "${latest_tag}"
 
 # Build the executable JAR
-echo "⚙️  Building the shaded JAR"
+echo "⚙️  Building the shaded JAR (this may take a while...)"
 mvn -q package -DskipTests -Pshaded-jar
 version="${latest_tag:1}"
 jar_file="target/changelog-generator-${version}.jar"
