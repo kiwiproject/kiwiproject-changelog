@@ -10,7 +10,39 @@
 
 Generates changelogs between two versions on GitHub.
 
-## Building and running the shaded JAR
+## Installation
+
+Currently you can install using an installation script or by manually building the JAR. The following sections describe these options.
+
+_For both installation types, the script assumes that Maven is available, since it is required to build the JAR file._
+
+### Using the installation script
+
+Clone the repository, then navigate to the folder where you cloned it.
+
+From the project root directory, you can install using the default location and script name by doing:
+
+```shell
+./etc/install/install.sh
+```
+
+This will create a directory `~/kiwiproject-changelog-script` with a script named `.generate-kiwi-changelog` inside. There is also a `README.txt` and the JAR file which is executed by the script.
+
+You can also run `install.sh` with `-h` to get the command line options.
+
+If you want to install to a custom location and/or change the script name, you can do something like:
+
+```shell
+./etc/install/install.sh -d /data/tools/kiwi-changelog -n gkc
+```
+
+This will install in the `/data/tools/kiwi-changelog` directory, creating it is necessary, and the script is named `gkc`.
+
+You can also _uninstall_ using the `-u` flag. You will be prompted for confirmation, which lets you review the script directory and name are correct.
+
+### Building and running the shaded JAR
+
+If you prefer a manual installation, first clone the repository.
 
 In order to run the changelog generator from the command line, you need to build the _shaded_ JAR which includes all dependencies.
 
@@ -28,10 +60,10 @@ $ git checkout <release-tag>
 $ mvn package -DskipTests -Pshaded-jar
 ```
 
-where `release-tag` is a valid tag, e.g., `v0.6.0`.
+where `release-tag` is a valid tag, e.g., `v0.6.0`. You can also build from the latest commit, i.e. `HEAD`.
 
-Make sure to check out the main branch once you've built the JAR, and maybe move the JAR somewhere else
-so that it doesn't get deleted the next time a `mvn clean` happens.
+If you built from a tag, make sure to check out the main branch once you've built the JAR, and it's a good idea to move
+the JAR somewhere else so that it doesn't get deleted the next time a `mvn clean` happens.
 
 Now you can run the JAR file with no arguments (or `-h` / `--help` ) to get usage information, for example:
 
