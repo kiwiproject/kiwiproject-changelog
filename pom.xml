@@ -30,7 +30,7 @@
         <!-- Versions for required dependencies -->
         <jackson.version>2.17.1</jackson.version>
         <jackson-module-kotlin.version>2.17.1</jackson-module-kotlin.version>
-        <kiwi.version>3.4.0</kiwi.version>
+        <kiwi.version>4.0.0</kiwi.version>
         <kotlin.version>2.0.0</kotlin.version>
         <kotlin-logging-jvm.version>7.0.0</kotlin-logging-jvm.version>
         <logback-classic.version>1.5.6</logback-classic.version>
