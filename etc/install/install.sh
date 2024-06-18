@@ -7,24 +7,26 @@ set -e
 
 
 # Set default values
-install_dir=$HOME/kiwiproject-changelog-script
-changelog_script_name=.generate-kiwi-changelog
+install_dir="$HOME/kiwiproject-changelog-script"
+changelog_script_name='.generate-kiwi-changelog'
 uninstall=0
+interactive_user_confirm=1
 
 
 # Functions
 function print_usage() {
-    echo "🛠  Usage: $0 -h -d -n -u"
+    echo "🛠  Usage: $0 -h -d -n -u -y"
     echo
     echo "  -h: print this help"
     echo "  -d: the installation directory (default: ${install_dir})"
     echo "  -n: the name of the script (default: ${changelog_script_name})"
     echo "  -u: uninstall the script and remove the installation directory"
+    echo "  -y: if there are confirmation prompts, automatically confirm them"
 }
 
 
 # Process arguments
-while getopts 'hn:d:u' opt; do
+while getopts 'hn:d:uy' opt; do
   case "$opt" in
     h)
       print_usage
@@ -43,6 +45,10 @@ while getopts 'hn:d:u' opt; do
       uninstall=1
       ;;
 
+    y)
+      interactive_user_confirm=0
+      ;;
+
     *)
       print_usage
       exit 1
@@ -55,7 +61,11 @@ done
 if [[ "$uninstall" -eq 1 ]]; then
   echo "🚧  Will uninstall directory ${install_dir}"
 
-  read -r -p 'Really uninstall (yes/no)? ' uninstall_confirmation
+  if [[ "$interactive_user_confirm" -eq 1 ]]; then
+    read -r -p 'Really uninstall (yes/no)? ' uninstall_confirmation
+  else
+    uninstall_confirmation='yes'
+  fi
 
   if [[ "$uninstall_confirmation" == 'yes' ]]; then
     echo "⚙️  Uninstalling..."
@@ -72,7 +82,12 @@ fi
 # Determine if install or upgrade and echo whether we are upgrading or installing for first time
 if [[ -d "$install_dir" ]]; then
   echo "⛔  Directory $install_dir exists."
-  read -r -p 'Overwrite and re-install latest? (yes/no) ' reinstall_confirmation
+
+  if [[ "$interactive_user_confirm" -eq 1 ]]; then
+    read -r -p 'Overwrite and re-install latest? (yes/no) ' reinstall_confirmation
+  else
+    reinstall_confirmation='yes'
+  fi
 
   if [[ "$reinstall_confirmation" != 'yes' ]]; then
     echo "👌  Overwrite existing directory not confirmed. Quitting"
