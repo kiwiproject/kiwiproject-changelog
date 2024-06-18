@@ -69,11 +69,6 @@ if [[ "$uninstall" -eq 1 ]]; then
 fi
 
 
-# Get the directory where this script lives
-script_dir="$(cd "$(dirname "$0")" && pwd)"
-echo "ℹ Script directory: ${script_dir}"
-
-
 # Determine if install or upgrade and echo whether we are upgrading or installing for first time
 if [[ -d "$install_dir" ]]; then
   echo "⛔  Directory $install_dir exists."
@@ -95,7 +90,7 @@ echo "ℹ️  Using script name: ${changelog_script_name}"
 echo "ℹ️️  Installing kiwiproject-changelog generator"
 
 # Create the directory (it it already exists, nothing happens)
- mkdir -p "$install_dir"
+mkdir -p "$install_dir"
 
 # Create a working directory to clone and build the JAR
 temp_dir=$(mktemp -d)
@@ -127,8 +122,8 @@ echo "🚀  Built JAR: $jar_file"
 # Copy files to the installation directory
 echo "📄  Copy files to installation directory"
 changelog_script_path="${install_dir}/${changelog_script_name}"
-cp "$script_dir/README.txt" "$install_dir"
-cp "$script_dir/generate-kiwi-changelog.sh" "$changelog_script_path"
+cp "etc/install/README.txt" "$install_dir"
+cp "etc/install/generate-kiwi-changelog.sh" "$changelog_script_path"
 cp "$jar_file" "${install_dir}/kiwi-changelog-generator.jar"
 
 # Ensure the changelog script is executable
