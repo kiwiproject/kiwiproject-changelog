@@ -12,11 +12,31 @@ Generates changelogs between two versions on GitHub.
 
 ## Installation
 
-Currently you can install using an installation script or by manually building the JAR. The following sections describe these options.
+You can install using an installation script or by manually building the JAR. The following sections describe these options.
 
 _For both installation types, the script assumes that Maven is available, since it is required to build the JAR file._
 
-### Using the installation script
+### Install directly from GitHub using curl
+
+This is the easiest way to install, but of course you should verify that the script is not malicious first. 🤣
+
+To install using the default directory (`~/kiwiproject-changelog-script`) and script name (`.generate-kiwi-changelog`):
+
+```shell
+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash
+```
+
+Or, to install to a custom directory and/or with a custom script name:
+
+```shell
+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -d <dir> -n <script-name>
+```
+
+Currently, commands that require user confirmation (such as when uninstalling or if you attempt to update an existing installation) won't
+work using a `curl`-based installation. To uninstall you can simply delete the directory, or follow the instructions below to
+clone the repository locally and run the `install.sh` script to uninstall, update, etc.
+
+### Execute the installation script locally
 
 Clone the repository, then navigate to the folder where you cloned it.
 
@@ -26,7 +46,8 @@ From the project root directory, you can install using the default location and 
 ./etc/install/install.sh
 ```
 
-This will create a directory `~/kiwiproject-changelog-script` with a script named `.generate-kiwi-changelog` inside. There is also a `README.txt` and the JAR file which is executed by the script.
+This will create a directory `~/kiwiproject-changelog-script` with a script named `.generate-kiwi-changelog` inside.
+There is also a `README.txt` and the JAR file which is executed by the script.
 
 You can also run `install.sh` with `-h` to get the command line options.
 
