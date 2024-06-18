@@ -32,9 +32,19 @@ Or, to install to a custom directory and/or with a custom script name:
 curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -d <dir> -n <script-name>
 ```
 
-Currently, commands that require user confirmation (such as when uninstalling or if you attempt to update an existing installation) won't
-work using a `curl`-based installation. To uninstall you can simply delete the directory, or follow the instructions below to
-clone the repository locally and run the `install.sh` script to uninstall, update, etc.
+Commands that require user confirmation (such as when uninstalling or if you attempt to update an existing installation)
+work using a `curl`-based installation, but you must use the `-y` (yes) option to avoid interactive prompts and
+auto-confirm. To uninstall you can:
+
+```shell
+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -u -y
+```
+
+To install the latest version and overwrite an existing installation, just run the original curl command again with `-y`:
+
+```shell
+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -y
+```
 
 ### Execute the installation script locally
 
