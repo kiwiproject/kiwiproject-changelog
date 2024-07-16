@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.tuple
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -24,6 +25,7 @@ import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubUser
 import org.kiwiproject.test.junit.jupiter.ClearBoxTest
 import org.kiwiproject.test.util.Fixtures
 
+@DisplayName("GitHubSearchManager")
 class GitHubSearchManagerTest {
 
     private lateinit var server: MockWebServer
