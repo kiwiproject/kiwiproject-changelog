@@ -36,7 +36,7 @@ private const val ISSUES_PATH =
 private const val RELEASES_PATH =
     "/repos/sleberknight/kotlin-scratch-pad/releases"
 
-@DisplayName("GithubApi")
+@DisplayName("GitHubApi")
 class GitHubApiTest {
 
     private lateinit var githubApi: GitHubApi

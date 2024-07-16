@@ -15,7 +15,7 @@ import java.net.URI
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-@DisplayName("GithubListFetcher")
+@DisplayName("GitHubPagingHelper")
 class GitHubPagingHelperTest {
 
     private lateinit var fetcher: GitHubPagingHelper

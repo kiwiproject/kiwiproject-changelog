@@ -34,7 +34,7 @@ import java.nio.file.Path
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-@DisplayName("GenerateChangelog")
+@DisplayName("ChangelogGenerator")
 class ChangelogGeneratorTest {
 
     @Nested
@@ -334,12 +334,12 @@ class ChangelogGeneratorTest {
     private fun changeLogText() =
         """
         Improvements
-        * Add a new foo to the Bar 
-        
+        * Add a new foo to the Bar
+
         Bugs
         * Fixed the thing
         * Fixed the other thing
-        
+
         Assorted
         * Improved the README
         """.trimIndent()
