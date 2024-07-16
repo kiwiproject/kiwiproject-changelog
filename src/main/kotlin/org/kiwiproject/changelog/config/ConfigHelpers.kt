@@ -72,6 +72,7 @@ internal object ConfigHelpers {
         return when (externalConfigYaml) {
             null -> ExternalChangelogConfig()
             else -> {
+                // TODO How to report deserialization problems? Just the WARN log? Add to ExternalChangelogConfig?
                 val yamlFactory = YAMLFactory().disable(YAMLGenerator.Feature.SPLIT_LINES)
                 val mapper = ObjectMapper(yamlFactory)
                 val handler = LoggingDeserializationProblemHandler()
