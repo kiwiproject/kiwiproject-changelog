@@ -28,8 +28,29 @@ import kotlin.system.exitProcess
     usageHelpAutoWidth = true,
     description = [
         "",
-        "Generate a changelog from git commits between two revisions",
-        ""]
+        "Generate a changelog for a specific GitHub milestone.",
+        "",
+        "Uses the GitHub REST API endpoints to search issues, pull requests, and commits.",
+        "Composes the change log from issues and pull requests for a milestone.",
+        "Uses the commits between revisions (tags) to find unique commit authors.",
+        "",
+        "Provides customization of the change log using labels associated with issues",
+        "and pull requests, and lets you store that configuration in a YAML file.",
+        "Labels can be associated with categories, and an emoji can be provided for",
+        "each category. The category order can also be specified, as well as a default",
+        "category when a label is not mapped to a category",
+        "",
+        "Provides various output options including to console, a file, or directly.",
+        "to GitHub on the Releases page.",
+        "",
+        "You can also close the milestone on GitHub and/or create a new milestone.",
+        "",
+        "For more information, see the README at",
+        "https://github.com/kiwiproject/kiwiproject-changelog",
+        "",
+        "Options:",
+        ""
+    ]
 )
 class App : Runnable {
 
@@ -73,14 +94,14 @@ class App : Runnable {
 
     @Option(
         names = ["-p", "--previous-rev"],
-        description = ["Starting revision commit to search for changes"],
+        description = ["Starting revision (tag) to search for commit authors"],
         required = true
     )
     lateinit var previousRevision: String
 
     @Option(
         names = ["-R", "--revision"],
-        description = ["Ending revision commit to search for changes"],
+        description = ["Ending revision (tag) to search for commit authors"],
         required = true
     )
     lateinit var revision: String
