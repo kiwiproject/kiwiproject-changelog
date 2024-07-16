@@ -22,6 +22,16 @@ class GitHubSearchManager(
         val allIssuesAndPulls = mutableListOf<GitHubIssue>()
         val totalCount = AtomicInteger()
 
+        // Implementation note:
+        // Here, we make separate requests for issues and pull requests
+        // to avoid getting a 422 Unprocessable Entity. See the Note
+        // in the "Search issues and pull requests" section of the
+        // "REST API endpoints for search" page in the documentation
+        // stating that requests made with a user access token must
+        // include "is:issue" or "is:pull-request" in the query (q).
+        //
+        // ref: https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-issues-and-pull-requests
+
         accumulateByType("issue", milestoneTitle, allIssuesAndPulls, totalCount)
         accumulateByType("pull-request", milestoneTitle, allIssuesAndPulls, totalCount)
 
