@@ -7,12 +7,13 @@ import okhttp3.mockwebserver.MockWebServer
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.kiwiproject.changelog.config.RepoHostConfig
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwiproject.changelog.MockWebServerExtension
+import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
 import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
 import org.kiwiproject.changelog.extension.takeRequestWith1MilliTimeout
@@ -27,25 +28,24 @@ class GitHubReleaseManagerTest {
     private lateinit var releaseManager: GitHubReleaseManager
     private val mapper = jacksonObjectMapper()
 
+    @RegisterExtension
+    val mockWebServerExtension = MockWebServerExtension()
+
     @BeforeEach
     fun setUp() {
-        server = MockWebServer()
-        server.start()
+        server = mockWebServerExtension.server
 
         val token = RandomStringUtils.randomAlphanumeric(40)
-        val repoHostConfig = RepoHostConfig(
-            "https://github.com",
+        val repoConfig = RepoConfig(
+            "https://fake-github.com",
             server.urlWithoutTrailingSlashAsString(),
             token,
-            "sleberknight/kotlin-scratch-pad"
+            "sleberknight/kotlin-scratch-pad",
+            "v1.1.0",
+            "v1.2.0"
         )
 
-        releaseManager = GitHubReleaseManager(repoHostConfig, GithubApi(token), mapper)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        server.shutdown()
+        releaseManager = GitHubReleaseManager(repoConfig, GitHubApi(token), mapper)
     }
 
     @Test
@@ -73,7 +73,7 @@ class GitHubReleaseManagerTest {
         val release = releaseManager.createRelease(tagName, releaseContent)
 
         assertThat(release.htmlUrl)
-            .isEqualTo("https://github.com/sleberknight/kotlin-scratch-pad/releases/tag/v0.9.0-alpha")
+            .isEqualTo("https://fake-github.com/sleberknight/kotlin-scratch-pad/releases/tag/v0.9.0-alpha")
 
         assertCreateReleaseRequests(requestJson)
     }

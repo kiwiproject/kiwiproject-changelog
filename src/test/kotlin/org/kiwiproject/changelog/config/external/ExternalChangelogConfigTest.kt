@@ -18,11 +18,10 @@ class ExternalChangelogConfigTest {
 
     @Test
     fun shouldReadConfig() {
-        val yaml = Fixtures.fixture("kiwi-changelogs/kiwi-changelog.yml")
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog.yml")
         val config = readConfig(yaml)
 
         assertAll(
-            { assertThat(config.alwaysIncludePRsFrom).containsExactly("dependabot[bot]") },
             {
                 assertThat(config.labelCategoryMap()).containsExactlyInAnyOrderEntriesOf(
                     mapOf(
@@ -72,11 +71,10 @@ class ExternalChangelogConfigTest {
 
     @Test
     fun shouldReadConfig_ThatContainsNoDefaultCategory() {
-        val yaml = Fixtures.fixture("kiwi-changelogs/kiwi-changelog-no-default.yml")
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-no-default.yml")
         val config = readConfig(yaml)
 
         assertAll(
-            { assertThat(config.alwaysIncludePRsFrom).containsExactly("dependabot[bot]", "bob") },
             {
                 assertThat(config.labelCategoryMap()).containsExactlyInAnyOrderEntriesOf(
                     mapOf(
@@ -106,12 +104,11 @@ class ExternalChangelogConfigTest {
 
     @Test
     fun shouldReadEmptyConfig() {
-        val yaml = Fixtures.fixture("kiwi-changelogs/empty-changelog.yml")
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/empty-changelog.yml")
         val config = readConfig(yaml)
 
         assertAll(
             { assertThat(config.categories).isEmpty() },
-            { assertThat(config.alwaysIncludePRsFrom).isEmpty() },
             { assertThat(config.labelCategoryMap()).isEmpty() },
             { assertThat(config.categoryOrder()).isEmpty() },
             { assertThat(config.defaultCategory()).isNull() }

@@ -75,25 +75,19 @@ class ConfigHelpersTest {
         fun shouldReturnEmptyConfigWhenNoConfigFilesExist() {
             val externalConfig = ConfigHelpers.externalConfig(current, userHomeDir, null, false)
 
-            assertAll(
-                { assertThat(externalConfig.categories).isEmpty() },
-                { assertThat(externalConfig.alwaysIncludePRsFrom).isEmpty() }
-            )
+            assertThat(externalConfig.categories).isEmpty()
         }
 
         @Test
         fun shouldIgnoreConfigFilesWhenInstructed() {
             val externalConfig = ConfigHelpers.externalConfig(current, userHomeDir, null, true)
 
-            assertAll(
-                { assertThat(externalConfig.categories).isEmpty() },
-                { assertThat(externalConfig.alwaysIncludePRsFrom).isEmpty() }
-            )
+            assertThat(externalConfig.categories).isEmpty()
         }
 
         @Test
         fun shouldUseExplicitConfigFile() {
-            val changelogPath = fixturePath("kiwi-changelogs/kiwi-changelog.yml")
+            val changelogPath = fixturePath("kiwi-changelog-configs/kiwi-changelog.yml")
 
             val externalConfig = ConfigHelpers.externalConfig(
                 current,
@@ -124,7 +118,7 @@ class ConfigHelpersTest {
         }
 
         private fun assertReadsConfigFromPath(configFilePath: Path) {
-            val yaml = fixture("kiwi-changelogs/kiwi-changelog.yml")
+            val yaml = fixture("kiwi-changelog-configs/kiwi-changelog.yml")
             Files.writeString(configFilePath, yaml)
 
             val externalConfig = ConfigHelpers.externalConfig(current, userHomeDir, null, false)
@@ -133,20 +127,15 @@ class ConfigHelpersTest {
         }
 
         private fun assertConfig(externalConfig: ExternalChangelogConfig) {
-            assertAll(
-                { assertThat(externalConfig.alwaysIncludePRsFrom).containsExactly("dependabot[bot]") },
-                {
-                    assertThat(externalConfig.categoryOrder()).containsExactly(
-                        "API Changes",
-                        "Deprecations",
-                        "Improvements",
-                        "Bugs",
-                        "Documentation",
-                        "Infrastructure",
-                        "Assorted",
-                        "Dependency Updates"
-                    )
-                }
+            assertThat(externalConfig.categoryOrder()).containsExactly(
+                "API Changes",
+                "Deprecations",
+                "Improvements",
+                "Bugs",
+                "Documentation",
+                "Infrastructure",
+                "Assorted",
+                "Dependency Updates"
             )
         }
     }
@@ -161,7 +150,6 @@ class ConfigHelpersTest {
                 listOf(),
                 listOf(),
                 null,
-                listOf(),
                 ExternalChangelogConfig()
             )
 
@@ -170,7 +158,6 @@ class ConfigHelpersTest {
                 { assertThat(config.categoryToEmoji).isEmpty() },
                 { assertThat(config.categoryOrder).isEmpty() },
                 { assertThat(config.defaultCategory).isEqualTo("Assorted") },
-                { assertThat(config.alwaysIncludePRsFrom).isEmpty() },
             )
         }
 
@@ -181,7 +168,6 @@ class ConfigHelpersTest {
                 listOf("Improvements:🎉", "Bugs:🐞"),
                 listOf("Improvements", "Bugs", "Random Things", "Dependency Updates"),
                 "Random Things",
-                listOf("dependabot[bot]"),
                 ExternalChangelogConfig()
             )
 
@@ -212,7 +198,6 @@ class ConfigHelpersTest {
                     )
                 },
                 { assertThat(config.defaultCategory).isEqualTo("Random Things") },
-                { assertThat(config.alwaysIncludePRsFrom).containsExactly("dependabot[bot]") },
             )
         }
 
@@ -225,8 +210,7 @@ class ConfigHelpersTest {
                     ExternalCategory("Dependency Updates", "⬆️", listOf("dependencies"), false),
                     ExternalCategory("Documentation", "📄", listOf("javadoc", "documentation"), false),
                     ExternalCategory("Other Changes", "❓", listOf("refactoring", "code cleanup"), true),
-                ),
-                listOf("murderbot[bot]", "otherbot[bot]")
+                )
             )
 
             val config = ConfigHelpers.buildCategoryConfig(
@@ -234,7 +218,6 @@ class ConfigHelpersTest {
                 listOf(),
                 listOf(),
                 null,
-                listOf(),
                 externalConfig
             )
 
@@ -274,7 +257,6 @@ class ConfigHelpersTest {
                     )
                 },
                 { assertThat(config.defaultCategory).isEqualTo("Other Changes") },
-                { assertThat(config.alwaysIncludePRsFrom).containsExactly("murderbot[bot]", "otherbot[bot]") },
             )
         }
 
@@ -287,8 +269,7 @@ class ConfigHelpersTest {
                     ExternalCategory("Assorted", "👜", listOf("refactoring", "code cleanup"), false),
                     ExternalCategory("Dependency Updates", "⬆️", listOf("dependencies"), false),
                     ExternalCategory("Other Changes", "👍", listOf("other", "random"), true)
-                ),
-                listOf("otherbot[bot]")
+                )
             )
 
            val labelCategoryMappings = listOf(
@@ -317,7 +298,6 @@ class ConfigHelpersTest {
                 categoryEmojiMappings,
                 categoryOrder,
                 "Assorted",
-                listOf("awesomebot[bot]", "foobot[bot]"),
                 externalConfig
             )
 
@@ -363,34 +343,6 @@ class ConfigHelpersTest {
                     )
                 },
                 { assertThat(config.defaultCategory).isEqualTo("Assorted") },
-                { assertThat(config.alwaysIncludePRsFrom).containsExactly(
-                    "awesomebot[bot]",
-                    "foobot[bot]",
-                    "otherbot[bot]")
-                },
-            )
-        }
-
-        @Test
-        fun shouldCombineUsersToAlwaysIncludePRs() {
-            val externalConfig = ExternalChangelogConfig(
-                listOf(),
-                listOf("murderbot[bot]", "otherbot[bot]")
-            )
-
-            val config = ConfigHelpers.buildCategoryConfig(
-                listOf(),
-                listOf(),
-                listOf(),
-                null,
-                listOf("dependabot[bot]"),
-                externalConfig
-            )
-
-            assertThat(config.alwaysIncludePRsFrom).containsExactlyInAnyOrder(
-                "dependabot[bot]",
-                "murderbot[bot]",
-                "otherbot[bot]"
             )
         }
     }

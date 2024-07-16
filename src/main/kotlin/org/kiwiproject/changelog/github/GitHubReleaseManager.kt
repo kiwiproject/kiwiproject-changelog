@@ -2,18 +2,18 @@ package org.kiwiproject.changelog.github
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.config.RepoConfig
 
 /**
  * Provides a simple way to interact with GitHub releases.
  */
 class GitHubReleaseManager(
-    private val repoHostConfig: RepoHostConfig,
-    private val api: GithubApi,
+    private val repoConfig: RepoConfig,
+    private val api: GitHubApi,
     private val mapper: ObjectMapper
 ) {
 
-    private val createReleaseUrl = "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/releases"
+    private val createReleaseUrl = "${repoConfig.apiUrl}/repos/${repoConfig.repository}/releases"
 
     /**
      * Create a new release in GitHub for the given [tagName]
@@ -51,7 +51,7 @@ class GitHubReleaseManager(
     }
 
     private fun tagUrlFor(tagName: String) =
-        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/git/ref/tags/$tagName"
+        "${repoConfig.apiUrl}/repos/${repoConfig.repository}/git/ref/tags/$tagName"
 
     data class GitHubRelease(val htmlUrl: String) {
         companion object {

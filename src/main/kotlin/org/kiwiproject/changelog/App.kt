@@ -7,11 +7,12 @@ import org.kiwiproject.changelog.config.ConfigHelpers.buildCategoryConfig
 import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
-import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.github.GitHubApi
 import org.kiwiproject.changelog.github.GitHubMilestoneManager
 import org.kiwiproject.changelog.github.GitHubMilestoneManager.GitHubMilestone
+import org.kiwiproject.changelog.github.GitHubPagingHelper
 import org.kiwiproject.changelog.github.GitHubReleaseManager
-import org.kiwiproject.changelog.github.GithubApi
+import org.kiwiproject.changelog.github.GitHubSearchManager
 import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.ITypeConverter
@@ -22,7 +23,7 @@ import kotlin.system.exitProcess
 
 @Command(
     name = "ChangelogGenerator",
-    versionProvider = ChangelogGeneratorMain.VersionProvider::class,
+    versionProvider = App.VersionProvider::class,
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     description = [
@@ -30,11 +31,11 @@ import kotlin.system.exitProcess
         "Generate a changelog from git commits between two revisions",
         ""]
 )
-class ChangelogGeneratorMain : Runnable {
+class App : Runnable {
 
     class VersionProvider : IVersionProvider {
         override fun getVersion(): Array<String> {
-            val implVersion = ChangelogGeneratorMain::class.java.`package`.implementationVersion
+            val implVersion = App::class.java.`package`.implementationVersion
             val version = implVersion ?: "[unknown]"
             return arrayOf(version)
         }
@@ -71,23 +72,16 @@ class ChangelogGeneratorMain : Runnable {
     lateinit var repository: String
 
     @Option(
-        names = ["-w", "--working-dir"],
-        description = ["Working directory to run git commands (default: \${DEFAULT-VALUE})"],
-        defaultValue = "."
-    )
-    lateinit var workingDir: String
-
-    @Option(
         names = ["-p", "--previous-rev"],
-        description = ["Starting revision commit to search for changes (default: \${DEFAULT-VALUE})"],
+        description = ["Starting revision commit to search for changes"],
         required = true
     )
     lateinit var previousRevision: String
 
     @Option(
         names = ["-R", "--revision"],
-        description = ["Ending revision commit to search for changes (default: \${DEFAULT-VALUE})"],
-        defaultValue = "HEAD"
+        description = ["Ending revision commit to search for changes"],
+        required = true
     )
     lateinit var revision: String
 
@@ -131,12 +125,6 @@ class ChangelogGeneratorMain : Runnable {
     var labelToCategoryMappings: List<String> = listOf()
 
     @Option(
-        names = ["-i", "--include-prs-from"],
-        description = ["Always include PRs in the output from this user (e.g. dependabot)"]
-    )
-    var alwaysIncludePRsFrom: List<String> = listOf()
-
-    @Option(
         names = ["-O", "--category-order"],
         description = ["The order to display the categories. Order is the order of these options"]
     )
@@ -171,14 +159,14 @@ class ChangelogGeneratorMain : Runnable {
     var closeMilestone: Boolean = false
 
     @Option(
-        names = ["-M", "--milestone-to-close"],
+        names = ["-M", "--milestone"],
         description = [
-            "This option lets you specify the milestone to close.",
+            "This option lets you specify the milestone.",
             "If not specified, the milestone is assumed to be the revision without a leading 'v'.",
             "For example, the default milestone for revision v1.4.2 is 1.4.2"
         ]
     )
-    var milestoneToClose: String? = null
+    var milestone: String? = null
 
     @Option(
         names = ["-N", "--create-next-milestone"],
@@ -221,11 +209,17 @@ class ChangelogGeneratorMain : Runnable {
             categoryToEmojiMappings,
             categoryOrder,
             defaultCategory,
-            alwaysIncludePRsFrom,
             externalConfig
         )
-        val repoHostConfig = RepoHostConfig(repoHostUrl, repoHostApi, githubToken, repository)
-        val repoConfig = RepoConfig(File(workingDir), previousRevision, revision)
+        val repoConfig = RepoConfig(
+            repoHostUrl,
+            repoHostApi,
+            githubToken,
+            repository,
+            previousRevision,
+            revision,
+            milestone
+        )
 
         if (outputType == OutputType.FILE) {
             check(outputFile != null) { "output file is required when output type is FILE" }
@@ -238,17 +232,19 @@ class ChangelogGeneratorMain : Runnable {
             categoryConfig = categoryConfig
         )
 
-        val githubApi = GithubApi(githubToken)
+        val githubApi = GitHubApi(githubToken)
         val mapper = jacksonObjectMapper()
-        val releaseManager = GitHubReleaseManager(repoHostConfig, githubApi, mapper)
+        val releaseManager = GitHubReleaseManager(repoConfig, githubApi, mapper)
+        val gitHubPagingHelper = GitHubPagingHelper()
+        val searchManager = GitHubSearchManager(repoConfig, githubApi, gitHubPagingHelper, mapper)
 
         println("Gathering information for change log")
-        GenerateChangelog(repoHostConfig, repoConfig, changeLogConfig, releaseManager).generate()
+        ChangelogGenerator(repoConfig, changeLogConfig, releaseManager, searchManager).generate()
 
         // Optional: close the milestone
-        val milestoneManager = GitHubMilestoneManager(repoHostConfig, githubApi, mapper)
+        val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
         if (closeMilestone) {
-            val closedMilestone = closeMilestone(revision, milestoneToClose, milestoneManager)
+            val closedMilestone = closeMilestone(repoConfig, milestone, milestoneManager)
             println("Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
         }
 
@@ -266,7 +262,6 @@ class ChangelogGeneratorMain : Runnable {
         println("repoHostApi = $repoHostApi")
         println("token = $token")
         println("repository = $repository")
-        println("workingDir = $workingDir")
         println("previousRevision = $previousRevision")
         println("revision = $revision")
         println("outputType = $outputType")
@@ -274,7 +269,6 @@ class ChangelogGeneratorMain : Runnable {
         println("defaultCategory = $defaultCategory")
         println("labelToCategoryMappings = $labelToCategoryMappings")
         println("categoryToEmojiMappings = $categoryToEmojiMappings")
-        println("alwaysIncludePRsFrom = $alwaysIncludePRsFrom")
         println("categoryOrder = $categoryOrder")
         println("configFile = $configFile")
         println("----------")
@@ -283,17 +277,27 @@ class ChangelogGeneratorMain : Runnable {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val exitCode = CommandLine(ChangelogGeneratorMain()).execute(*args)
-            exitProcess(exitCode)
+            val appResult = execute(args)
+            exitProcess(appResult.exitCode)
         }
 
         @VisibleForTesting
+        internal fun execute(args: Array<String>): AppResult {
+            val app = App()
+            val exitCode = CommandLine(app).execute(*args)
+            return AppResult(exitCode, app)
+        }
+
+        @VisibleForTesting
+        internal data class AppResult(val exitCode: Int, val app: App)
+
+        @VisibleForTesting
         fun closeMilestone(
-            revision: String,
+            repoConfig: RepoConfig,
             maybeMilestoneTitle: String?,
             milestoneManager: GitHubMilestoneManager
         ): GitHubMilestone {
-            val milestoneTitle = maybeMilestoneTitle ?: revision.substring(1)
+            val milestoneTitle = maybeMilestoneTitle ?: repoConfig.milestone()
             println("Closing milestone $milestoneTitle")
 
             val milestone = milestoneManager.getOpenMilestoneByTitle(milestoneTitle)

@@ -15,7 +15,6 @@ class CategoryConfigTest {
         assertAll(
             { assertThat(emptyConfig.defaultCategory).isEqualTo("Assorted") },
             { assertThat(emptyConfig.labelToCategoryMapping).isEmpty() },
-            { assertThat(emptyConfig.alwaysIncludePRsFrom).isEmpty() },
             { assertThat(emptyConfig.categoryOrder).isEmpty() },
             { assertThat(emptyConfig.categoryToEmoji).isEmpty() }
         )

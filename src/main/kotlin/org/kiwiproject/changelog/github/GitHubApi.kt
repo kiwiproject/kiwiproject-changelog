@@ -1,6 +1,7 @@
 package org.kiwiproject.changelog.github
 
 import com.google.common.annotations.VisibleForTesting
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.kiwiproject.changelog.extension.firstValueAsLongOrThrow
 import org.kiwiproject.changelog.extension.firstValueOrNull
 import org.kiwiproject.time.KiwiDurationFormatters
@@ -19,7 +20,9 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class GithubApi(
+private val LOG = KotlinLogging.logger {}
+
+class GitHubApi(
     private val githubToken: String,
     private val httpClient: HttpClient = HttpClient.newHttpClient()
 ) {
@@ -28,7 +31,7 @@ class GithubApi(
      * Generic method to make a GET request to any GitHub REST API endpoint.
      */
     fun get(url: String): GitHubResponse {
-        println("GET: $url")
+        LOG.debug { "GET: $url" }
 
         val httpRequest = newRequestBuilder(url).GET().build()
         return sendRequest(httpRequest)
@@ -38,7 +41,7 @@ class GithubApi(
      * Generic method to make a POST request to any GitHub REST API endpoint.
      */
     fun post(url: String, bodyJson: String): GitHubResponse {
-        println("POST: $url")
+        LOG.debug { "POST: $url" }
 
         val bodyPublisher = BodyPublishers.ofString(bodyJson)
         val httpRequest = newRequestBuilder(url).POST(bodyPublisher).build()
@@ -49,7 +52,7 @@ class GithubApi(
      * Generic method to make a PATCH request to any GitHub REST API endpoint.
      */
     fun patch(url: String, bodyJson: String): GitHubResponse {
-        println("PATCH: $url")
+        LOG.debug { "PATCH: $url" }
 
         val bodyPublisher = BodyPublishers.ofString(bodyJson)
         val httpRequest = newRequestBuilder(url).method("PATCH", bodyPublisher).build()
@@ -94,14 +97,14 @@ class GithubApi(
                 val now = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
                 val resetAt = Instant.ofEpochSecond(rateLimitResetEpochSeconds).atZone(ZoneId.of("UTC"))
                 val timeUntilReset = Duration.between(now, resetAt)
-                val humanTimeUntilReset = KiwiDurationFormatters.formatDurationWords(timeUntilReset)
+                val humanTimeUntilReset = humanTimeUntilReset(timeUntilReset)
 
                 val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(now)
                 val rateLimitReset = epochSecondsAsIsoFormatted(rateLimitResetEpochSeconds)
-                println("GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, Time until reset: $humanTimeUntilReset")
+                LOG.debug { "GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, Time until reset: $humanTimeUntilReset" }
 
                 val link = responseHeaders.firstValueOrNull("Link")
-                println("GitHub 'Link' header: $link")
+                LOG.debug { "GitHub 'Link' header: $link" }
 
                 return GitHubResponse(
                     httpResponse.statusCode(),
@@ -113,6 +116,13 @@ class GithubApi(
                     rateLimitResetEpochSeconds
                 )
             }
+
+            @VisibleForTesting
+            internal fun humanTimeUntilReset(timeUntilReset: Duration): String =
+                when {
+                    timeUntilReset.isNegative -> "Time until reset is negative! ($timeUntilReset)"
+                    else -> KiwiDurationFormatters.formatDurationWords(timeUntilReset)
+                }
         }
     }
 }

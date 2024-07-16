@@ -290,7 +290,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.kiwiproject.changelog.ChangelogGeneratorMain</mainClass>
+                                    <mainClass>org.kiwiproject.changelog.App</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
