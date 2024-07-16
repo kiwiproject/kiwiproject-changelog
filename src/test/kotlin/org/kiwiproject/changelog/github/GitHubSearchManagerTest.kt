@@ -291,6 +291,9 @@ class GitHubSearchManagerTest {
 
             @Test
             fun shouldReturnGitHubUserWithoutLoginOrHtmlUrl_WhenTopLevelAuthorPropertyIsNull() {
+                // Note:
+                // We must declare the map value type as Any? (nullable) and then
+                // use an unchecked cast later when passing it as an argument.
                 val commitContainer = mapOf<String, Any?>(
                     "commit" to mapOf<String, Any>(
                         "author" to mapOf<String, Any>(
