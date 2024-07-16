@@ -59,6 +59,7 @@ class GitHubApi(
         return sendRequest(httpRequest)
     }
 
+    // TODO Can we allow use without a token? The Rate Limits are lower, but the APIs work on public repos
     private fun newRequestBuilder(url: String): HttpRequest.Builder =
         HttpRequest.newBuilder()
             .uri(URI.create(url))
