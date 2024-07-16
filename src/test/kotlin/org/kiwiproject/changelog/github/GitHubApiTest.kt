@@ -57,7 +57,7 @@ class GitHubApiTest {
     inner class Get {
 
         @Test
-        fun shouldGetGithubResource() {
+        fun shouldGetGitHubResource() {
             val issueResponseJson = Fixtures.fixture("github-issues-response.json")
             val link = """<https://api.github.com/repositories/315369011/issues?page=2&per_page=10&state=closed&filter=all&direction=desc>; rel="next", <https://api.github.com/repositories/315369011/issues?page=48&per_page=10&state=closed&filter=all&direction=desc>; rel="last""""
 
