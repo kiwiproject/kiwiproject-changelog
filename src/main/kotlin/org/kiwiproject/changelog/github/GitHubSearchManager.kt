@@ -117,6 +117,15 @@ class GitHubSearchManager(
 
         val authorName = getAuthorName(commitContainer)
 
+        // We have seen "author" be null in the "real world", so we have to handle it.
+        // The scenario that we observed seems to be the result of commits by the same
+        // user, but some commits were under a previous email. Since the user has a
+        // different email in GitHub from the earlier commit, maybe this causes the
+        // author to be null because it can't be linked by the commit email.
+        //
+        // We can only get the login and html_url from the "author" directly under each
+        // object in the "commits" array. If we can't get them, then create a user
+        // that only contains a name.
         return if (commitContainer["author"] != null) {
             gitHubUserFrom(authorName, commitContainer)
         } else {
