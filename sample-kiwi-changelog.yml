@@ -46,6 +46,3 @@ categories:
     labels:
       - infrastructure
       - github_actions
-
-alwaysIncludePRsFrom:
-  - dependabot[bot]
