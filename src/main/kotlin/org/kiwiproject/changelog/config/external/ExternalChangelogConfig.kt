@@ -3,11 +3,10 @@ package org.kiwiproject.changelog.config.external
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls.AS_EMPTY
 
-// The JsonSetters are needed, otherwise null is the actual value when deserializing if there are no values in the YAML
+// The JsonSetter is needed, otherwise null is the actual value when deserializing if there are no values in the YAML
 
 data class ExternalChangelogConfig(
     @JsonSetter(nulls = AS_EMPTY) val categories: List<ExternalCategory> = listOf(),
-    @JsonSetter(nulls = AS_EMPTY) val alwaysIncludePRsFrom: List<String> = listOf()
 ) {
 
     fun labelCategoryMap(): Map<String, String> {

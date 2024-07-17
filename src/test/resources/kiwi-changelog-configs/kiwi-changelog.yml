@@ -45,6 +45,3 @@ categories:
     emoji: 🆙
     labels:
       - dependencies
-
-alwaysIncludePRsFrom:
-  - "dependabot[bot]"

@@ -10,27 +10,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
 import org.junit.jupiter.params.provider.ValueSource
-import org.kiwiproject.changelog.config.RepoHostConfig
-import org.kiwiproject.changelog.github.GithubApi.GitHubResponse
+import org.kiwiproject.changelog.github.GitHubApi.GitHubResponse
 import java.net.URI
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-@DisplayName("GithubListFetcher")
-class GithubListFetcherTest {
+@DisplayName("GitHubPagingHelper")
+class GitHubPagingHelperTest {
 
-    private lateinit var fetcher: GithubListFetcher
+    private lateinit var fetcher: GitHubPagingHelper
 
     @BeforeEach
     fun setUp() {
-        fetcher = GithubListFetcher(
-            RepoHostConfig(
-                "https://github.com",
-                "https://api.github.com",
-                "12345",
-                "kiwiproject/kiwi"
-            )
-        )
+        fetcher = GitHubPagingHelper()
     }
 
     @Nested

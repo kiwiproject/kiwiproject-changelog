@@ -1,0 +1,999 @@
+{
+  "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/compare/v0.11.0...v0.12.0",
+  "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/compare/v0.11.0...v0.12.0",
+  "permalink_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/compare/kiwiproject:eeebba6...kiwiproject:0b521be",
+  "diff_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/compare/v0.11.0...v0.12.0.diff",
+  "patch_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/compare/v0.11.0...v0.12.0.patch",
+  "base_commit": {
+    "sha": "eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+    "node_id": "C_kwDOE8r0GNoAKGVlZWJiYTZhOWJmYmU0MTQ0MjI4YjI5YWI5OTVmYzkwMjU3MjFlN2I",
+    "commit": {
+      "author": {
+        "name": "Scott Leberknight",
+        "email": "174812+sleberknight@users.noreply.fake-github.com",
+        "date": "2024-06-18T03:18:02Z"
+      },
+      "committer": {
+        "name": "Scott Leberknight",
+        "email": "174812+sleberknight@users.noreply.fake-github.com",
+        "date": "2024-06-18T03:18:02Z"
+      },
+      "message": "[maven-release-plugin] prepare release v0.11.0",
+      "tree": {
+        "sha": "fbceefb88c5ab7507ba4ac951dd315b602850c94",
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/fbceefb88c5ab7507ba4ac951dd315b602850c94"
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEOjlfF+yJx+vMDaO9pZkJXrgoScwFAmZw/GoACgkQpZkJXrgo\nScy3mRAAgotn5xdb8QUolRphqAZUKMNxKgKe3kqucwvX1Ma7Nf06mepcnHi68Imb\nkONJ4jvg9Kb2W7ATRrjvJFT4bqUnxQzQ7LLTmEuotM4zbSsQ8C8LanjQ2CLHQ0za\n7sw9QWlua/eW3FLVS/3I4VJeV/Ox4Mw5RsDIAKBlx8obsz2U7ktYPN0nbY9N2284\nq5xl5tBgWJgNYno6AS2WEfrKLS+o6yJncfsjbCEPW4tuUDwQJ1cxfLCYavDha9vf\ne9d/HzF8ZYKdbdaOZ8XptzYCMsFQ5Oz4YhGdkEnKTJ3jusj7vVtdTBauRshxhLTL\nQaGduohOFt3z4TwFP5OAietQlZk9LMsV66wP//Eq3Pvep88v4Cb41huhegzdoSFW\n1zemw0nraqe7/cdRHn8i3KX8BUXPLTrSmVxb1ZzUZV0bxWjznCt/KTAF6WJ7LfBE\nm0YQVI+bhXsws8vxQK7jsW+3ZpZgHNJ3nRWuQGsP+Wy0b6PBYTQLHcoEyMwwx58i\nJgctGfnNyknZ5gYnS6qeruJYSMZhbtW9usI4bPoQx6wy2Q//0+dP40uH881a+Han\nu8nrrf4cB7V+J0uXpHuhtlihCGfp7gv4adh8ydtTwq2IZO35ZF326P/ktPmeXE/j\n77Y//q+3Z3rH6aS06fMkMNqChN7jA7udl4aeD+UgTH5XM6vEXNA=\n=sCG/\n-----END PGP SIGNATURE-----",
+        "payload": "tree fbceefb88c5ab7507ba4ac951dd315b602850c94\nparent 55ab0d253d6d3ce20c2d7563415b907fe4c4c825\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718680682 -0400\ncommitter Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718680682 -0400\n\n[maven-release-plugin] prepare release v0.11.0\n"
+      }
+    },
+    "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+    "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+    "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b/comments",
+    "author": {
+      "login": "sleberknight",
+      "id": 174812,
+      "node_id": "MDQ6VXNlcjE3NDgxMg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+      "gravatar_id": "",
+      "url": "https://api.fake-github.com/users/sleberknight",
+      "html_url": "https://fake-github.com/sleberknight",
+      "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+      "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+      "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+      "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+      "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+      "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+      "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+      "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "sleberknight",
+      "id": 174812,
+      "node_id": "MDQ6VXNlcjE3NDgxMg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+      "gravatar_id": "",
+      "url": "https://api.fake-github.com/users/sleberknight",
+      "html_url": "https://fake-github.com/sleberknight",
+      "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+      "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+      "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+      "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+      "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+      "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+      "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+      "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "55ab0d253d6d3ce20c2d7563415b907fe4c4c825",
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/55ab0d253d6d3ce20c2d7563415b907fe4c4c825",
+        "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/55ab0d253d6d3ce20c2d7563415b907fe4c4c825"
+      }
+    ]
+  },
+  "merge_base_commit": {
+    "sha": "eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+    "node_id": "C_kwDOE8r0GNoAKGVlZWJiYTZhOWJmYmU0MTQ0MjI4YjI5YWI5OTVmYzkwMjU3MjFlN2I",
+    "commit": {
+      "author": {
+        "name": "Scott Leberknight",
+        "email": "174812+sleberknight@users.noreply.fake-github.com",
+        "date": "2024-06-18T03:18:02Z"
+      },
+      "committer": {
+        "name": "Scott Leberknight",
+        "email": "174812+sleberknight@users.noreply.fake-github.com",
+        "date": "2024-06-18T03:18:02Z"
+      },
+      "message": "[maven-release-plugin] prepare release v0.11.0",
+      "tree": {
+        "sha": "fbceefb88c5ab7507ba4ac951dd315b602850c94",
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/fbceefb88c5ab7507ba4ac951dd315b602850c94"
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEOjlfF+yJx+vMDaO9pZkJXrgoScwFAmZw/GoACgkQpZkJXrgo\nScy3mRAAgotn5xdb8QUolRphqAZUKMNxKgKe3kqucwvX1Ma7Nf06mepcnHi68Imb\nkONJ4jvg9Kb2W7ATRrjvJFT4bqUnxQzQ7LLTmEuotM4zbSsQ8C8LanjQ2CLHQ0za\n7sw9QWlua/eW3FLVS/3I4VJeV/Ox4Mw5RsDIAKBlx8obsz2U7ktYPN0nbY9N2284\nq5xl5tBgWJgNYno6AS2WEfrKLS+o6yJncfsjbCEPW4tuUDwQJ1cxfLCYavDha9vf\ne9d/HzF8ZYKdbdaOZ8XptzYCMsFQ5Oz4YhGdkEnKTJ3jusj7vVtdTBauRshxhLTL\nQaGduohOFt3z4TwFP5OAietQlZk9LMsV66wP//Eq3Pvep88v4Cb41huhegzdoSFW\n1zemw0nraqe7/cdRHn8i3KX8BUXPLTrSmVxb1ZzUZV0bxWjznCt/KTAF6WJ7LfBE\nm0YQVI+bhXsws8vxQK7jsW+3ZpZgHNJ3nRWuQGsP+Wy0b6PBYTQLHcoEyMwwx58i\nJgctGfnNyknZ5gYnS6qeruJYSMZhbtW9usI4bPoQx6wy2Q//0+dP40uH881a+Han\nu8nrrf4cB7V+J0uXpHuhtlihCGfp7gv4adh8ydtTwq2IZO35ZF326P/ktPmeXE/j\n77Y//q+3Z3rH6aS06fMkMNqChN7jA7udl4aeD+UgTH5XM6vEXNA=\n=sCG/\n-----END PGP SIGNATURE-----",
+        "payload": "tree fbceefb88c5ab7507ba4ac951dd315b602850c94\nparent 55ab0d253d6d3ce20c2d7563415b907fe4c4c825\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718680682 -0400\ncommitter Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718680682 -0400\n\n[maven-release-plugin] prepare release v0.11.0\n"
+      }
+    },
+    "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+    "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+    "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b/comments",
+    "author": {
+      "login": "sleberknight",
+      "id": 174812,
+      "node_id": "MDQ6VXNlcjE3NDgxMg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+      "gravatar_id": "",
+      "url": "https://api.fake-github.com/users/sleberknight",
+      "html_url": "https://fake-github.com/sleberknight",
+      "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+      "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+      "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+      "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+      "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+      "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+      "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+      "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "sleberknight",
+      "id": 174812,
+      "node_id": "MDQ6VXNlcjE3NDgxMg==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+      "gravatar_id": "",
+      "url": "https://api.fake-github.com/users/sleberknight",
+      "html_url": "https://fake-github.com/sleberknight",
+      "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+      "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+      "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+      "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+      "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+      "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+      "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+      "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "55ab0d253d6d3ce20c2d7563415b907fe4c4c825",
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/55ab0d253d6d3ce20c2d7563415b907fe4c4c825",
+        "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/55ab0d253d6d3ce20c2d7563415b907fe4c4c825"
+      }
+    ]
+  },
+  "status": "ahead",
+  "ahead_by": 10,
+  "behind_by": 0,
+  "total_commits": 10,
+  "commits": [
+    {
+      "sha": "829a567bff53c0644da506cffca03431883d4c6c",
+      "node_id": "C_kwDOE8r0GNoAKDgyOWE1NjdiZmY1M2MwNjQ0ZGE1MDZjZmZjYTAzNDMxODgzZDRjNmM",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-06-18T03:18:04Z"
+        },
+        "committer": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-06-18T03:18:04Z"
+        },
+        "message": "[maven-release-plugin] prepare for next development iteration",
+        "tree": {
+          "sha": "7ffd90ecfde65f2f71690e3b028987b992593d4d",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/7ffd90ecfde65f2f71690e3b028987b992593d4d"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/829a567bff53c0644da506cffca03431883d4c6c",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEOjlfF+yJx+vMDaO9pZkJXrgoScwFAmZw/GwACgkQpZkJXrgo\nScz+NRAAkAFfmAYG7bPlCdIFb0hZczz+xs0VJWUhTldXi4MPsssKnS3O/ElUB5gb\naZfMb0Cn9DPENmOhkM9lyLP8BQ/A6cJuzLY/AUCf3/kyH0ze/Qzo5G5OIUv5CW9p\nr162eOflfzoILlnNYSGX8EkVp/tNmlWveyCzFhe9YWVZNymBiS/M4T0vmsksiSq6\nMEtj/C4ZOV8G9OdwbLLW4QHfzVVWLpBzJkgBFhQmE87AJo0uukM7WvSwvbDna/fB\nW6hwz/yMtqcUStNNMQpb0tpTdiIdcEMzGPcPkA5Wwt0h/Ul81jddQ/BvrV5ZhepF\nWhHs7CLisaNqIXOg7O99yEicC3tEpkAps8jJgKXqQk/aeX9BsgdmgqScl4qhoQU7\nNnIhJFyMgHapv8TE7fkgTvUNBqQXlqL8HDGH1ZD9p/mFKg55ph9y00YEAkORAgYa\ncdxWYKI/deyEDLqWC6TrEriJxOH6qdWc8k0rqHOT04ENlWilw328QMwI8YLOG1nJ\niEW05/g17Vs3gQo3K/cu7MDcUYuaW10dw0W7DA8NCfpLeVW9Cu5H6YgJVm9Bm/z5\nwXmgmwz1OpdOlc8ajxTy8Q0dgalDiXp0Z2spG7bKxTmCMdeciPiyoPYTSSiXTjRh\nsbM9sdZ+FCfEQR7J1HYriIzFLUjPgYPTakRDWKeWvngZ1MO/8FM=\n=49XT\n-----END PGP SIGNATURE-----",
+          "payload": "tree 7ffd90ecfde65f2f71690e3b028987b992593d4d\nparent eeebba6a9bfbe4144228b29ab995fc9025721e7b\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718680684 -0400\ncommitter Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718680684 -0400\n\n[maven-release-plugin] prepare for next development iteration\n"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/829a567bff53c0644da506cffca03431883d4c6c",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/829a567bff53c0644da506cffca03431883d4c6c",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/829a567bff53c0644da506cffca03431883d4c6c/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/eeebba6a9bfbe4144228b29ab995fc9025721e7b",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/eeebba6a9bfbe4144228b29ab995fc9025721e7b"
+        }
+      ]
+    },
+    {
+      "sha": "ff14de49ee2381578c2b2a9692f72cea34f35182",
+      "node_id": "C_kwDOE8r0GNoAKGZmMTRkZTQ5ZWUyMzgxNTc4YzJiMmE5NjkyZjcyY2VhMzRmMzUxODI",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-06-18T19:48:41Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-06-18T19:48:41Z"
+        },
+        "message": "Update install script to work using a curl-based installation (#184)\n\n* Change \"copy files\" to use relative path to etc/install\r\n* Remove code to get \"script_dir\" since it's not needed anymore\r\n* Misc - remove leading space before mkdir\r\n\r\nCloses #183",
+        "tree": {
+          "sha": "d0b1db98a06e29c2beece7ed4848ed4d7577c063",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/d0b1db98a06e29c2beece7ed4848ed4d7577c063"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/ff14de49ee2381578c2b2a9692f72cea34f35182",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmceSZCRC1aQ7uu5UhlAAAQTMQAIo2o5ITHMEggrESqxvPL5lr\nPE09huml94Bfs3IEohEn/1FHoIBF1xiZJ0f9m3vzkGRIav1TQKNfXVHKeWaFkBop\n185mVWcFJbIK/gPklr31PsJtuWUCdi0sWKElhLZr9VwWgtR1omQJD5zV7Fw5Ee98\nwyepvYQF4J3g88MjLmsvPgd3igOEo2w60yMT08Ta2taMXMtIZ3iQR3xVwuNfWTgd\n2LoSOe9lCSXRAkN6bE/JoPSDTyb3aqgZaAn9risYPzb3dP3+yWPKfdmF8NjEVkNb\nyGzf00HXbLVPKl3atvzAgD/DswVdFdf3p3Hdkj/oNRcShH7soj9Fzg2palbBXH//\neBwTnM1qMUbwMJQz9X/arvhBxU8xa47LWa+vskVZY0+ZKQyzdoDVVTNryNteIQ/t\nN9XwOv2bEofUfwh+EMjfSAx7g9URmKRSvTf7DQ2NUHlQti22mar23fxUb2t1MG3j\ns/QYCmoKqOssvLnHJAh7ulp2DE5rVixWsQp49fjHmHyw44LrWk5gJytp+t6lOpqB\nuhR4o3ARJlrGCLwG1SDaSt9+IoynA8du79v8VPa87jtF2MYB+tIxtCYOB62Mi9iP\nOzvVoovh5YnTzloUFrnj5kPPKezG/XXH0L9epYp/RsnY9h7MOJOX3n5c6tDTGEJP\nEezeNfBjoM1WFQ8qHc+I\n=Ocrw\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree d0b1db98a06e29c2beece7ed4848ed4d7577c063\nparent 829a567bff53c0644da506cffca03431883d4c6c\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718740121 -0400\ncommitter GitHub <noreply@fake-github.com> 1718740121 -0400\n\nUpdate install script to work using a curl-based installation (#184)\n\n* Change \"copy files\" to use relative path to etc/install\r\n* Remove code to get \"script_dir\" since it's not needed anymore\r\n* Misc - remove leading space before mkdir\r\n\r\nCloses #183"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/ff14de49ee2381578c2b2a9692f72cea34f35182",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/ff14de49ee2381578c2b2a9692f72cea34f35182",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/ff14de49ee2381578c2b2a9692f72cea34f35182/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "829a567bff53c0644da506cffca03431883d4c6c",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/829a567bff53c0644da506cffca03431883d4c6c",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/829a567bff53c0644da506cffca03431883d4c6c"
+        }
+      ]
+    },
+    {
+      "sha": "0843943b1d0dee681f18f8a3adcd0be9214dbc37",
+      "node_id": "C_kwDOE8r0GNoAKDA4NDM5NDNiMWQwZGVlNjgxZjE4ZjhhM2FkY2QwYmU5MjE0ZGJjMzc",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-06-18T20:05:01Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-06-18T20:05:01Z"
+        },
+        "message": "Add curl-based install instructions to the README (#185)\n\nAdd instructions to the README on how to install\r\ndirectly from GitHub using curl.",
+        "tree": {
+          "sha": "74cf3af1711c4a7bce68590deb306ea5f8e070f1",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/74cf3af1711c4a7bce68590deb306ea5f8e070f1"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/0843943b1d0dee681f18f8a3adcd0be9214dbc37",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmcehtCRC1aQ7uu5UhlAAAbgYQAJhi+je0dyDFZz08Nh+bggBZ\n1YdMPJaJ13wjPOUvpVD2GbUNVJ6FKXLHq0BE9x/aySAF8k6tHPR/lIZ+9Dy23ufe\n8zJEV0yx3/ef60vuD31aV+z6/mVBbKbUPz2VnyQ0iDyrDHNslxYp/+2fqNR0cB5I\n4kr/ii0PmT+buMRPWLzl3FPRD9WKSBknd9Ubdh8Z/FH2+RSyZVzXWvUF9QP2FNPD\nxoH5lUa+Uqfv1ayeYpS6Rc9NbIcTLQ3m99Yz8JsDay4wdRV68bU0T/DSYGylLkQ5\nCMZJwiICR4/HoZxeWocPf/9vEVLYva75yTHo8Zx1nhSLAaQIoAlUD0dWtKGSCXjR\nc4HtY+c0vxPtsbxZCXgxaHmyyooj5vtCD0wY95mL4jAXQtlJ7YWcvMnkVMued7Bc\nUTH3IDX9pyrkWeT+h8QRtknrDLElHbM7ihqhqEU0XJI/8jmooLGuOXlS2g45By6d\nie4uWJf2SCLx+Lm7jk4dtYoFVHPmDTytBl5ZrfKmvyA+WUAliKVtrcrEhGJ4mN/O\nxw+m0CLvQEZ+pkKk0XntF8jXjnoGSlgb4BAq1xfM8nVU0b9dp9nwkGWbYhiNw1D2\nYCSTnFDLsb7IdFILG7a54ycfDOie4v9AXqDq43aZ4oE42bKL31C9CpTggsvNMcXq\n6Cih7SWZu4ErB5x78zmL\n=ea2z\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree 74cf3af1711c4a7bce68590deb306ea5f8e070f1\nparent ff14de49ee2381578c2b2a9692f72cea34f35182\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718741101 -0400\ncommitter GitHub <noreply@fake-github.com> 1718741101 -0400\n\nAdd curl-based install instructions to the README (#185)\n\nAdd instructions to the README on how to install\r\ndirectly from GitHub using curl."
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/0843943b1d0dee681f18f8a3adcd0be9214dbc37",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/0843943b1d0dee681f18f8a3adcd0be9214dbc37",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/0843943b1d0dee681f18f8a3adcd0be9214dbc37/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "ff14de49ee2381578c2b2a9692f72cea34f35182",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/ff14de49ee2381578c2b2a9692f72cea34f35182",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/ff14de49ee2381578c2b2a9692f72cea34f35182"
+        }
+      ]
+    },
+    {
+      "sha": "4ec1c165cd77e96c31238106a109e4c27b3c932c",
+      "node_id": "C_kwDOE8r0GNoAKDRlYzFjMTY1Y2Q3N2U5NmMzMTIzODEwNmExMDllNGMyN2IzYzkzMmM",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-06-18T20:31:28Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-06-18T20:31:28Z"
+        },
+        "message": "Add automatic confirm option to install script (#187)\n\nAdd -y (\"yes\") option to install script to avoid interactive prompts.\r\n\r\nCloses  #186",
+        "tree": {
+          "sha": "7629be4d1087977c4a07829a0515f05cc9504b67",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/7629be4d1087977c4a07829a0515f05cc9504b67"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/4ec1c165cd77e96c31238106a109e4c27b3c932c",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmce6gCRC1aQ7uu5UhlAAA4H8QADWURCs27aYmqx9LlV5FQ0JZ\n78bJjHJfQyfU9sdz5RL3uZQaxuzAIrR6YHsY0LJ6ZWTBzJ51gZGFvUXaf72zStiO\neAMPZmf/g8iuhGzREdIMieOP8ECHBgQyUTAzMHA6F58T1JGMZD4LKslXzjeTQmIU\nAMt9WdcAAIzPoCjmmBfpfu/nQR8i4PNnYnLyVncQnY9Gx4tBRPAJ03ZNh9tmlfh+\nZfg8hpvZGnFaqcIRhdxvoiv2Z7E7vyflULgrWVAoB/gzDO8VVAwjdg3m1pyPTP+V\n0haD+GanpYLKjrS5ENHqEa4zT3izeHydJzUjkn4DsJf/4GD95juF8a9yKnuwQASW\nEa6RJ0OGXKtxm4a3/IG1GQAsNgSAvYMYlQSEHSesvpyQturUK0zLjm+xT4hZW/oZ\n9C8CE8ZtOuluh+kAhruiJPzAEUJ5beJl7sIV18Twf5X5fAzgUjLNu15LVtla/oc9\n09r/iSuKzHGrciEZAX6kHHHP51mrwxFWaWVQ6h73EsoQIqWCFbcsA7YYYKaFKl9c\nEmE1FjdZP4q/A1bom6ee8aCScZMdKSDov0bBuwgRaKL2BSLYzIySe2UcvwcFJOCG\nhYMVOh1m+v4E71nSIgEAM0btrPL+SwVYp/9TPmvA8/0Rm6qeq7Z7hlsdrZA7kbte\n83ohM5PrZ1POSVn9HS+L\n=fjAI\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree 7629be4d1087977c4a07829a0515f05cc9504b67\nparent 0843943b1d0dee681f18f8a3adcd0be9214dbc37\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718742688 -0400\ncommitter GitHub <noreply@fake-github.com> 1718742688 -0400\n\nAdd automatic confirm option to install script (#187)\n\nAdd -y (\"yes\") option to install script to avoid interactive prompts.\r\n\r\nCloses  #186"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/4ec1c165cd77e96c31238106a109e4c27b3c932c",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/4ec1c165cd77e96c31238106a109e4c27b3c932c",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/4ec1c165cd77e96c31238106a109e4c27b3c932c/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "0843943b1d0dee681f18f8a3adcd0be9214dbc37",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/0843943b1d0dee681f18f8a3adcd0be9214dbc37",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/0843943b1d0dee681f18f8a3adcd0be9214dbc37"
+        }
+      ]
+    },
+    {
+      "sha": "93aaa529de3cec3f45ac6d135cdf94eb47539024",
+      "node_id": "C_kwDOE8r0GNoAKDkzYWFhNTI5ZGUzY2VjM2Y0NWFjNmQxMzVjZGY5NGViNDc1MzkwMjQ",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-06-18T21:10:28Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-06-18T21:10:28Z"
+        },
+        "message": "Update README for new auto-confirm option\n\nUpdate the README with information about the new -y option\r\nto automatically confirm an uninstall or update/overwrite.",
+        "tree": {
+          "sha": "b151af39f496a84767ef2260aa34b54ddf334469",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/b151af39f496a84767ef2260aa34b54ddf334469"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/93aaa529de3cec3f45ac6d135cdf94eb47539024",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmcffECRC1aQ7uu5UhlAAA9bsQADJvAS38UkmdnFlhQaRhcKZR\nHMODSdV4elF4PUPYutHjRTgO5NUQOFzqc7JgiGq4oxZ4A0Z3QQW9vZRpXQi5vxxb\n1wrtVIQW4hqQKVA82NgPb3CsR4b7gZ/yRmnq4Q7SlWiuXIrwoX4LTtQJmE5kgFaH\n3i2AkuYarifvwASOXjYSoJdKIDcwgxNGt2Dq9WbNv3FO5HXEgUNmNx2GS2amPz+P\ndd57r1LDlxic1LGsYImulsno9djl7Cyr78/VdYj3V4Yn6M49fOUXq/UXDfoaZUCm\nh4rdkO6LqnCmNtip/AtdmRUQ55C+2ILVImXQb9dlOCy7ECu709FbM07NBO1v1CMQ\nYPOSBcx6Pr4SQq7n6DY02S7z1sYxiEzZ7xRufj8Z5TJ8SxbhX1nCqzvQwhgaCdP+\nK9t3rfea2TarJRNvSoJ3nE3uLI8U5CABKJTqETyj9tT8xt/IasPqt0ZfLHy93JNp\nMDmgTAIZQagIjZQozK1ga/fWMduHkpZXMaTsCInGCt449gjARmuOPNdh77FZV6yJ\n4jrkZ3bh8+NbYSYRlghrln0NcIcSROKw79CkblHlgbXvqyf9aT5bHhqaL9vrNbUW\nk4j2BSDJFBVm0Kz4veS+fNflfVHt2ubuGtMf5B3e8Q5KzjuHDJEvDSIMLKqqyecB\ne1B0RpT3bjeqQ9kdKz+5\n=7x2G\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree b151af39f496a84767ef2260aa34b54ddf334469\nparent 4ec1c165cd77e96c31238106a109e4c27b3c932c\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1718745028 -0400\ncommitter GitHub <noreply@fake-github.com> 1718745028 -0400\n\nUpdate README for new auto-confirm option\n\nUpdate the README with information about the new -y option\r\nto automatically confirm an uninstall or update/overwrite."
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/93aaa529de3cec3f45ac6d135cdf94eb47539024",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/93aaa529de3cec3f45ac6d135cdf94eb47539024",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/93aaa529de3cec3f45ac6d135cdf94eb47539024/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "4ec1c165cd77e96c31238106a109e4c27b3c932c",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/4ec1c165cd77e96c31238106a109e4c27b3c932c",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/4ec1c165cd77e96c31238106a109e4c27b3c932c"
+        }
+      ]
+    },
+    {
+      "sha": "6c853c3b7208981823721dcd2bea7107cd72fca4",
+      "node_id": "C_kwDOE8r0GNoAKDZjODUzYzNiNzIwODk4MTgyMzcyMWRjZDJiZWE3MTA3Y2Q3MmZjYTQ",
+      "commit": {
+        "author": {
+          "name": "dependabot[bot]",
+          "email": "49699333+dependabot[bot]@users.noreply.fake-github.com",
+          "date": "2024-07-08T17:28:53Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-07-08T17:28:53Z"
+        },
+        "message": "Bump org.kiwiproject:kiwi-test from 3.4.0 to 3.5.0 (#192)\n\nBumps [org.kiwiproject:kiwi-test](https://fake-github.com/kiwiproject/kiwi-test) from 3.4.0 to 3.5.0.\r\n- [Release notes](https://fake-github.com/kiwiproject/kiwi-test/releases)\r\n- [Commits](https://fake-github.com/kiwiproject/kiwi-test/compare/v3.4.0...v3.5.0)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: org.kiwiproject:kiwi-test\r\n  dependency-type: direct:development\r\n  update-type: version-update:semver-minor\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@fake-github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com>",
+        "tree": {
+          "sha": "f552f37f9f085ba41775c6c750e3f1c6d9d2e2e2",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/f552f37f9f085ba41775c6c750e3f1c6d9d2e2e2"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/6c853c3b7208981823721dcd2bea7107cd72fca4",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmjCHVCRC1aQ7uu5UhlAAAPCUQAGefvjECJ7XZO+Ed+aeUFmgl\nDBKLvB2bYhbQIRO+vIWqHC2sZ+iY7RBIuuq+ftXSvK1Xbwia5gWcYSNoZ10gRyxc\niKWXO7JxjqoDSYvcAsso/TD3FsmAlzD/unFh5oUYGjKmuWyw/UI2Rr2JzaCdstfS\nU/M05ZP8jonnf3L8H3ho8NteMugXAG0Es05HsR84bK+mBJ8DPx6kWzo8j3NkZv5i\nxQFW2GIRxdoGCILzRByalfvd1BOYbHpzEkhTJoUM8kph+rjcXW9oIa3j6aPeqMg9\nCj3lrZ91dlHPzbHxxHd5TE9v7XDoECILsxgYMSwgjcM4ZqXw8WmqP7/vEbRkRJ7G\nZ8IZq8Y/YgvyazlED9Wz5FhhZYF9PR05uMYl22458sJy3g1527+HkSBbR3gNXVdP\n8EzfxECh540CsNQ4Rtep4ydn47tQ/X5cr6CkeqXBNF1vNTxxcltwvPBKGDkSprQ+\n4E97uBQ1K0oJbM2k/EivOHY7YowbrGzXSi+MN0dSnGU6dQ3sNOk0vIC3fDsj+KBh\n7WXEMcJHNL2f+lLIviUSTNPMyzPc5bBwJEJDtKM8QQwBr4OOgxm7B7bzkMotg6rp\nlTlaSg21qhOQReU/QN6YIyqiBdWYOmLvzUvF2IaUPq0g8wAugXU1julFTwXV9vLX\nTElC1qrfqmw2lrvR66RD\n=FOhX\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree f552f37f9f085ba41775c6c750e3f1c6d9d2e2e2\nparent 93aaa529de3cec3f45ac6d135cdf94eb47539024\nauthor dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com> 1720459733 -0400\ncommitter GitHub <noreply@fake-github.com> 1720459733 -0400\n\nBump org.kiwiproject:kiwi-test from 3.4.0 to 3.5.0 (#192)\n\nBumps [org.kiwiproject:kiwi-test](https://fake-github.com/kiwiproject/kiwi-test) from 3.4.0 to 3.5.0.\r\n- [Release notes](https://fake-github.com/kiwiproject/kiwi-test/releases)\r\n- [Commits](https://fake-github.com/kiwiproject/kiwi-test/compare/v3.4.0...v3.5.0)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: org.kiwiproject:kiwi-test\r\n  dependency-type: direct:development\r\n  update-type: version-update:semver-minor\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@fake-github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com>"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/6c853c3b7208981823721dcd2bea7107cd72fca4",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/6c853c3b7208981823721dcd2bea7107cd72fca4",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/6c853c3b7208981823721dcd2bea7107cd72fca4/comments",
+      "author": {
+        "login": "dependabot[bot]",
+        "id": 49699333,
+        "node_id": "MDM6Qm90NDk2OTkzMzM=",
+        "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/dependabot%5Bbot%5D",
+        "html_url": "https://fake-github.com/apps/dependabot",
+        "followers_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/followers",
+        "following_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/orgs",
+        "repos_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/repos",
+        "events_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/received_events",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "93aaa529de3cec3f45ac6d135cdf94eb47539024",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/93aaa529de3cec3f45ac6d135cdf94eb47539024",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/93aaa529de3cec3f45ac6d135cdf94eb47539024"
+        }
+      ]
+    },
+    {
+      "sha": "fb772360b9325468e09a27c0c26b62743260881a",
+      "node_id": "C_kwDOE8r0GNoAKGZiNzcyMzYwYjkzMjU0NjhlMDlhMjdjMGMyNmI2Mjc0MzI2MDg4MWE",
+      "commit": {
+        "author": {
+          "name": "dependabot[bot]",
+          "email": "49699333+dependabot[bot]@users.noreply.fake-github.com",
+          "date": "2024-07-08T17:29:16Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-07-08T17:29:16Z"
+        },
+        "message": "Bump org.kiwiproject:kiwi from 4.0.0 to 4.1.0 (#191)\n\nBumps [org.kiwiproject:kiwi](https://fake-github.com/kiwiproject/kiwi) from 4.0.0 to 4.1.0.\r\n- [Release notes](https://fake-github.com/kiwiproject/kiwi/releases)\r\n- [Commits](https://fake-github.com/kiwiproject/kiwi/compare/v4.0.0...v4.1.0)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: org.kiwiproject:kiwi\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-minor\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@fake-github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com>",
+        "tree": {
+          "sha": "bedceefbd7b9017ef49f238cafacc394ee4349f6",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/bedceefbd7b9017ef49f238cafacc394ee4349f6"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/fb772360b9325468e09a27c0c26b62743260881a",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmjCHsCRC1aQ7uu5UhlAAA2DkQAICj73o8vI/6qBjyIjOBS1VI\nv2R8qlyc/zUwy92ahDGo1KYjFfHyRKahDRSrtJPiN5qziePmfqMxmE9cRdHsUbo9\ngxNDF0KT0odsdNJZYloWS2eo14vsc3wB+s0w+iBsHTb1ZaXuBq4nvv6T5yvrw4mQ\nNXQgAYBVPlLSlAcJ3JaBqNbfVWLvigxWKID3Ae0OFG5F6M6AKoqE/W59rzoJQB15\nigZsqLbK5rYBDeeX/zDVV47rnqKDeqNULuxjj14gwIm3LAY7K4N/0TigzHkEdpoa\nhjkC5KDmaVqgS+dP5+3I+fWZkYWUSFOwRkWe/oUutz2VgcuCJs+6D9R1uaVtfBGq\ndHrzqMu1R6oSwEKEicMRYvXRwQWuPZCdplXsR9L1DevLfxYpVUhgvOQpLdZ3yLdJ\nNICkzyYUhhxXACSEL2xOY0Vbq4zBI1Y420fsuArGViBEjF1kCEpytwbN1N0py8Ix\n5qosAAxz7us48ngcyjc/Hey382cV+W2NnIrAI8hNorcgeEQjLeuSZkx1UWL7yiGJ\nVc5h9hCqx/wh8MoWQ2y8n0ui+9JooWSyjm+qhnSuEA9IstmdC0yIgkNt8sUnQGkl\nqHqZ1PdcXMw2cumRF1Vo1QIGq+1DlKxqR/vHFfAy/bITg8bfEjsMFtlnbR6HJdBI\nXj2IUQP9X5A5csyclVHl\n=Pgft\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree bedceefbd7b9017ef49f238cafacc394ee4349f6\nparent 6c853c3b7208981823721dcd2bea7107cd72fca4\nauthor dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com> 1720459756 -0400\ncommitter GitHub <noreply@fake-github.com> 1720459756 -0400\n\nBump org.kiwiproject:kiwi from 4.0.0 to 4.1.0 (#191)\n\nBumps [org.kiwiproject:kiwi](https://fake-github.com/kiwiproject/kiwi) from 4.0.0 to 4.1.0.\r\n- [Release notes](https://fake-github.com/kiwiproject/kiwi/releases)\r\n- [Commits](https://fake-github.com/kiwiproject/kiwi/compare/v4.0.0...v4.1.0)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: org.kiwiproject:kiwi\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-minor\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@fake-github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com>"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/fb772360b9325468e09a27c0c26b62743260881a",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/fb772360b9325468e09a27c0c26b62743260881a",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/fb772360b9325468e09a27c0c26b62743260881a/comments",
+      "author": {
+        "login": "dependabot[bot]",
+        "id": 49699333,
+        "node_id": "MDM6Qm90NDk2OTkzMzM=",
+        "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/dependabot%5Bbot%5D",
+        "html_url": "https://fake-github.com/apps/dependabot",
+        "followers_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/followers",
+        "following_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/orgs",
+        "repos_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/repos",
+        "events_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/received_events",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "6c853c3b7208981823721dcd2bea7107cd72fca4",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/6c853c3b7208981823721dcd2bea7107cd72fca4",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/6c853c3b7208981823721dcd2bea7107cd72fca4"
+        }
+      ]
+    },
+    {
+      "sha": "bc6bb261c814ccc3ded246a022c741b16a2d0915",
+      "node_id": "C_kwDOE8r0GNoAKGJjNmJiMjYxYzgxNGNjYzNkZWQyNDZhMDIyYzc0MWIxNmEyZDA5MTU",
+      "commit": {
+        "author": {
+          "name": "dependabot[bot]",
+          "email": "49699333+dependabot[bot]@users.noreply.fake-github.com",
+          "date": "2024-07-08T17:29:34Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-07-08T17:29:34Z"
+        },
+        "message": "Bump org.kiwiproject:kiwi-parent from 3.0.15 to 3.0.16 (#189)\n\nBumps [org.kiwiproject:kiwi-parent](https://fake-github.com/kiwiproject/kiwi-parent) from 3.0.15 to 3.0.16.\r\n- [Release notes](https://fake-github.com/kiwiproject/kiwi-parent/releases)\r\n- [Commits](https://fake-github.com/kiwiproject/kiwi-parent/compare/v3.0.15...v3.0.16)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: org.kiwiproject:kiwi-parent\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-patch\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@fake-github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com>",
+        "tree": {
+          "sha": "11c5b84023d205d2a120abb0ca88b7a2dea174fb",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/11c5b84023d205d2a120abb0ca88b7a2dea174fb"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/bc6bb261c814ccc3ded246a022c741b16a2d0915",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmjCH+CRC1aQ7uu5UhlAAA/GoQAJHiteNqBlBcunfVZS2wdMor\n6Z+LkwylQpgO8ETnGgkbJsS6MOM0kb65oMzyeMsGF5lYwM9EGmbt9pJ2NILShOOy\nC++E5sLSyRaYJMrH99OP1BlHOhEjvftxI+W5/QUNxXRA7n8nIfPYP346pnIEh0wP\nbSYqqoFljyM3lCSOpjaPVeBOXQEsqf/wmnWUn4sLJ1414o7Pmvw4mWnhzXd9UfB9\n183gStezbCmcxhGQ9+CeThK2AdvvWcgzFIU8OPZVhJFsGFKM8MdXE7hjmQtOIL5L\ncd1KemWOyjXfKcXEkVBqOEHVu5Se9Cx6aJT8tzfioWb4L8pjxSSpUwncOzN7JHXT\nATXPbpsleKYWe42Hd7PVknS0z+3wmK+eBxHv435mHoYodvJy4g3qCrvWRT5A9spw\nkWR/oeV0q+WCrP+StlP+cEVXnI6jaBqau3Ug28mo+k3/Rp5RROhnaxMfatPdgf6l\nqBTvdESSl/Uix7Ye0mnINZQd88TeyDBCn0i8d3V3aGobtUBQzZPJ/nkYefC7osFJ\nGasRwSWOI+wzOfSNXE/1UeAoQQEAvO6fFXmmM+oOFY4b4XjMkWP4KMHYgKSxieRa\nfNj558d4S2Sj6Z3xtiVvsSujEodGcHGZAU1sH4qZt8NL++hjJfHVjthhS1z1URIc\nr9naRODIp+O2t0LNYzjU\n=zwpU\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree 11c5b84023d205d2a120abb0ca88b7a2dea174fb\nparent fb772360b9325468e09a27c0c26b62743260881a\nauthor dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com> 1720459774 -0400\ncommitter GitHub <noreply@fake-github.com> 1720459774 -0400\n\nBump org.kiwiproject:kiwi-parent from 3.0.15 to 3.0.16 (#189)\n\nBumps [org.kiwiproject:kiwi-parent](https://fake-github.com/kiwiproject/kiwi-parent) from 3.0.15 to 3.0.16.\r\n- [Release notes](https://fake-github.com/kiwiproject/kiwi-parent/releases)\r\n- [Commits](https://fake-github.com/kiwiproject/kiwi-parent/compare/v3.0.15...v3.0.16)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: org.kiwiproject:kiwi-parent\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-patch\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@fake-github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.fake-github.com>"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/bc6bb261c814ccc3ded246a022c741b16a2d0915",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/bc6bb261c814ccc3ded246a022c741b16a2d0915",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/bc6bb261c814ccc3ded246a022c741b16a2d0915/comments",
+      "author": {
+        "login": "dependabot[bot]",
+        "id": 49699333,
+        "node_id": "MDM6Qm90NDk2OTkzMzM=",
+        "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/dependabot%5Bbot%5D",
+        "html_url": "https://fake-github.com/apps/dependabot",
+        "followers_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/followers",
+        "following_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/orgs",
+        "repos_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/repos",
+        "events_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/dependabot%5Bbot%5D/received_events",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "fb772360b9325468e09a27c0c26b62743260881a",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/fb772360b9325468e09a27c0c26b62743260881a",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/fb772360b9325468e09a27c0c26b62743260881a"
+        }
+      ]
+    },
+    {
+      "sha": "3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80",
+      "node_id": "C_kwDOE8r0GNoAKDM1NTBhOWU2YzEyODJjY2M3YTA3Y2IwZTFmZjkyZTQxMzFlNThjODA",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-07-08T17:47:27Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@fake-github.com",
+          "date": "2024-07-08T17:47:27Z"
+        },
+        "message": "Use BOMs for Jackson and Kotlin to prevent dependency convergence errors (#193)\n\n* Update the POM to use the Jackson and Kotlin BOMs to control versions\r\n* Create a separate version property for kotlin-maven-plugin\r\n* Update Jackson version from 2.17.1 to 2.17.2",
+        "tree": {
+          "sha": "565f79ee58041fa2e6bff279f7ec18bd6697f3e6",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/565f79ee58041fa2e6bff279f7ec18bd6697f3e6"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmjCYvCRC1aQ7uu5UhlAAA6MMQAB3oTsQeOGnZrNFYfomSoyKF\ni77dhM8xZ04+haq5WkbkYguIM0OZwQ+LbLhMXoREJF48oRR6vv1UglGRhogCFdpm\noZtQSAB7gQJD/qqYoDPU+gfRhyW6fk0Rhp1eXj/AqhX6T5c4qzTlkYY1VUeRmVWr\nIY+zC8ZUI+EtNjRF6mIf20MNE8KLbfBm0NO7epL0U/c7ugzfVOt+XzR4fIIJ/WPg\n/ltrsliT2vfiB7hbgAULCECtwo8Nlwbbs+XcyaHpGABQuAvZKfiQzf54D7S59e5k\nT7s0sA89mY9hdEn3fNcfnFEhxDKrhHbWxXqiQ4I6xTiMlBkOxum/IpI/ehtZn2W3\nrCVSiOxQvSBPdd6EcoD6wPN0CGADAK3SEfjuCfTzZUzHPxf0ag6Ml1PXdIv9QXbK\nbLNIzT0CRFohcflBIKYkpt8xZ8lqo8oSmGKEUtRqfSZXahvvWHpOU3CByRoNYc/0\n7nkNUKde+DCOaCj6TomG/rSzbRgagKKO9zfU51aIqk0E+MDlX6li16+oLKpwNJle\n8UExlrpdLgBQ8fCkQZ6ABJn3EMXXHaAl9yFx6gCTrpEkKzpyfMGqhNZ+4voOo1iz\ngP1FRZF7EBpSc4JqylJDyiKKTI6R3MAVTLoSmGy2D/NxJ0j5EN1f6QdjXAFpo/xH\nyENF98cs+9CMyDgANpWC\n=07AU\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree 565f79ee58041fa2e6bff279f7ec18bd6697f3e6\nparent bc6bb261c814ccc3ded246a022c741b16a2d0915\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1720460847 -0400\ncommitter GitHub <noreply@fake-github.com> 1720460847 -0400\n\nUse BOMs for Jackson and Kotlin to prevent dependency convergence errors (#193)\n\n* Update the POM to use the Jackson and Kotlin BOMs to control versions\r\n* Create a separate version property for kotlin-maven-plugin\r\n* Update Jackson version from 2.17.1 to 2.17.2"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/web-flow",
+        "html_url": "https://fake-github.com/web-flow",
+        "followers_url": "https://api.fake-github.com/users/web-flow/followers",
+        "following_url": "https://api.fake-github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/web-flow/orgs",
+        "repos_url": "https://api.fake-github.com/users/web-flow/repos",
+        "events_url": "https://api.fake-github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/web-flow/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "bc6bb261c814ccc3ded246a022c741b16a2d0915",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/bc6bb261c814ccc3ded246a022c741b16a2d0915",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/bc6bb261c814ccc3ded246a022c741b16a2d0915"
+        }
+      ]
+    },
+    {
+      "sha": "0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+      "node_id": "C_kwDOE8r0GNoAKDBiNTIxYmU5OWZmODA3Yjc3MzVmYWE3NmE0YjBkYTdiYzFiNjkxMmU",
+      "commit": {
+        "author": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-07-09T14:22:38Z"
+        },
+        "committer": {
+          "name": "Scott Leberknight",
+          "email": "174812+sleberknight@users.noreply.fake-github.com",
+          "date": "2024-07-09T14:22:38Z"
+        },
+        "message": "[maven-release-plugin] prepare release v0.12.0",
+        "tree": {
+          "sha": "6a530bb7004447cdcb06a657796d165281422c76",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/trees/6a530bb7004447cdcb06a657796d165281422c76"
+        },
+        "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\niQIzBAABCAAdFiEEOjlfF+yJx+vMDaO9pZkJXrgoScwFAmaNR64ACgkQpZkJXrgo\nScw75RAAnnf7ivYOchRRGsYpaXxLDwJs1xaetK6yKb61SeDFguEbLNqs4CvJ67GW\nmOxIlu9cBh9bYUtQtqCLLhd/ojOGZYFlY418JQFGYkXH3Yvvkfk+7fVVmzTe/o5o\naDv+riHM1cMAe5cGCMtqXvZgJJirG31IBp7phUwUlDYh2hNpXoD8CLONwpwrwBRy\nNaysz+PyX49zJzEpCshzprEbX1ckS57DZclDMQihD2t7UHf/XY57WfFUfeuYbIfU\n7/dY2hFeRF84LLVzYexQNGgNMI3MrWAEIIQSseQjH54D2zqi3lVz3w1fqlT3EbbX\nblZyBMfx7CFPd2bRtVpPwqs2Qq35e8ofj48lrZFAdaEJnhUXw5rgGnjsScZZlRiv\nVP4/miwf68sN42eR4onDjG+MWsx/Fcy6ymw8njolS8+Va4d+2+4z+D6MDNZLv67B\nS8NDy7q0bC39Tf0cgS4ipi+Y1iY8bDElGeDtI5THU+dvk8+YSHVCDNZqe1CU19FS\nUbJKy1LJLqwlHaaKU9s6+btcifh0TVF/2GgwMnOLgUex2zg1PMBNn5Kg5qODVr7i\nhZujxNRHWsQvt9pFPEI8QtwnulcJL4712csD+qwSFXiWSbe9R9yavXcnkLiyqfsv\nQHvYzY0Ndqd6p/60znDP1FqxfPkK5yaS8A+tPoh4LWzu3A3BC1w=\n=an5O\n-----END PGP SIGNATURE-----",
+          "payload": "tree 6a530bb7004447cdcb06a657796d165281422c76\nparent 3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80\nauthor Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1720534958 -0400\ncommitter Scott Leberknight <174812+sleberknight@users.noreply.fake-github.com> 1720534958 -0400\n\n[maven-release-plugin] prepare release v0.12.0\n"
+        }
+      },
+      "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+      "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+      "comments_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/0b521be99ff807b7735faa76a4b0da7bc1b6912e/comments",
+      "author": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "sleberknight",
+        "id": 174812,
+        "node_id": "MDQ6VXNlcjE3NDgxMg==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/174812?v=4",
+        "gravatar_id": "",
+        "url": "https://api.fake-github.com/users/sleberknight",
+        "html_url": "https://fake-github.com/sleberknight",
+        "followers_url": "https://api.fake-github.com/users/sleberknight/followers",
+        "following_url": "https://api.fake-github.com/users/sleberknight/following{/other_user}",
+        "gists_url": "https://api.fake-github.com/users/sleberknight/gists{/gist_id}",
+        "starred_url": "https://api.fake-github.com/users/sleberknight/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.fake-github.com/users/sleberknight/subscriptions",
+        "organizations_url": "https://api.fake-github.com/users/sleberknight/orgs",
+        "repos_url": "https://api.fake-github.com/users/sleberknight/repos",
+        "events_url": "https://api.fake-github.com/users/sleberknight/events{/privacy}",
+        "received_events_url": "https://api.fake-github.com/users/sleberknight/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80",
+          "url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/commits/3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80",
+          "html_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/commit/3550a9e6c1282ccc7a07cb0e1ff92e4131e58c80"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "sha": "372388c2586d51e558ff235215f2bbbfa5c1f186",
+      "filename": "README.md",
+      "status": "modified",
+      "additions": 34,
+      "deletions": 3,
+      "changes": 37,
+      "blob_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/blob/0b521be99ff807b7735faa76a4b0da7bc1b6912e/README.md",
+      "raw_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/raw/0b521be99ff807b7735faa76a4b0da7bc1b6912e/README.md",
+      "contents_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/contents/README.md?ref=0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+      "patch": "@@ -12,11 +12,41 @@ Generates changelogs between two versions on GitHub.\n \n ## Installation\n \n-Currently you can install using an installation script or by manually building the JAR. The following sections describe these options.\n+You can install using an installation script or by manually building the JAR. The following sections describe these options.\n \n _For both installation types, the script assumes that Maven is available, since it is required to build the JAR file._\n \n-### Using the installation script\n+### Install directly from GitHub using curl\n+\n+This is the easiest way to install, but of course you should verify that the script is not malicious first. 🤣\n+\n+To install using the default directory (`~/kiwiproject-changelog-script`) and script name (`.generate-kiwi-changelog`):\n+\n+```shell\n+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash\n+```\n+\n+Or, to install to a custom directory and/or with a custom script name:\n+\n+```shell\n+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -d <dir> -n <script-name>\n+```\n+\n+Commands that require user confirmation (such as when uninstalling or if you attempt to update an existing installation)\n+work using a `curl`-based installation, but you must use the `-y` (yes) option to avoid interactive prompts and\n+auto-confirm. To uninstall you can:\n+\n+```shell\n+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -u -y\n+```\n+\n+To install the latest version and overwrite an existing installation, just run the original curl command again with `-y`:\n+\n+```shell\n+curl -s  https://raw.githubusercontent.com/kiwiproject/kiwiproject-changelog/main/etc/install/install.sh | bash -s -- -y\n+```\n+\n+### Execute the installation script locally\n \n Clone the repository, then navigate to the folder where you cloned it.\n \n@@ -26,7 +56,8 @@ From the project root directory, you can install using the default location and\n ./etc/install/install.sh\n ```\n \n-This will create a directory `~/kiwiproject-changelog-script` with a script named `.generate-kiwi-changelog` inside. There is also a `README.txt` and the JAR file which is executed by the script.\n+This will create a directory `~/kiwiproject-changelog-script` with a script named `.generate-kiwi-changelog` inside.\n+There is also a `README.txt` and the JAR file which is executed by the script.\n \n You can also run `install.sh` with `-h` to get the command line options.\n "
+    },
+    {
+      "sha": "cb27850bf8b2791906c39458b3bf2977a0a8605f",
+      "filename": "etc/install/install.sh",
+      "status": "modified",
+      "additions": 24,
+      "deletions": 14,
+      "changes": 38,
+      "blob_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/blob/0b521be99ff807b7735faa76a4b0da7bc1b6912e/etc%2Finstall%2Finstall.sh",
+      "raw_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/raw/0b521be99ff807b7735faa76a4b0da7bc1b6912e/etc%2Finstall%2Finstall.sh",
+      "contents_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/contents/etc%2Finstall%2Finstall.sh?ref=0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+      "patch": "@@ -7,24 +7,26 @@ set -e\n \n \n # Set default values\n-install_dir=$HOME/kiwiproject-changelog-script\n-changelog_script_name=.generate-kiwi-changelog\n+install_dir=\"$HOME/kiwiproject-changelog-script\"\n+changelog_script_name='.generate-kiwi-changelog'\n uninstall=0\n+interactive_user_confirm=1\n \n \n # Functions\n function print_usage() {\n-    echo \"🛠  Usage: $0 -h -d -n -u\"\n+    echo \"🛠  Usage: $0 -h -d -n -u -y\"\n     echo\n     echo \"  -h: print this help\"\n     echo \"  -d: the installation directory (default: ${install_dir})\"\n     echo \"  -n: the name of the script (default: ${changelog_script_name})\"\n     echo \"  -u: uninstall the script and remove the installation directory\"\n+    echo \"  -y: if there are confirmation prompts, automatically confirm them\"\n }\n \n \n # Process arguments\n-while getopts 'hn:d:u' opt; do\n+while getopts 'hn:d:uy' opt; do\n   case \"$opt\" in\n     h)\n       print_usage\n@@ -43,6 +45,10 @@ while getopts 'hn:d:u' opt; do\n       uninstall=1\n       ;;\n \n+    y)\n+      interactive_user_confirm=0\n+      ;;\n+\n     *)\n       print_usage\n       exit 1\n@@ -55,7 +61,11 @@ done\n if [[ \"$uninstall\" -eq 1 ]]; then\n   echo \"🚧  Will uninstall directory ${install_dir}\"\n \n-  read -r -p 'Really uninstall (yes/no)? ' uninstall_confirmation\n+  if [[ \"$interactive_user_confirm\" -eq 1 ]]; then\n+    read -r -p 'Really uninstall (yes/no)? ' uninstall_confirmation\n+  else\n+    uninstall_confirmation='yes'\n+  fi\n \n   if [[ \"$uninstall_confirmation\" == 'yes' ]]; then\n     echo \"⚙️  Uninstalling...\"\n@@ -69,15 +79,15 @@ if [[ \"$uninstall\" -eq 1 ]]; then\n fi\n \n \n-# Get the directory where this script lives\n-script_dir=\"$(cd \"$(dirname \"$0\")\" && pwd)\"\n-echo \"ℹ Script directory: ${script_dir}\"\n-\n-\n # Determine if install or upgrade and echo whether we are upgrading or installing for first time\n if [[ -d \"$install_dir\" ]]; then\n   echo \"⛔  Directory $install_dir exists.\"\n-  read -r -p 'Overwrite and re-install latest? (yes/no) ' reinstall_confirmation\n+\n+  if [[ \"$interactive_user_confirm\" -eq 1 ]]; then\n+    read -r -p 'Overwrite and re-install latest? (yes/no) ' reinstall_confirmation\n+  else\n+    reinstall_confirmation='yes'\n+  fi\n \n   if [[ \"$reinstall_confirmation\" != 'yes' ]]; then\n     echo \"👌  Overwrite existing directory not confirmed. Quitting\"\n@@ -95,7 +105,7 @@ echo \"ℹ️  Using script name: ${changelog_script_name}\"\n echo \"ℹ️️  Installing kiwiproject-changelog generator\"\n \n # Create the directory (it it already exists, nothing happens)\n- mkdir -p \"$install_dir\"\n+mkdir -p \"$install_dir\"\n \n # Create a working directory to clone and build the JAR\n temp_dir=$(mktemp -d)\n@@ -127,8 +137,8 @@ echo \"🚀  Built JAR: $jar_file\"\n # Copy files to the installation directory\n echo \"📄  Copy files to installation directory\"\n changelog_script_path=\"${install_dir}/${changelog_script_name}\"\n-cp \"$script_dir/README.txt\" \"$install_dir\"\n-cp \"$script_dir/generate-kiwi-changelog.sh\" \"$changelog_script_path\"\n+cp \"etc/install/README.txt\" \"$install_dir\"\n+cp \"etc/install/generate-kiwi-changelog.sh\" \"$changelog_script_path\"\n cp \"$jar_file\" \"${install_dir}/kiwi-changelog-generator.jar\"\n \n # Ensure the changelog script is executable"
+    },
+    {
+      "sha": "88fcd45717149a1e24714274a74cc0d01235897b",
+      "filename": "pom.xml",
+      "status": "modified",
+      "additions": 17,
+      "deletions": 22,
+      "changes": 39,
+      "blob_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/blob/0b521be99ff807b7735faa76a4b0da7bc1b6912e/pom.xml",
+      "raw_url": "https://fake-github.com/kiwiproject/kiwiproject-changelog/raw/0b521be99ff807b7735faa76a4b0da7bc1b6912e/pom.xml",
+      "contents_url": "https://api.fake-github.com/repos/kiwiproject/kiwiproject-changelog/contents/pom.xml?ref=0b521be99ff807b7735faa76a4b0da7bc1b6912e",
+      "patch": "@@ -5,11 +5,11 @@\n     <parent>\n         <groupId>org.kiwiproject</groupId>\n         <artifactId>kiwi-parent</artifactId>\n-        <version>3.0.15</version>\n+        <version>3.0.16</version>\n     </parent>\n \n     <artifactId>changelog-generator</artifactId>\n-    <version>0.11.0</version>\n+    <version>0.12.0</version>\n     <packaging>jar</packaging>\n \n     <name>Changelog Generator</name>\n@@ -23,14 +23,13 @@\n         <connection>scm:git:https://fake-github.com/kiwiproject/kiwiproject-changelog.git</connection>\n         <developerConnection>scm:git:git@fake-github.com:kiwiproject/kiwiproject-changelog.git</developerConnection>\n         <url>https://fake-github.com/kiwiproject/kiwiproject-changelog</url>\n-        <tag>v0.11.0</tag>\n+        <tag>v0.12.0</tag>\n     </scm>\n \n     <properties>\n         <!-- Versions for required dependencies -->\n-        <jackson.version>2.17.1</jackson.version>\n-        <jackson-module-kotlin.version>2.17.1</jackson-module-kotlin.version>\n-        <kiwi.version>4.0.0</kiwi.version>\n+        <jackson.version>2.17.2</jackson.version>\n+        <kiwi.version>4.1.0</kiwi.version>\n         <kotlin.version>2.0.0</kotlin.version>\n         <kotlin-logging-jvm.version>7.0.0</kotlin-logging-jvm.version>\n         <logback-classic.version>1.5.6</logback-classic.version>\n@@ -39,12 +38,13 @@\n         <snakeyaml.version>2.2</snakeyaml.version>\n \n         <!-- Versions for test dependencies -->\n-        <kiwi-test.version>3.4.0</kiwi-test.version>\n+        <kiwi-test.version>3.5.0</kiwi-test.version>\n         <mockwebserver.version>4.12.0</mockwebserver.version>\n \n         <!-- Versions for plugins -->\n         <dokka-maven-plugin.version>1.9.20</dokka-maven-plugin.version>\n         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>\n+        <kotlin-maven-plugin.version>2.0.0</kotlin-maven-plugin.version>\n         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>\n         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>\n         <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>\n@@ -64,21 +64,19 @@\n     <dependencyManagement>\n         <dependencies>\n             <dependency>\n-                <groupId>org.jetbrains.kotlin</groupId>\n-                <artifactId>kotlin-stdlib</artifactId>\n-                <version>${kotlin.version}</version>\n+                <groupId>com.fasterxml.jackson</groupId>\n+                <artifactId>jackson-bom</artifactId>\n+                <version>${jackson.version}</version>\n+                <type>pom</type>\n+                <scope>import</scope>\n             </dependency>\n \n             <dependency>\n                 <groupId>org.jetbrains.kotlin</groupId>\n-                <artifactId>kotlin-stdlib-common</artifactId>\n-                <version>${kotlin.version}</version>\n-            </dependency>\n-\n-            <dependency>\n-                <groupId>org.jetbrains.kotlin</groupId>\n-                <artifactId>kotlin-stdlib-jdk8</artifactId>\n+                <artifactId>kotlin-bom</artifactId>\n                 <version>${kotlin.version}</version>\n+                <type>pom</type>\n+                <scope>import</scope>\n             </dependency>\n \n             <dependency>\n@@ -96,13 +94,11 @@\n         <dependency>\n             <groupId>com.fasterxml.jackson.dataformat</groupId>\n             <artifactId>jackson-dataformat-yaml</artifactId>\n-            <version>${jackson.version}</version>\n         </dependency>\n \n         <dependency>\n             <groupId>com.fasterxml.jackson.module</groupId>\n             <artifactId>jackson-module-kotlin</artifactId>\n-            <version>${jackson-module-kotlin.version}</version>\n         </dependency>\n \n         <dependency>\n@@ -147,7 +143,6 @@\n         <dependency>\n             <groupId>org.jetbrains.kotlin</groupId>\n             <artifactId>kotlin-test-junit5</artifactId>\n-            <version>${kotlin.version}</version>\n             <scope>test</scope>\n             <exclusions>\n                 <exclusion>\n@@ -186,7 +181,7 @@\n             <plugin>\n                 <groupId>org.jetbrains.kotlin</groupId>\n                 <artifactId>kotlin-maven-plugin</artifactId>\n-                <version>${kotlin.version}</version>\n+                <version>${kotlin-maven-plugin.version}</version>\n                 <executions>\n                     <execution>\n                         <id>compile</id>\n@@ -256,7 +251,7 @@\n             When generating releases, use Dokka to generate the javadocs.\n             Unlike the docs, this performs the plugin in the package phase\n             to ensure it happens before GPG signing (which happens at verify).\n-            \n+\n             ref: https://kotlinlang.org/docs/dokka-introduction.html\n         -->\n         <profile>"
+    }
+  ]
+}

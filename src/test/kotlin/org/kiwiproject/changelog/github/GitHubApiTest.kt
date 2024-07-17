@@ -6,19 +6,25 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.within
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+import org.kiwiproject.changelog.MockWebServerExtension
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
 import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
 import org.kiwiproject.changelog.extension.rateLimitLimit
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
+import org.kiwiproject.changelog.github.GitHubApi.GitHubResponse.Companion.humanTimeUntilReset
 import org.kiwiproject.test.util.Fixtures
+import org.kiwiproject.time.KiwiDurationFormatters
 import java.net.http.HttpHeaders
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -30,31 +36,28 @@ private const val ISSUES_PATH =
 private const val RELEASES_PATH =
     "/repos/sleberknight/kotlin-scratch-pad/releases"
 
-@DisplayName("GithubApi")
-class GithubApiTest {
+@DisplayName("GitHubApi")
+class GitHubApiTest {
 
-    private lateinit var githubApi: GithubApi
+    private lateinit var githubApi: GitHubApi
     private lateinit var server: MockWebServer
+
+    @RegisterExtension
+    val mockWebServerExtension = MockWebServerExtension()
 
     @BeforeEach
     fun setUp() {
-        server = MockWebServer()
-        server.start()
+        server = mockWebServerExtension.server
 
         val token = RandomStringUtils.randomAlphanumeric(40)
-        githubApi = GithubApi(token)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        server.shutdown()
+        githubApi = GitHubApi(token)
     }
 
     @Nested
     inner class Get {
 
         @Test
-        fun shouldGetGithubResource() {
+        fun shouldGetGitHubResource() {
             val issueResponseJson = Fixtures.fixture("github-issues-response.json")
             val link = """<https://api.github.com/repositories/315369011/issues?page=2&per_page=10&state=closed&filter=all&direction=desc>; rel="next", <https://api.github.com/repositories/315369011/issues?page=48&per_page=10&state=closed&filter=all&direction=desc>; rel="last""""
 
@@ -165,6 +168,26 @@ class GithubApiTest {
                 { assertThat(patchRequest.requestUrl).hasToString(url) },
                 { assertThat(patchRequest.body.readUtf8()).isEqualTo(bodyJson) },
             )
+        }
+    }
+
+    @Nested
+    inner class HumanTimeUntilReset {
+
+        @ParameterizedTest
+        @ValueSource(longs = [0, 5, 10, 60, 180, 86_400])
+        fun shouldReturnFormattedDuration_WhenPositiveOrZero(durationSeconds: Long) {
+            val duration = Duration.ofSeconds(durationSeconds)
+            assertThat(humanTimeUntilReset(duration))
+                .isEqualTo(KiwiDurationFormatters.formatDurationWords(duration))
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [-100, -50, -25, -1])
+        fun shouldReturnWarning_WhenNegative(durationSeconds: Long) {
+            val duration = Duration.ofSeconds(durationSeconds)
+            assertThat(humanTimeUntilReset(duration))
+                .isEqualTo("Time until reset is negative! ($duration)")
         }
     }
 

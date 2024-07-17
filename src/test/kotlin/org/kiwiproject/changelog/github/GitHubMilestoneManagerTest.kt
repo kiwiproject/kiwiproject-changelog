@@ -6,13 +6,14 @@ import okhttp3.mockwebserver.MockWebServer
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.kiwiproject.changelog.config.RepoHostConfig
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwiproject.changelog.MockWebServerExtension
+import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
 import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
@@ -26,25 +27,24 @@ class GitHubMilestoneManagerTest {
     private lateinit var milestoneManager: GitHubMilestoneManager
     private val mapper = jacksonObjectMapper()
 
+    @RegisterExtension
+    val mockWebServerExtension = MockWebServerExtension()
+
     @BeforeEach
     fun setUp() {
-        server = MockWebServer()
-        server.start()
+        server = mockWebServerExtension.server
 
         val token = RandomStringUtils.randomAlphanumeric(40)
-        val repoHostConfig = RepoHostConfig(
-            "https://github.com",
+        val repoConfig = RepoConfig(
+            "https://fake-github.com",
             server.urlWithoutTrailingSlashAsString(),
             token,
-            "sleberknight/kotlin-scratch-pad"
+            "sleberknight/kotlin-scratch-pad",
+            "v1.4.0",
+            "v1.5.0"
         )
 
-        milestoneManager = GitHubMilestoneManager(repoHostConfig, GithubApi(token), mapper)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        server.shutdown()
+        milestoneManager = GitHubMilestoneManager(repoConfig, GitHubApi(token), mapper)
     }
 
     @Nested
@@ -261,7 +261,7 @@ class GitHubMilestoneManagerTest {
             { assertThat(milestone.title).isEqualTo("0.9.0-alpha") },
             {
                 assertThat(milestone.htmlUrl)
-                    .isEqualTo("https://github.com/sleberknight/kotlin-scratch-pad/milestone/1")
+                    .isEqualTo("https://fake-github.com/sleberknight/kotlin-scratch-pad/milestone/1")
             }
         )
     }
@@ -288,7 +288,7 @@ class GitHubMilestoneManagerTest {
                 { assertThat(milestone.title).isEqualTo("0.9.0") },
                 {
                     assertThat(milestone.htmlUrl)
-                        .isEqualTo("https://github.com/sleberknight/kotlin-scratch-pad/milestone/2")
+                        .isEqualTo("https://fake-github.com/sleberknight/kotlin-scratch-pad/milestone/2")
                 }
             )
 

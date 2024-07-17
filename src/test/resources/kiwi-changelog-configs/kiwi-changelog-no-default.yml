@@ -24,7 +24,3 @@ categories:
   - name: "Dependency Updates"
     labels:
       - dependencies
-
-alwaysIncludePRsFrom:
-  - "dependabot[bot]"
-  - bob

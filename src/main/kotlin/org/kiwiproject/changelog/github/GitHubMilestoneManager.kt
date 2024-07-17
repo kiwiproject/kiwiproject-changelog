@@ -2,19 +2,19 @@ package org.kiwiproject.changelog.github
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.kiwiproject.changelog.config.RepoHostConfig
+import org.kiwiproject.changelog.config.RepoConfig
 
 /**
  * Provides a simple way to interact with GitHub milestones.
  */
 class GitHubMilestoneManager(
-    private val repoHostConfig: RepoHostConfig,
-    private val api: GithubApi,
+    private val repoConfig: RepoConfig,
+    private val api: GitHubApi,
     private val mapper: ObjectMapper
 ) {
 
     private val listOpenMilestonesUrl =
-        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/milestones?state=open&per_page=50"
+        "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones?state=open&per_page=50"
 
     fun getOpenMilestoneByTitle(title: String): GitHubMilestone {
         val maybeMilestone = getOpenMilestoneByTitleOrNull(title)
@@ -63,7 +63,7 @@ class GitHubMilestoneManager(
     }
 
     private fun closeMilestoneUrl(number: Int): String =
-        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/milestones/$number"
+        "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones/$number"
 
     fun createMilestone(title: String): GitHubMilestone {
         val createUrl = createMilestoneUrl()
@@ -82,7 +82,7 @@ class GitHubMilestoneManager(
     }
 
     private fun createMilestoneUrl(): String =
-        "${repoHostConfig.apiUrl}/repos/${repoHostConfig.repository}/milestones"
+        "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones"
 
     data class GitHubMilestone(val number: Int, val title: String, val htmlUrl: String) {
         companion object {

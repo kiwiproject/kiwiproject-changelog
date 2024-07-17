@@ -14,7 +14,7 @@ enum class OutputType {
 
 data class ChangelogConfig(val date: ZonedDateTime = ZonedDateTime.now(),
                            val outputType: OutputType = OutputType.CONSOLE,
-                           val outputFile: File?,
+                           val outputFile: File? = null,
                            val categoryConfig: CategoryConfig) {
 
     val dateString: String = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)

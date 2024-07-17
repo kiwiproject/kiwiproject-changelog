@@ -3,6 +3,7 @@ package org.kiwiproject.changelog.extension
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.kiwiproject.test.okhttp3.mockwebserver.RecordedRequests
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
@@ -39,6 +40,13 @@ fun MockWebServer.takeRequestWith1SecTimeout(): RecordedRequest =
  */
 fun MockWebServer.takeRequestWith1MilliTimeout() : RecordedRequest? =
     this.takeRequest(1, TimeUnit.MILLISECONDS)
+
+/**
+ * Asserts that there are no more recorded requests for a [MockWebServer].
+ */
+fun MockWebServer.assertNoMoreRequests() {
+    RecordedRequests.assertNoMoreRequests(this)
+}
 
 /**
  * Fixed value for the GitHub `X-RateLimit-Limit` header.
