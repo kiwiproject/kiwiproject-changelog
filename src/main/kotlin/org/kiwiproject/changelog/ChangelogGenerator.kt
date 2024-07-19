@@ -18,7 +18,7 @@ class ChangelogGenerator(
 ) {
 
     fun generate(): GenerateResult {
-        println("Finding commits between ${repoConfig.previousRevision}..${repoConfig.revision}")
+        println("🔎 Finding commits between ${repoConfig.previousRevision}..${repoConfig.revision}")
         val commitAuthorsResult =
             searchManager.findUniqueAuthorsInCommitsBetween(repoConfig.previousRevision, repoConfig.revision)
 
@@ -29,11 +29,11 @@ class ChangelogGenerator(
             GitHubChange.from(issue, category)
         }
 
-        println("Generating changelog based on ${changes.size} issues and PRs from GitHub for milestone ${repoConfig.milestone()}")
+        println("🛠 Generating changelog based on ${changes.size} issues and PRs from GitHub for milestone ${repoConfig.milestone()}")
         val githubUrl = repoConfig.repoUrl()
         val changeLog = formatChangeLog(commitAuthorsResult, changes, repoConfig, changeLogConfig, githubUrl)
 
-        println("Writing out changelog to ${changeLogConfig.outputType}")
+        println("📝 Writing out changelog to ${changeLogConfig.outputType}")
         writeChangeLog(changeLog)
 
         return GenerateResult(
@@ -62,12 +62,12 @@ class ChangelogGenerator(
 
             OutputType.FILE -> {
                 writeFile(changeLog)
-                println("Wrote changelog to ${changeLogConfig.outputFile}")
+                println("✅ Wrote changelog to ${changeLogConfig.outputFile}")
             }
 
             OutputType.GITHUB -> {
                 val release = releaseManager.createRelease(repoConfig.revision, changeLog)
-                println("Created GitHub release. See it at ${release.htmlUrl}")
+                println("✅ Created GitHub release. See it at ${release.htmlUrl}")
             }
         }
     }
