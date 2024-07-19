@@ -42,7 +42,8 @@ class GitHubReleaseManagerTest {
             token,
             "sleberknight/kotlin-scratch-pad",
             "v1.1.0",
-            "v1.2.0"
+            "v1.2.0",
+            milestone = null
         )
 
         releaseManager = GitHubReleaseManager(repoConfig, GitHubApi(token), mapper)

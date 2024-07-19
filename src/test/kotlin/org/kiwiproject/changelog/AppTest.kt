@@ -260,6 +260,10 @@ class AppTest {
     @Nested
     inner class CloseMilestone {
 
+        private val url = "https://fake-github.com"
+        private val apiUrl = "https://api.fake-github.com"
+        private val token = "abc-123"
+        private val repository = "fakeorg/fakerepo"
         private val urlPrefix = "https://fake-github.com/acme/space-modulator/milestones/"
 
         private lateinit var milestoneManager : GitHubMilestoneManager
@@ -278,7 +282,7 @@ class AppTest {
             `when`(milestoneManager.getOpenMilestoneByTitle(anyString())).thenReturn(milestone)
             `when`(milestoneManager.closeMilestone(anyInt())).thenReturn(milestone)
 
-            val repoConfig = RepoConfig("", "", "", "", "v1.4.1", "v${title}")
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v${title}", milestone = null)
             val closedMilestone = App.closeMilestone(
                 repoConfig = repoConfig,
                 maybeMilestoneTitle = null,
@@ -299,7 +303,7 @@ class AppTest {
             `when`(milestoneManager.getOpenMilestoneByTitle(anyString())).thenReturn(milestone)
             `when`(milestoneManager.closeMilestone(anyInt())).thenReturn(milestone)
 
-            val repoConfig = RepoConfig("", "", "", "", "v1.4.1", "v${title}")
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v${title}", milestone = null)
             val closedMilestone = App.closeMilestone(
                 repoConfig = repoConfig,
                 maybeMilestoneTitle = "1.5.0",

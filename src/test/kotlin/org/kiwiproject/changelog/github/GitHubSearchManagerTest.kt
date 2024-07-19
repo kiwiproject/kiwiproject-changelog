@@ -46,7 +46,8 @@ class GitHubSearchManagerTest {
             token,
             "kiwiproject/kiwiproject-changelog",
             "v0.11.0",
-            "v0.12.0"
+            "v0.12.0",
+            milestone = null
         )
 
         searchManager = GitHubSearchManager(repoConfig, GitHubApi(token), GitHubPagingHelper(), mapper)

@@ -42,7 +42,7 @@ class ChangeLogFormatterKtTest {
                 changelogConfig,
                 repoConfig.repoUrl()
             )
-            
+
             assertThat(changelog.trim())
                 .isEqualTo(
                     """
@@ -126,10 +126,11 @@ class ChangeLogFormatterKtTest {
         val repoConfig = RepoConfig(
             "https://fake-github.com",
             "https://api.fake-github.com",
-            "12345",
+            "token-12345",
             "fakeorg/fakerepo",
             "v1.4.1",
-            "v1.4.2"
+            "v1.4.2",
+            milestone = null
         )
         return repoConfig
     }
