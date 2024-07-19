@@ -1,5 +1,6 @@
 package org.kiwiproject.changelog.github
 
+import io.github.oshai.kotlinlogging.Level
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.apache.commons.lang3.RandomStringUtils
@@ -181,6 +182,7 @@ class GitHubApiTest {
             val timeUntilReset = humanTimeUntilReset(duration)
             assertAll(
                 { assertThat(timeUntilReset.isNegative).isFalse() },
+                { assertThat(timeUntilReset.logLevel).isEqualTo(Level.DEBUG) },
                 {
                     assertThat(timeUntilReset.message)
                         .isEqualTo("Time until reset: ${KiwiDurationFormatters.formatDurationWords(duration)}")
@@ -195,6 +197,7 @@ class GitHubApiTest {
             val timeUntilReset = humanTimeUntilReset(duration)
             assertAll(
                 { assertThat(timeUntilReset.isNegative).isTrue() },
+                { assertThat(timeUntilReset.logLevel).isEqualTo(Level.WARN) },
                 { assertThat(timeUntilReset.message).isEqualTo("Time until reset is negative! ($duration)") }
             )
         }

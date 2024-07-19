@@ -2,6 +2,7 @@ package org.kiwiproject.changelog.github
 
 import com.google.common.annotations.VisibleForTesting
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.Level
 import org.kiwiproject.changelog.extension.firstValueAsLongOrThrow
 import org.kiwiproject.changelog.extension.firstValueOrNull
 import org.kiwiproject.time.KiwiDurationFormatters
@@ -103,11 +104,7 @@ class GitHubApi(
                 val rateLimitReset = epochSecondsAsIsoFormatted(rateLimitResetEpochSeconds)
                 val rateLimitLogMessage =
                     "GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, $humanTimeUntilReset"
-                if (humanTimeUntilReset.isNegative) {
-                    LOG.warn { rateLimitLogMessage }
-                } else {
-                    LOG.debug { rateLimitLogMessage }
-                }
+                LOG.at(humanTimeUntilReset.logLevel) { humanTimeUntilReset.message }
 
                 val link = responseHeaders.firstValueOrNull("Link")
                 LOG.debug { "GitHub 'Link' header: $link" }
@@ -126,11 +123,11 @@ class GitHubApi(
             @VisibleForTesting
             internal fun humanTimeUntilReset(timeUntilReset: Duration): TimeUntilReset =
                 when {
-                    timeUntilReset.isNegative -> TimeUntilReset("Time until reset is negative! ($timeUntilReset)", true)
-                    else -> TimeUntilReset("Time until reset: ${KiwiDurationFormatters.formatDurationWords(timeUntilReset)}", false)
+                    timeUntilReset.isNegative -> TimeUntilReset("Time until reset is negative! ($timeUntilReset)", true, Level.WARN)
+                    else -> TimeUntilReset("Time until reset: ${KiwiDurationFormatters.formatDurationWords(timeUntilReset)}", false, Level.DEBUG)
                 }
 
-            data class TimeUntilReset(val message: String, val isNegative: Boolean)
+            data class TimeUntilReset(val message: String, val isNegative: Boolean, val logLevel: Level)
         }
     }
 }
