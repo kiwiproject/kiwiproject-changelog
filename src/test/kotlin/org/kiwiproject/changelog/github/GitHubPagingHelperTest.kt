@@ -18,11 +18,11 @@ import java.time.temporal.ChronoUnit
 @DisplayName("GitHubPagingHelper")
 class GitHubPagingHelperTest {
 
-    private lateinit var fetcher: GitHubPagingHelper
+    private lateinit var pagingHelper: GitHubPagingHelper
 
     @BeforeEach
     fun setUp() {
-        fetcher = GitHubPagingHelper()
+        pagingHelper = GitHubPagingHelper()
     }
 
     @Nested
@@ -32,7 +32,7 @@ class GitHubPagingHelperTest {
         fun shouldNotThrowException_WhenStatusCodeIs200() {
             val response = newGitHubResponse(200)
 
-            assertThatCode { fetcher.checkOkResponse(response) }.doesNotThrowAnyException()
+            assertThatCode { pagingHelper.checkOkResponse(response) }.doesNotThrowAnyException()
         }
 
         @ParameterizedTest
@@ -41,7 +41,7 @@ class GitHubPagingHelperTest {
             val response = newGitHubResponse(statusCode)
 
             assertThatIllegalStateException()
-                .isThrownBy { fetcher.checkOkResponse(response) }
+                .isThrownBy { pagingHelper.checkOkResponse(response) }
                 .withMessage("GET ${response.requestUri} failed, response code ${response.statusCode}, response body\n:${response.content}")
         }
 
@@ -61,7 +61,7 @@ class GitHubPagingHelperTest {
 
         @Test
         fun shouldReturn_none_WhenLinkHeaderIsNull() {
-            val nextPageUrl = fetcher.getNextPageUrl(null)
+            val nextPageUrl = pagingHelper.getNextPageUrl(null)
             assertThat(nextPageUrl).isEqualTo("none")
         }
 
@@ -69,14 +69,14 @@ class GitHubPagingHelperTest {
         @Test
         fun shouldReturn_none_WhenLinkHeaderDoesNotContainNextLink() {
             val link = """<https://api.github.com/repositories/315369011/issues?page=5&per_page=100&state=closed&filter=all&direction=desc>; rel="last""""
-            val nextPageUrl = fetcher.getNextPageUrl(link)
+            val nextPageUrl = pagingHelper.getNextPageUrl(link)
             assertThat(nextPageUrl).isEqualTo("none")
         }
 
         @ParameterizedTest
         @CsvFileSource(resources = ["/link-headers.csv"], quoteCharacter = '\'')
         fun shouldReturnNextPageLink(link: String, expectedNextPageUrl: String) {
-            val nextPageUrl = fetcher.getNextPageUrl(link)
+            val nextPageUrl = pagingHelper.getNextPageUrl(link)
             assertThat(nextPageUrl).isEqualTo(expectedNextPageUrl)
         }
     }
