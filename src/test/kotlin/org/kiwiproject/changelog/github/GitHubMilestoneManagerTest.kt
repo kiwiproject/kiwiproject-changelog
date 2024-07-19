@@ -41,7 +41,8 @@ class GitHubMilestoneManagerTest {
             token,
             "sleberknight/kotlin-scratch-pad",
             "v1.4.0",
-            "v1.5.0"
+            "v1.5.0",
+            milestone = null
         )
 
         milestoneManager = GitHubMilestoneManager(repoConfig, GitHubApi(token), mapper)

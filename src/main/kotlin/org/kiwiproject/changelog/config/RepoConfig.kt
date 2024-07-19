@@ -10,23 +10,6 @@ data class RepoConfig(
     private val milestone: String?
 ) {
 
-    constructor(
-        url: String,
-        apiUrl: String,
-        token: String,
-        repository: String,
-        previousRevision: String,
-        revision: String
-    ) : this(
-        url,
-        apiUrl,
-        token,
-        repository,
-        previousRevision,
-        revision,
-        null
-    )
-
     // Accepts v<major>.<minor>.<patch> and optionally a "pre-release" version
     // such as "-beta" or any other characters after the patch version.
     private val revisionPattern = Regex("v\\d+\\.\\d+\\.\\d+.*")

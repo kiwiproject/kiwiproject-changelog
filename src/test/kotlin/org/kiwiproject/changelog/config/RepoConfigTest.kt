@@ -45,7 +45,7 @@ class RepoConfigTest {
             v2.0.0-beta, 2.0.0-beta
             v2.0.0-gamma, 2.0.0-gamma""")
         fun shouldRemoveLeading_v_FromRevision(revision: String, expectedRevision: String) {
-            val repoConfig = RepoConfig(url, apiUrl, token, repository, previousRevision, revision)
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, previousRevision, revision, milestone = null)
 
             assertThat(repoConfig.milestone()).isEqualTo(expectedRevision)
         }
@@ -59,7 +59,7 @@ class RepoConfigTest {
             "v1.4.",
         ])
         fun shouldThrowIllegalArgument_WhenRevisionIsNotInExpectedFormat(revision: String) {
-            val repoConfig = RepoConfig(url, apiUrl, token, repository, previousRevision, revision)
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, previousRevision, revision, milestone = null)
 
             assertThatIllegalArgumentException().isThrownBy { repoConfig.milestone() }
         }
@@ -67,7 +67,7 @@ class RepoConfigTest {
 
     @Test
     fun shouldCreateRepoUrl() {
-        val repoConfig = RepoConfig(url, apiUrl, token, repository, previousRevision, "1.4.2")
+        val repoConfig = RepoConfig(url, apiUrl, token, repository, previousRevision, "1.4.2", milestone = null)
 
         assertThat(repoConfig.repoUrl()).isEqualTo("$url/$repository")
     }

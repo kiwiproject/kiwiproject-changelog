@@ -322,7 +322,8 @@ class ChangelogGeneratorTest {
         token = "test_token_12345",
         repository = "kiwiproject/kiwi-test",
         previousRevision = "1.4.1",
-        revision = "v1.4.2"
+        revision = "v1.4.2",
+        milestone = null
     )
 
     private fun changelogConfig(outputType: OutputType, outputFile: Path? = null) = ChangelogConfig(
