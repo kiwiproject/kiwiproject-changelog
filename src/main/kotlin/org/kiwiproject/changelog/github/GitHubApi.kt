@@ -101,7 +101,13 @@ class GitHubApi(
 
                 val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(now)
                 val rateLimitReset = epochSecondsAsIsoFormatted(rateLimitResetEpochSeconds)
-                LOG.debug { "GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, Time until reset: $humanTimeUntilReset" }
+                val rateLimitLogMessage =
+                    "GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, $humanTimeUntilReset"
+                if (humanTimeUntilReset.isNegative) {
+                    LOG.warn { rateLimitLogMessage }
+                } else {
+                    LOG.debug { rateLimitLogMessage }
+                }
 
                 val link = responseHeaders.firstValueOrNull("Link")
                 LOG.debug { "GitHub 'Link' header: $link" }
@@ -118,11 +124,13 @@ class GitHubApi(
             }
 
             @VisibleForTesting
-            internal fun humanTimeUntilReset(timeUntilReset: Duration): String =
+            internal fun humanTimeUntilReset(timeUntilReset: Duration): TimeUntilReset =
                 when {
-                    timeUntilReset.isNegative -> "Time until reset is negative! ($timeUntilReset)"
-                    else -> KiwiDurationFormatters.formatDurationWords(timeUntilReset)
+                    timeUntilReset.isNegative -> TimeUntilReset("Time until reset is negative! ($timeUntilReset)", true)
+                    else -> TimeUntilReset("Time until reset: ${KiwiDurationFormatters.formatDurationWords(timeUntilReset)}", false)
                 }
+
+            data class TimeUntilReset(val message: String, val isNegative: Boolean)
         }
     }
 }
