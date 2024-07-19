@@ -178,16 +178,25 @@ class GitHubApiTest {
         @ValueSource(longs = [0, 5, 10, 60, 180, 86_400])
         fun shouldReturnFormattedDuration_WhenPositiveOrZero(durationSeconds: Long) {
             val duration = Duration.ofSeconds(durationSeconds)
-            assertThat(humanTimeUntilReset(duration))
-                .isEqualTo(KiwiDurationFormatters.formatDurationWords(duration))
+            val timeUntilReset = humanTimeUntilReset(duration)
+            assertAll(
+                { assertThat(timeUntilReset.isNegative).isFalse() },
+                {
+                    assertThat(timeUntilReset.message)
+                        .isEqualTo("Time until reset: ${KiwiDurationFormatters.formatDurationWords(duration)}")
+                }
+            )
         }
 
         @ParameterizedTest
         @ValueSource(longs = [-100, -50, -25, -1])
         fun shouldReturnWarning_WhenNegative(durationSeconds: Long) {
             val duration = Duration.ofSeconds(durationSeconds)
-            assertThat(humanTimeUntilReset(duration))
-                .isEqualTo("Time until reset is negative! ($duration)")
+            val timeUntilReset = humanTimeUntilReset(duration)
+            assertAll(
+                { assertThat(timeUntilReset.isNegative).isTrue() },
+                { assertThat(timeUntilReset.message).isEqualTo("Time until reset is negative! ($duration)") }
+            )
         }
     }
 
