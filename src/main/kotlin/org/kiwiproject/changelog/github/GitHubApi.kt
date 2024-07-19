@@ -103,8 +103,8 @@ class GitHubApi(
                 val currentDateTime = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(now)
                 val rateLimitReset = epochSecondsAsIsoFormatted(rateLimitResetEpochSeconds)
                 val rateLimitLogMessage =
-                    "GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, $humanTimeUntilReset"
-                LOG.at(humanTimeUntilReset.logLevel) { humanTimeUntilReset.message }
+                    "GitHub API rate info => Limit : $rateLimitLimit, Remaining : $rateLimitRemaining, Current time: $currentDateTime, Reset at: $rateLimitReset, ${humanTimeUntilReset.message}"
+                LOG.at(humanTimeUntilReset.logLevel) { this.message = rateLimitLogMessage }
 
                 val link = responseHeaders.firstValueOrNull("Link")
                 LOG.debug { "GitHub 'Link' header: $link" }
