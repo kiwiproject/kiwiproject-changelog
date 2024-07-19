@@ -212,7 +212,7 @@ class App : Runnable {
             return
         }
 
-        println("Generating change log for version $revision")
+        println("⚙ Generating change log for version $revision")
 
         val githubToken = token ?: System.getenv("KIWI_CHANGELOG_TOKEN")
         check(githubToken != null) {
@@ -220,7 +220,7 @@ class App : Runnable {
         }
 
         // Get external configuration if one exists
-        println("Getting configuration information")
+        println("🛠 Getting configuration information")
         val currentDirectory = File(".").absoluteFile.parentFile
         val userHomeDirectory = File(System.getProperty("user.home"))
         val externalConfig = externalConfig(currentDirectory, userHomeDirectory, configFile, ignoreConfigFiles)
@@ -259,46 +259,48 @@ class App : Runnable {
         val gitHubPagingHelper = GitHubPagingHelper()
         val searchManager = GitHubSearchManager(repoConfig, githubApi, gitHubPagingHelper, mapper)
 
-        println("Gathering information for change log")
+        println("⚙ Gathering information for change log")
         var generateResult = ChangelogGenerator(repoConfig, changeLogConfig, releaseManager, searchManager).generate()
 
-        println("Generated change log for release ${repoConfig.milestone()}")
+        println("✅ Generated change log for release ${repoConfig.milestone()}")
         println()
-        println("Release stats:")
-        println("* Number of changes (issues/PRs): ${generateResult.changeCount}")
-        println("* Unique authors: ${generateResult.uniqueAuthorCount}")
-        println("* Number of commits: ${generateResult.commitCount}")
+        println("📈 Release stats:")
+        println("✔ Number of changes (issues/PRs): ${generateResult.changeCount}")
+        println("✔ Unique authors: ${generateResult.uniqueAuthorCount}")
+        println("✔ Number of commits: ${generateResult.commitCount}")
 
         // Optional: close the milestone
         val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
         if (closeMilestone) {
             val closedMilestone = closeMilestone(repoConfig, milestone, milestoneManager)
-            println("Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
+            println("✅ Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
         }
 
         // Optional: create new milestone
         if (createNextMilestone != null) {
             val newMilestone = createMilestone(createNextMilestone!!, milestoneManager)
-            println("Created new milestone ${newMilestone.title}. See it at ${newMilestone.htmlUrl}")
+            println("✅ Created new milestone ${newMilestone.title}. See it at ${newMilestone.htmlUrl}")
         }
+
+        println("🍻 Cheers!")
     }
 
     private fun printArgValues() {
         println()
-        println("Arguments:")
-        println("repoHostUrl = $repoHostUrl")
-        println("repoHostApi = $repoHostApi")
-        println("token = $token")
-        println("repository = $repository")
-        println("previousRevision = $previousRevision")
-        println("revision = $revision")
-        println("outputType = $outputType")
-        println("outputFile = $outputFile")
-        println("defaultCategory = $defaultCategory")
-        println("labelToCategoryMappings = $labelToCategoryMappings")
-        println("categoryToEmojiMappings = $categoryToEmojiMappings")
-        println("categoryOrder = $categoryOrder")
-        println("configFile = $configFile")
+        println("📖 Arguments:")
+        println("✔ repoHostUrl = $repoHostUrl")
+        println("✔ repoHostApi = $repoHostApi")
+        println("✔ token = $token")
+        println("✔ repository = $repository")
+        println("✔ previousRevision = $previousRevision")
+        println("✔ revision = $revision")
+        println("✔ outputType = $outputType")
+        println("✔ outputFile = $outputFile")
+        println("✔ defaultCategory = $defaultCategory")
+        println("✔ labelToCategoryMappings = $labelToCategoryMappings")
+        println("✔ categoryToEmojiMappings = $categoryToEmojiMappings")
+        println("✔ categoryOrder = $categoryOrder")
+        println("✔ configFile = $configFile")
         println("----------")
     }
 
@@ -326,7 +328,7 @@ class App : Runnable {
             milestoneManager: GitHubMilestoneManager
         ): GitHubMilestone {
             val milestoneTitle = maybeMilestoneTitle ?: repoConfig.milestone()
-            println("Closing milestone $milestoneTitle")
+            println("⚙ Closing milestone $milestoneTitle")
 
             val milestone = milestoneManager.getOpenMilestoneByTitle(milestoneTitle)
             val closedMilestone = milestoneManager.closeMilestone(milestone.number)
@@ -336,11 +338,11 @@ class App : Runnable {
 
         @VisibleForTesting
         fun createMilestone(title: String, milestoneManager: GitHubMilestoneManager): GitHubMilestone {
-            println("Creating new milestone $title")
+            println("⚙ Creating new milestone $title")
 
             val maybeMilestone = milestoneManager.getOpenMilestoneByTitleOrNull(title)
             if (maybeMilestone != null) {
-                println("Milestone $title already exists. Returning it.")
+                println("⚠ Milestone $title already exists. Returning it.")
                 return maybeMilestone
             }
 

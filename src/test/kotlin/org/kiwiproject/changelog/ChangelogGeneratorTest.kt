@@ -119,7 +119,7 @@ class ChangelogGeneratorTest {
 
             val expectedChangelogContent = expectedChangelogContent()
 
-            val output = stdout.capturedLines().toList()
+            val output = stdout.capturedString()
             assertAll(
                 { assertThat(result.changeCount).isEqualTo(issues.size) },
                 { assertThat(result.commitCount).isEqualTo(commitAuthorsResult.totalCommits) },
@@ -129,7 +129,7 @@ class ChangelogGeneratorTest {
                 { assertThat(output).doesNotContain("## Enhancements") },
                 { assertThat(output).doesNotContain("## Glitches") },
                 { assertThat(output).doesNotContain("## Everything Else") },
-                { assertThat(output).contains("Wrote changelog to $changelogFile") },
+                { assertThat(output).contains("✅ Wrote changelog to $changelogFile") },
                 { assertThat(changelogFileContent).isEqualTo(expectedChangelogContent) }
             )
 
