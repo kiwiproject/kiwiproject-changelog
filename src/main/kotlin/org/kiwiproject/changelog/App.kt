@@ -260,7 +260,14 @@ class App : Runnable {
         val searchManager = GitHubSearchManager(repoConfig, githubApi, gitHubPagingHelper, mapper)
 
         println("Gathering information for change log")
-        ChangelogGenerator(repoConfig, changeLogConfig, releaseManager, searchManager).generate()
+        var generateResult = ChangelogGenerator(repoConfig, changeLogConfig, releaseManager, searchManager).generate()
+
+        println("Generated change log for release ${repoConfig.milestone()}")
+        println()
+        println("Release stats:")
+        println("* Number of changes (issues/PRs): ${generateResult.changeCount}")
+        println("* Unique authors: ${generateResult.uniqueAuthorCount}")
+        println("* Number of commits: ${generateResult.commitCount}")
 
         // Optional: close the milestone
         val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
