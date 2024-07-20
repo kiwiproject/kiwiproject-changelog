@@ -12,11 +12,13 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.kiwiproject.changelog.MockWebServerExtension
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
 import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
-import org.kiwiproject.changelog.extension.takeRequestWith1MilliTimeout
+import org.kiwiproject.changelog.extension.assertNoMoreRequests
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
 import org.kiwiproject.test.util.Fixtures
@@ -58,6 +60,14 @@ class GitHubReleaseManagerTest {
                 .addGitHubRateLimitHeaders()
         )
 
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody("[]")  // no releases, so no problems
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
         val releaseResponseJson = Fixtures.fixture("github-create-release-response.json")
         server.enqueue(
             MockResponse()
@@ -77,6 +87,8 @@ class GitHubReleaseManagerTest {
             .isEqualTo("https://fake-github.com/sleberknight/kotlin-scratch-pad/releases/tag/v0.9.0-alpha")
 
         assertCreateReleaseRequests(requestJson)
+
+        server.assertNoMoreRequests()
     }
 
     @Test
@@ -95,13 +107,78 @@ class GitHubReleaseManagerTest {
         val getTagRequest = server.takeRequestWith1SecTimeout()
         assertAll(
             { assertThat(getTagRequest.method).isEqualTo("GET") },
-            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/git/ref/tags/v0.9.0-alpha") },
-            {
-                assertThat(server.takeRequestWith1MilliTimeout())
-                    .describedAs("The 'create release' request should not have happened")
-                    .isNull()
-            }
+            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/git/ref/tags/v0.9.0-alpha") }
         )
+
+        server.assertNoMoreRequests()
+    }
+
+    @Test
+    fun shouldThrowIllegalState_WhenListReleasesRequestFails() {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(getTagResponseJson())
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(500)
+                .setBody("""{ "error": "oops" }""")
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        assertThatIllegalStateException()
+            .isThrownBy { releaseManager.createRelease("v0.9.0-alpha", "The release contents") }
+            .withMessage("""List releases was unsuccessful. Status: 500. Text: { "error": "oops" }""")
+
+        assertRequestsWhenReleaseCheckFails()
+    }
+
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+        github-list-releases-response-for-matching-name.json, with name
+        github-list-releases-response-for-matching-tag_name.json, associated with tag""")
+    fun shouldThrowIllegalState_WhenReleaseAlreadyExists(fixture: String, expectedFailurePhrase: String) {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(getTagResponseJson())
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(Fixtures.fixture(fixture))
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        assertThatIllegalStateException()
+            .isThrownBy { releaseManager.createRelease("v0.9.0-alpha", "The release contents") }
+            .withMessage("A release $expectedFailurePhrase v0.9.0-alpha already exists")
+
+        assertRequestsWhenReleaseCheckFails()
+    }
+
+    private fun assertRequestsWhenReleaseCheckFails() {
+        val getTagRequest = server.takeRequestWith1SecTimeout()
+        val listReleasesRequest = server.takeRequestWith1SecTimeout()
+
+        assertAll(
+            { assertThat(getTagRequest.method).isEqualTo("GET") },
+            { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/git/ref/tags/v0.9.0-alpha") },
+
+            { assertThat(listReleasesRequest.method).isEqualTo("GET") },
+            { assertThat(listReleasesRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/releases?per_page=100") }
+        )
+
+        server.assertNoMoreRequests()
     }
 
     @Test
@@ -110,6 +187,14 @@ class GitHubReleaseManagerTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(getTagResponseJson())
+                .addJsonContentTypeHeader()
+                .addGitHubRateLimitHeaders()
+        )
+
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody("[]")
                 .addJsonContentTypeHeader()
                 .addGitHubRateLimitHeaders()
         )
@@ -131,6 +216,8 @@ class GitHubReleaseManagerTest {
             .withMessage("Create release was unsuccessful. Status: 422. Text: Validation failed")
 
         assertCreateReleaseRequests(requestJson)
+
+        server.assertNoMoreRequests()
     }
 
     private fun getTagResponseJson(): String = Fixtures.fixture("github-get-tag-response.json")
@@ -143,11 +230,16 @@ class GitHubReleaseManagerTest {
 
     private fun assertCreateReleaseRequests(requestJson: String) {
         val getTagRequest = server.takeRequestWith1SecTimeout()
+        val listReleasesRequest = server.takeRequestWith1SecTimeout()
         val createReleaseRequest = server.takeRequestWith1SecTimeout()
 
         assertAll(
             { assertThat(getTagRequest.method).isEqualTo("GET") },
             { assertThat(getTagRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/git/ref/tags/v0.9.0-alpha") },
+
+            { assertThat(listReleasesRequest.method).isEqualTo("GET") },
+            { assertThat(listReleasesRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/releases?per_page=100") },
+
             { assertThat(createReleaseRequest.method).isEqualTo("POST") },
             { assertThat(createReleaseRequest.path).isEqualTo("/repos/sleberknight/kotlin-scratch-pad/releases") },
             { assertThat(createReleaseRequest.body.readUtf8()).isEqualToIgnoringWhitespace(requestJson) }
