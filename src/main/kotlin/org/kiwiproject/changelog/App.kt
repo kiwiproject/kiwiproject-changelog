@@ -212,7 +212,7 @@ class App : Runnable {
             return
         }
 
-        println("⚙ Generating change log for version $revision")
+        println("⚙️  Generating change log for version $revision")
 
         val githubToken = token ?: System.getenv("KIWI_CHANGELOG_TOKEN")
         check(githubToken != null) {
@@ -220,7 +220,7 @@ class App : Runnable {
         }
 
         // Get external configuration if one exists
-        println("🛠 Getting configuration information")
+        println("🛠️  Getting configuration information")
         val currentDirectory = File(".").absoluteFile.parentFile
         val userHomeDirectory = File(System.getProperty("user.home"))
         val externalConfig = externalConfig(currentDirectory, userHomeDirectory, configFile, ignoreConfigFiles)
@@ -259,8 +259,8 @@ class App : Runnable {
         val gitHubPagingHelper = GitHubPagingHelper()
         val searchManager = GitHubSearchManager(repoConfig, githubApi, gitHubPagingHelper, mapper)
 
-        println("⚙ Gathering information for change log")
-        var generateResult = ChangelogGenerator(repoConfig, changeLogConfig, releaseManager, searchManager).generate()
+        println("⚙️  Gathering information for change log")
+        val generateResult = ChangelogGenerator(repoConfig, changeLogConfig, releaseManager, searchManager).generate()
 
         println("✅ Generated change log for release ${repoConfig.milestone()}")
         println()
@@ -287,7 +287,7 @@ class App : Runnable {
 
     private fun printArgValues() {
         println()
-        println("📖 Arguments:")
+        println("ℹ️  Arguments:")
         println("✔ repoHostUrl = $repoHostUrl")
         println("✔ repoHostApi = $repoHostApi")
         println("✔ token = $token")
@@ -328,7 +328,7 @@ class App : Runnable {
             milestoneManager: GitHubMilestoneManager
         ): GitHubMilestone {
             val milestoneTitle = maybeMilestoneTitle ?: repoConfig.milestone()
-            println("⚙ Closing milestone $milestoneTitle")
+            println("⚙️  Closing milestone $milestoneTitle")
 
             val milestone = milestoneManager.getOpenMilestoneByTitle(milestoneTitle)
             val closedMilestone = milestoneManager.closeMilestone(milestone.number)
@@ -338,11 +338,11 @@ class App : Runnable {
 
         @VisibleForTesting
         fun createMilestone(title: String, milestoneManager: GitHubMilestoneManager): GitHubMilestone {
-            println("⚙ Creating new milestone $title")
+            println("⚙️  Creating new milestone $title")
 
             val maybeMilestone = milestoneManager.getOpenMilestoneByTitleOrNull(title)
             if (maybeMilestone != null) {
-                println("⚠ Milestone $title already exists. Returning it.")
+                println("⚠️  Milestone $title already exists. Returning it.")
                 return maybeMilestone
             }
 
