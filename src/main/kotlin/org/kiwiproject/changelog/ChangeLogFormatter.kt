@@ -90,7 +90,7 @@ internal fun ensureAllCategories(
     val initialCategories = categoryOrder.ifEmpty { categories }
     val missingCategories = categories - initialCategories.toSet()
     if (missingCategories.isNotEmpty()) {
-        println("⚠ WARN: Missing categories ${missingCategories.joinToString()} (they will be added after other categories)")
+        println("⚠️  WARN: Missing categories ${missingCategories.joinToString()} (they will be added after other categories)")
     }
     return when {
         missingCategories.isNotEmpty() -> initialCategories + missingCategories.sorted()

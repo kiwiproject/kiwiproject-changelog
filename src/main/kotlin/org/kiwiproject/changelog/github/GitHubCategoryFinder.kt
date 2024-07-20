@@ -14,7 +14,7 @@ class GitHubCategoryFinder(categoryConfig: CategoryConfig) {
 
         val foundLabel = labels.intersect(labelMapping.keys).firstOrNull()
         if (foundLabel == null) {
-            println("⚠ WARN: Using default category ($defaultCategory) b/c no mapping found for label(s): $labels")
+            println("⚠️  WARN: Using default category ($defaultCategory) b/c no mapping found for label(s): $labels")
             return defaultCategory
         }
 
