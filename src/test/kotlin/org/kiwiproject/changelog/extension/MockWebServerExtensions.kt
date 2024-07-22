@@ -33,15 +33,6 @@ fun MockWebServer.takeRequestWith1SecTimeout(): RecordedRequest =
     this.takeRequest(1, TimeUnit.SECONDS)!!
 
 /**
- *  Calls [MockWebServer.takeRequest] method with a 5-millisecond timeout.
- *
- *  Use this when you don't expect there to be any more requests, and
- *  verify it by ensuring the returned `RecordedRequest` is `null`.
- */
-fun MockWebServer.takeRequestWith1MilliTimeout() : RecordedRequest? =
-    this.takeRequest(1, TimeUnit.MILLISECONDS)
-
-/**
  * Asserts that there are no more recorded requests for a [MockWebServer].
  */
 fun MockWebServer.assertNoMoreRequests() {
@@ -65,17 +56,28 @@ fun MockResponse.addJsonContentTypeHeader() : MockResponse {
 }
 
 /**
- * Adds the GitHub
+ * Decrements `rateLimitRemaining`, and adds the GitHub
  * [rate limit headers](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api#checking-the-status-of-your-rate-limit).
  *
  * The rate limit reset time is calculated as "now" plus 42 minutes (naturally).
  */
 fun MockResponse.addGitHubRateLimitHeaders(): MockResponse {
     rateLimitRemaining--
+    return addGitHubRateLimitHeaders(rateLimitRemaining)
+}
+
+/**
+ * Adds the GitHub
+ * [rate limit headers](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api#checking-the-status-of-your-rate-limit).
+ *
+ * The rate limit reset time is calculated as "now" plus 42 minutes (naturally).
+ */
+fun MockResponse.addGitHubRateLimitHeaders(rateLimitRemaining: Long): MockResponse {
     val rateLimitResetAt = Instant.now().plus(42, ChronoUnit.MINUTES).epochSecond
 
     addHeader("X-RateLimit-Limit", rateLimitLimit)
     addHeader("X-RateLimit-Remaining", rateLimitRemaining)
     addHeader("X-RateLimit-Reset", rateLimitResetAt)
+    addHeader("X-RateLimit-Resource", "core")
     return this
 }

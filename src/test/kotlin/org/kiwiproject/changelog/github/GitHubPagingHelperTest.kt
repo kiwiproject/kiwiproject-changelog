@@ -52,7 +52,8 @@ class GitHubPagingHelperTest {
             null,
             60,
             42,
-            Instant.now().plus(30, ChronoUnit.MINUTES).epochSecond
+            Instant.now().plus(30, ChronoUnit.MINUTES).epochSecond,
+            "core"
         )
     }
 
