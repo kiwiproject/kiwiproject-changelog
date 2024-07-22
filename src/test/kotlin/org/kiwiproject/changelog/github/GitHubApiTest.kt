@@ -15,21 +15,20 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.junitpioneer.jupiter.params.LongRangeSource
 import org.kiwiproject.changelog.MockWebServerExtension
 import org.kiwiproject.changelog.extension.addGitHubRateLimitHeaders
 import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
+import org.kiwiproject.changelog.extension.assertNoMoreRequests
 import org.kiwiproject.changelog.extension.rateLimitLimit
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
-import org.kiwiproject.changelog.github.GitHubApi.GitHubResponse.Companion.humanTimeUntilReset
 import org.kiwiproject.test.util.Fixtures
 import org.kiwiproject.time.KiwiDurationFormatters
-import java.net.http.HttpHeaders
 import java.time.Duration
 import java.time.Instant
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 private const val ISSUES_PATH =
     "/repos/kiwiproject/dropwizard-service-utilities/issues?page=1&per_page=10&state=closed&filter=all&direction=desc"
@@ -87,6 +86,8 @@ class GitHubApiTest {
                 { assertThat(getRequest.method).isEqualTo("GET") },
                 { assertThat(getRequest.requestUrl).hasToString(url) },
             )
+
+            server.assertNoMoreRequests()
         }
     }
 
@@ -125,6 +126,8 @@ class GitHubApiTest {
                 { assertThat(postRequest.requestUrl).hasToString(url) },
                 { assertThat(postRequest.body.readUtf8()).isEqualTo(bodyJson) },
             )
+
+            server.assertNoMoreRequests()
         }
     }
 
@@ -169,6 +172,38 @@ class GitHubApiTest {
                 { assertThat(patchRequest.requestUrl).hasToString(url) },
                 { assertThat(patchRequest.body.readUtf8()).isEqualTo(bodyJson) },
             )
+
+            server.assertNoMoreRequests()
+        }
+    }
+
+    @Nested
+    inner class RateLimitCheck {
+
+        @Test
+        fun shouldThrowIllegalState_WhenRateLimitIsExceeded() {
+            val issueResponseJson = Fixtures.fixture("github-issues-response.json")
+
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(issueResponseJson)
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders(rateLimitRemaining = 0)
+            )
+
+            val url = server.urlWithoutTrailingSlashAsString(ISSUES_PATH)
+            assertThatIllegalStateException()
+                .isThrownBy { githubApi.get(url) }
+                .withMessageContaining("Rate limit exceeded")
+
+            val getRequest = server.takeRequestWith1SecTimeout()
+            assertAll(
+                { assertThat(getRequest.method).isEqualTo("GET") },
+                { assertThat(getRequest.requestUrl).hasToString(url) },
+            )
+
+            server.assertNoMoreRequests()
         }
     }
 
@@ -179,7 +214,8 @@ class GitHubApiTest {
         @ValueSource(longs = [0, 5, 10, 60, 180, 86_400])
         fun shouldReturnFormattedDuration_WhenPositiveOrZero(durationSeconds: Long) {
             val duration = Duration.ofSeconds(durationSeconds)
-            val timeUntilReset = humanTimeUntilReset(duration)
+            val rateLimitRemaining = Random.nextLong(RATE_LIMIT_REMAINING_WARNING_THRESHOLD + 1, 30)
+            val timeUntilReset = humanTimeUntilReset(duration, rateLimitRemaining)
             assertAll(
                 { assertThat(timeUntilReset.isNegative).isFalse() },
                 { assertThat(timeUntilReset.logLevel).isEqualTo(Level.DEBUG) },
@@ -191,42 +227,32 @@ class GitHubApiTest {
         }
 
         @ParameterizedTest
+        @LongRangeSource(from = RATE_LIMIT_REMAINING_WARNING_THRESHOLD + 1, to = 10, closed = true)
+        fun shouldReturnDebugLogLevel_WhenRateLimitRemainingIsAboveWarningThreshold(rateLimitRemaining: Long) {
+            val duration = Duration.ofSeconds(45)
+            val timeUntilReset = humanTimeUntilReset(duration, rateLimitRemaining)
+            assertThat(timeUntilReset.logLevel).isEqualTo(Level.DEBUG)
+        }
+
+        @ParameterizedTest
+        @LongRangeSource(from = 0, to = RATE_LIMIT_REMAINING_WARNING_THRESHOLD, closed = true)
+        fun shouldReturnWarnLogLevel_WhenRateLimitRemainingIsAtOrBelowWarningThreshold(rateLimitRemaining: Long) {
+            val duration = Duration.ofSeconds(60)
+            val timeUntilReset = humanTimeUntilReset(duration, rateLimitRemaining)
+            assertThat(timeUntilReset.logLevel).isEqualTo(Level.WARN)
+        }
+
+        @ParameterizedTest
         @ValueSource(longs = [-100, -50, -25, -1])
         fun shouldReturnWarning_WhenNegative(durationSeconds: Long) {
             val duration = Duration.ofSeconds(durationSeconds)
-            val timeUntilReset = humanTimeUntilReset(duration)
+            val rateLimitRemaining = Random.nextLong(10, 30)
+            val timeUntilReset = humanTimeUntilReset(duration, rateLimitRemaining)
             assertAll(
                 { assertThat(timeUntilReset.isNegative).isTrue() },
                 { assertThat(timeUntilReset.logLevel).isEqualTo(Level.WARN) },
                 { assertThat(timeUntilReset.message).isEqualTo("Time until reset is negative! ($duration)") }
             )
-        }
-    }
-
-    @Nested
-    inner class ResetLimitAsIsoFormatted {
-
-        @Test
-        fun shouldReturnFormattedDateTime_WhenHeaderExists() {
-            val resetLimitEpochSeconds = Instant.now().epochSecond
-
-            val responseHeaders = HttpHeaders.of(mapOf(
-                "X-RateLimit-Reset" to listOf(resetLimitEpochSeconds.toString())
-            )) { _, _ -> true }
-
-            val result = resetLimitAsIsoFormatted(responseHeaders)
-            assertThat(result).isEqualTo(
-                DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(
-                    Instant.ofEpochSecond(resetLimitEpochSeconds).atZone(ZoneOffset.UTC))
-            )
-        }
-
-        @Test
-        fun shouldThrowIllegalState_WhenHeaderExists() {
-            val responseHeaders = HttpHeaders.of(mapOf<String, List<String>>()) { _, _ -> true }
-
-            assertThatIllegalStateException()
-                .isThrownBy { resetLimitAsIsoFormatted(responseHeaders) }
         }
     }
 }
