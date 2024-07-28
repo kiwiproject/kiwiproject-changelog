@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
 import org.junit.jupiter.params.provider.ValueSource
-import org.kiwiproject.changelog.github.GitHubApi.GitHubResponse
 import java.net.URI
 import java.time.Instant
 import java.time.temporal.ChronoUnit

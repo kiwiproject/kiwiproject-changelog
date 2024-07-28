@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.kiwiproject.changelog.extension.nowUtc
 import org.kiwiproject.changelog.extension.truncatedToSeconds
 import org.kiwiproject.changelog.extension.utcZonedDateTimeFromEpochSeconds
-import org.kiwiproject.changelog.github.GitHubApi.GitHubResponse
 import java.net.URI
 import java.time.Duration
 import java.time.ZonedDateTime
