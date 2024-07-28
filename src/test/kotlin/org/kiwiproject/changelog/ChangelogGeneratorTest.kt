@@ -15,12 +15,12 @@ import org.kiwiproject.changelog.config.CategoryConfig
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
+import org.kiwiproject.changelog.github.GitHubIssue
+import org.kiwiproject.changelog.github.GitHubRelease
 import org.kiwiproject.changelog.github.GitHubReleaseManager
-import org.kiwiproject.changelog.github.GitHubReleaseManager.GitHubRelease
 import org.kiwiproject.changelog.github.GitHubSearchManager
 import org.kiwiproject.changelog.github.GitHubSearchManager.CommitAuthorsResult
-import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubIssue
-import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubUser
+import org.kiwiproject.changelog.github.GitHubUser
 import org.kiwiproject.test.junit.jupiter.ClearBoxTest
 import org.kiwiproject.test.util.Fixtures
 import org.mockito.Mockito.anyString

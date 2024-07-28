@@ -21,7 +21,6 @@ import org.kiwiproject.changelog.extension.addJsonContentTypeHeader
 import org.kiwiproject.changelog.extension.assertNoMoreRequests
 import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
-import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubUser
 import org.kiwiproject.test.junit.jupiter.ClearBoxTest
 import org.kiwiproject.test.util.Fixtures
 

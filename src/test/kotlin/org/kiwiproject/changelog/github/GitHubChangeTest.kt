@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubIssue
 import java.time.ZonedDateTime
 
 @DisplayName("GitHubChange")

@@ -90,13 +90,13 @@ class GitHubReleaseManager(
         val releaseDoesNotExist = releases.none { release -> release[property] == tagName }
         check(releaseDoesNotExist) { "A release $failurePhrase $tagName already exists" }
     }
+}
 
-    data class GitHubRelease(val htmlUrl: String) {
-        companion object {
-            fun from(responseContent: Map<String, Any>): GitHubRelease {
-                val htmlUrl = responseContent["html_url"] as String
-                return GitHubRelease(htmlUrl)
-            }
+data class GitHubRelease(val htmlUrl: String) {
+    companion object {
+        fun from(responseContent: Map<String, Any>): GitHubRelease {
+            val htmlUrl = responseContent["html_url"] as String
+            return GitHubRelease(htmlUrl)
         }
     }
 }
