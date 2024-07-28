@@ -1,7 +1,5 @@
 package org.kiwiproject.changelog.github
 
-import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubIssue
-
 data class GitHubChange(val number: Int, val title: String, val htmlUrl: String, val category: String) {
 
     companion object {

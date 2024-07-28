@@ -150,23 +150,24 @@ class GitHubSearchManager(
     private fun createCompareCommitsUrl(base: String, head: String): String =
         "${repoConfig.apiUrl}/repos/${repoConfig.repository}/compare/${base}...${head}?per_page=100&page=1"
 
-    data class GitHubIssue(
-        val title: String,
-        val number: Int,
-        val htmlUrl: String,
-        val labels: List<String>,
-        val user: GitHubUser?,
-        val createdAt: ZonedDateTime
-    )
+}
 
-    data class GitHubUser(
-        val name: String,
-        val login: String?,
-        val htmlUrl: String?
-    ) {
+data class GitHubIssue(
+    val title: String,
+    val number: Int,
+    val htmlUrl: String,
+    val labels: List<String>,
+    val user: GitHubUser?,
+    val createdAt: ZonedDateTime
+)
 
-        fun asMarkdown(): String {
-            return if (htmlUrl != null) "[$name](${htmlUrl})" else name
-        }
+data class GitHubUser(
+    val name: String,
+    val login: String?,
+    val htmlUrl: String?
+) {
+
+    fun asMarkdown(): String {
+        return if (htmlUrl != null) "[$name](${htmlUrl})" else name
     }
 }

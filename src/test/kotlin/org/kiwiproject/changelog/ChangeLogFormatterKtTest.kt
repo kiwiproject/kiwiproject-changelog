@@ -10,7 +10,7 @@ import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.github.GitHubChange
 import org.kiwiproject.changelog.github.GitHubSearchManager.CommitAuthorsResult
-import org.kiwiproject.changelog.github.GitHubSearchManager.GitHubUser
+import org.kiwiproject.changelog.github.GitHubUser
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
