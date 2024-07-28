@@ -2,7 +2,6 @@ package org.kiwiproject.changelog.github
 
 import com.google.common.annotations.VisibleForTesting
 import org.apache.commons.lang3.StringUtils.abbreviate
-import org.kiwiproject.changelog.github.GitHubApi.GitHubResponse
 
 private const val NO_NEXT_PAGE = "none"
 
