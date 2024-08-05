@@ -12,8 +12,8 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
+import org.kiwiproject.changelog.github.GitHubMilestone
 import org.kiwiproject.changelog.github.GitHubMilestoneManager
-import org.kiwiproject.changelog.github.GitHubMilestoneManager.GitHubMilestone
 import org.mockito.Mockito.anyInt
 import org.mockito.Mockito.anyString
 import org.mockito.Mockito.mock

@@ -8,8 +8,8 @@ import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.github.GitHubApi
+import org.kiwiproject.changelog.github.GitHubMilestone
 import org.kiwiproject.changelog.github.GitHubMilestoneManager
-import org.kiwiproject.changelog.github.GitHubMilestoneManager.GitHubMilestone
 import org.kiwiproject.changelog.github.GitHubPagingHelper
 import org.kiwiproject.changelog.github.GitHubReleaseManager
 import org.kiwiproject.changelog.github.GitHubSearchManager

@@ -83,15 +83,15 @@ class GitHubMilestoneManager(
 
     private fun createMilestoneUrl(): String =
         "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones"
+}
 
-    data class GitHubMilestone(val number: Int, val title: String, val htmlUrl: String) {
-        companion object {
-            fun from(responseContent: Map<String, Any>): GitHubMilestone {
-                val number = responseContent["number"] as Int
-                val title = responseContent["title"] as String
-                val htmlUrl = responseContent["html_url"] as String
-                return GitHubMilestone(number, title, htmlUrl)
-            }
+data class GitHubMilestone(val number: Int, val title: String, val htmlUrl: String) {
+    companion object {
+        fun from(responseContent: Map<String, Any>): GitHubMilestone {
+            val number = responseContent["number"] as Int
+            val title = responseContent["title"] as String
+            val htmlUrl = responseContent["html_url"] as String
+            return GitHubMilestone(number, title, htmlUrl)
         }
     }
 }
