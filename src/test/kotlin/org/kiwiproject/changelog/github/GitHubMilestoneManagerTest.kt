@@ -256,7 +256,7 @@ class GitHubMilestoneManagerTest {
         }
     }
 
-    private fun assertMilestone(milestone: GitHubMilestoneManager.GitHubMilestone) {
+    private fun assertMilestone(milestone: GitHubMilestone) {
         assertAll(
             { assertThat(milestone.number).isEqualTo(1) },
             { assertThat(milestone.title).isEqualTo("0.9.0-alpha") },
