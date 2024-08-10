@@ -127,7 +127,7 @@ commits related to them, so the author information can only be obtained from the
 that occurred during the milestone.
 
 Labels on the issues and pull requests are mapped to a category.
-For example, the label "enhancement" might map to the category "Improvements".
+For example, the label "enhancement" might map to the category "Improvements."
 And you can also specify an emoji for each category for a nicer-looking changelog.
 
 ### How to prevent duplicates in change logs

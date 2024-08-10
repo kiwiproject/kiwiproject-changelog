@@ -47,7 +47,7 @@ class ChangeLogFormatterKtTest {
                 .isEqualTo(
                     """
                     ## Summary
-                    - 2024-07-13T15:44:45.000034567 - [4 commit(s)](https://fake-github.com/fakeorg/fakerepo/compare/v1.4.1...v1.4.2) by [dependabot[bot]](https://fake-github.com/apps/dependabot)
+                    - 2024-07-13T15:44:45Z - [4 commit(s)](https://fake-github.com/fakeorg/fakerepo/compare/v1.4.1...v1.4.2) by [dependabot[bot]](https://fake-github.com/apps/dependabot)
 
                      - No notable improvements. No issues or pull requests referenced milestone 1.4.2.
                 """.trimIndent()
@@ -104,7 +104,7 @@ class ChangeLogFormatterKtTest {
             assertThat(changelog.trim()).isEqualTo(
                 """
                 ## Summary
-                - 2024-07-13T15:44:45.000034567 - [4 commit(s)](https://fake-github.com/fakeorg/fakerepo/compare/v1.4.1...v1.4.2) by [Scott Leberknight](https://fake-github.com/sleberknight), [dependabot[bot]](https://fake-github.com/apps/dependabot)
+                - 2024-07-13T15:44:45Z - [4 commit(s)](https://fake-github.com/fakeorg/fakerepo/compare/v1.4.1...v1.4.2) by [Scott Leberknight](https://fake-github.com/sleberknight), [dependabot[bot]](https://fake-github.com/apps/dependabot)
 
                 ## Improvements 🚀
                 * Make the foo better [(#142)](https://fake-github.com/fakeorg/fakerepo/issues/142)

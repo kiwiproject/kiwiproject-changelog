@@ -11,7 +11,6 @@ import org.kiwiproject.changelog.extension.truncatedToSeconds
 import org.kiwiproject.changelog.extension.utcZonedDateTimeFromEpochSeconds
 import java.net.URI
 import java.time.Duration
-import java.time.ZonedDateTime
 import kotlin.random.Random
 
 @DisplayName("GitHubResponse")
@@ -20,7 +19,7 @@ class GitHubResponseTest {
     @RepeatedTest(10)
     fun shouldReturnTheZonedDateTimeWhenRateLimitResetsAtUTC() {
         val randomMinutesFromNow = Random.nextLong(1, 61)
-        val rateLimitResetAt = ZonedDateTime.now().plusMinutes(randomMinutesFromNow)
+        val rateLimitResetAt = nowUtc().plusMinutes(randomMinutesFromNow)
         val rateLimitResetAtEpochSeconds = rateLimitResetAt.toEpochSecond()
 
         val response = GitHubResponse(
@@ -43,7 +42,7 @@ class GitHubResponseTest {
     @RepeatedTest(10)
     fun shouldCalculateTimeUntilRateLimitResets() {
         val randomMinutesFromNow = Random.nextLong(1, 61)
-        val rateLimitResetAt = ZonedDateTime.now().plusMinutes(randomMinutesFromNow).toEpochSecond()
+        val rateLimitResetAt = nowUtc().plusMinutes(randomMinutesFromNow).toEpochSecond()
 
         val response = GitHubResponse(
             200,
@@ -77,7 +76,7 @@ class GitHubResponseTest {
             null,
             10,
             rateLimitRemaining,
-            ZonedDateTime.now().plusMinutes(1).toEpochSecond(),
+            nowUtc().plusMinutes(1).toEpochSecond(),
             "core"
         )
 
