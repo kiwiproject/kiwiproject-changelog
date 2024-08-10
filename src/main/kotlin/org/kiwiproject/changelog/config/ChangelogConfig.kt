@@ -1,5 +1,6 @@
 package org.kiwiproject.changelog.config
 
+import org.kiwiproject.changelog.extension.nowUtc
 import java.io.File
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -12,10 +13,10 @@ enum class OutputType {
     }
 }
 
-data class ChangelogConfig(val date: ZonedDateTime = ZonedDateTime.now(),
+data class ChangelogConfig(val date: ZonedDateTime = nowUtc(),
                            val outputType: OutputType = OutputType.CONSOLE,
                            val outputFile: File? = null,
                            val categoryConfig: CategoryConfig) {
 
-    val dateString: String = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)
+    val dateString: String = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX").format(date)
 }

@@ -248,7 +248,7 @@
     <profiles>
 
         <!--
-            When generating releases, use Dokka to generate the javadocs.
+            When generating releases, use Dokka to generate the Javadocs.
             Unlike the docs, this performs the plugin in the package phase
             to ensure it happens before GPG signing (which happens at verify).
 

@@ -1,5 +1,5 @@
 ## Summary
-- 2024-07-14T17:29:42.000000129 - [4 commit(s)](https://fake-github.com/kiwiproject/kiwi-test/compare/1.4.1...v1.4.2) by [Alice](https://fake-github.com/bob42), [Bob](https://fake-github.com/bob42), [dependabot[bot]](https://fake-github.com/apps/dependabot)
+- 2024-07-14T17:29:42Z - [4 commit(s)](https://fake-github.com/kiwiproject/kiwi-test/compare/1.4.1...v1.4.2) by [Alice](https://fake-github.com/bob42), [Bob](https://fake-github.com/bob42), [dependabot[bot]](https://fake-github.com/apps/dependabot)
 
 ## Enhancements
 * Add method foobar in BazUtils [(#142)](https://fake-github.com/fakeorg/fakerepo/issues/142)

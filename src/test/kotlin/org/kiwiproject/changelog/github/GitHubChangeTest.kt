@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import java.time.ZonedDateTime
+import org.kiwiproject.changelog.extension.nowUtc
 
 @DisplayName("GitHubChange")
 class GitHubChangeTest {
@@ -17,7 +17,7 @@ class GitHubChangeTest {
             "https://fake-github.com/fakeorg/fakerepo/issues/43",
             listOf("enhancement"),
             null,
-            ZonedDateTime.now()
+            nowUtc()
         )
 
         val change = GitHubChange.from(issue, "Improvements")
