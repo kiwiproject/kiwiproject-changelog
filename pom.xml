@@ -29,7 +29,7 @@
     <properties>
         <!-- Versions for required dependencies -->
         <jackson.version>2.17.2</jackson.version>
-        <kiwi.version>4.2.0</kiwi.version>
+        <kiwi.version>4.3.0</kiwi.version>
         <kotlin.version>2.0.0</kotlin.version>
         <kotlin-logging-jvm.version>7.0.0</kotlin-logging-jvm.version>
         <logback-classic.version>1.5.6</logback-classic.version>
