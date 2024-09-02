@@ -37,7 +37,7 @@ class GitHubReleaseManagerTest {
     fun setUp() {
         server = mockWebServerExtension.server
 
-        val token = RandomStringUtils.randomAlphanumeric(40)
+        val token = RandomStringUtils.secure().nextAlphanumeric(40)
         val repoConfig = RepoConfig(
             "https://fake-github.com",
             server.urlWithoutTrailingSlashAsString(),
