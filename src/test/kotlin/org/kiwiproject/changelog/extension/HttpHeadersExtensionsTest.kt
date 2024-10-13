@@ -72,5 +72,14 @@ class HttpHeadersExtensionsTest {
                 .isThrownBy { httpHeaders.firstValueAsLongOrThrow("Some-Custom-Header") }
                 .withMessage("Some-Custom-Header header was expected, but does not exist (case-insensitive)")
         }
+
+        @Test
+        fun shouldThrowIllegalState_WhenHeaderExists_ButValueIsNotConvertibleToLong() {
+            assertThatIllegalStateException()
+                .isThrownBy { httpHeaders.firstValueAsLongOrThrow("X-RateLimit-Resource") }
+                .withMessage("X-RateLimit-Resource header exists, but its value does not parse as a Long")
+                .havingCause()
+                .isExactlyInstanceOf(NumberFormatException::class.java)
+        }
     }
 }
