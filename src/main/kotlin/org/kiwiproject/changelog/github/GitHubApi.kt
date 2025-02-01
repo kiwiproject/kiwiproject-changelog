@@ -110,7 +110,7 @@ internal fun humanTimeUntilReset(timeUntilReset: Duration, rateLimitRemaining: L
             TimeUntilReset("Time until reset is negative! ($timeUntilReset)", true, Level.WARN)
 
         else -> TimeUntilReset(
-            "Time until reset: ${KiwiDurationFormatters.formatDurationWords(timeUntilReset)}",
+            "Time until reset: ${KiwiDurationFormatters.formatJavaDurationWords(timeUntilReset)}",
             false,
             logLevelForRateLimitRemaining(rateLimitRemaining)
         )
