@@ -221,7 +221,7 @@ class GitHubApiTest {
                 { assertThat(timeUntilReset.logLevel).isEqualTo(Level.DEBUG) },
                 {
                     assertThat(timeUntilReset.message)
-                        .isEqualTo("Time until reset: ${KiwiDurationFormatters.formatDurationWords(duration)}")
+                        .isEqualTo("Time until reset: ${KiwiDurationFormatters.formatJavaDurationWords(duration)}")
                 }
             )
         }

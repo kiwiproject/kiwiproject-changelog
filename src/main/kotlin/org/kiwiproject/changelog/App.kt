@@ -276,7 +276,7 @@ class App : Runnable {
             println("✅ Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
         }
 
-        // Optional: create new milestone
+        // Optional: create a new milestone
         if (createNextMilestone != null) {
             val newMilestone = createMilestone(createNextMilestone!!, milestoneManager)
             println("✅ Created new milestone ${newMilestone.title}. See it at ${newMilestone.htmlUrl}")
