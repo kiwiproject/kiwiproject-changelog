@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.kiwiproject</groupId>
         <artifactId>kiwi-parent</artifactId>
-        <version>3.0.22</version>
+        <version>3.0.23</version>
     </parent>
 
     <artifactId>changelog-generator</artifactId>
@@ -28,13 +28,13 @@
 
     <properties>
         <!-- Versions for required dependencies -->
-        <jackson.version>2.18.2</jackson.version>
-        <kiwi.version>4.7.0</kiwi.version>
+        <jackson.version>2.18.3</jackson.version>
+        <kiwi.version>4.8.0</kiwi.version>
         <kotlin.version>2.1.10</kotlin.version>
         <kotlin-logging-jvm.version>7.0.4</kotlin-logging-jvm.version>
-        <logback-classic.version>1.5.16</logback-classic.version>
+        <logback-classic.version>1.5.17</logback-classic.version>
         <picocli.version>4.7.6</picocli.version>
-        <slf4j-api.version>2.0.16</slf4j-api.version>
+        <slf4j-api.version>2.0.17</slf4j-api.version>
         <snakeyaml.version>2.4</snakeyaml.version>
 
         <!-- Versions for test dependencies -->
@@ -45,7 +45,7 @@
         <dokka-maven-plugin.version>2.0.0</dokka-maven-plugin.version>
         <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
         <kotlin-maven-plugin.version>2.1.10</kotlin-maven-plugin.version>
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
