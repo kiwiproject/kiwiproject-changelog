@@ -31,7 +31,7 @@
         <jackson.version>2.18.3</jackson.version>
         <kiwi.version>4.8.0</kiwi.version>
         <kotlin.version>2.1.10</kotlin.version>
-        <kotlin-logging-jvm.version>7.0.4</kotlin-logging-jvm.version>
+        <kotlin-logging-jvm.version>7.0.5</kotlin-logging-jvm.version>
         <logback-classic.version>1.5.17</logback-classic.version>
         <picocli.version>4.7.6</picocli.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
