@@ -31,7 +31,7 @@
         <jackson.version>2.18.3</jackson.version>
         <kiwi.version>4.8.0</kiwi.version>
         <kotlin.version>2.1.20</kotlin.version>
-        <kotlin-logging-jvm.version>7.0.5</kotlin-logging-jvm.version>
+        <kotlin-logging-jvm.version>7.0.6</kotlin-logging-jvm.version>
         <logback-classic.version>1.5.18</logback-classic.version>
         <picocli.version>4.7.6</picocli.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
@@ -47,8 +47,8 @@
         <kotlin-maven-plugin.version>2.1.20</kotlin-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
-        <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
 
         <!-- Kotlin settings -->
