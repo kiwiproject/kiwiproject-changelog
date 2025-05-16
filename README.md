@@ -1,6 +1,6 @@
 # Kiwiproject Changelog Generator
 
-[![build](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/build.yml/badge.svg)](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/build.yml)
+[![build](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/build.yml?query=branch%3Amain)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_kiwiproject-changelog&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kiwiproject_kiwiproject-changelog)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kiwiproject_kiwiproject-changelog&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kiwiproject_kiwiproject-changelog)
 [![CodeQL](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/codeql.yml/badge.svg)](https://github.com/kiwiproject/kiwiproject-changelog/actions/workflows/codeql.yml)
