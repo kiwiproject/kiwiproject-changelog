@@ -30,7 +30,7 @@
         <!-- Versions for required dependencies -->
         <jackson.version>2.19.0</jackson.version>
         <kiwi.version>4.9.0</kiwi.version>
-        <kotlin.version>2.1.20</kotlin.version>
+        <kotlin.version>2.1.21</kotlin.version>
         <kotlin-logging-jvm.version>7.0.7</kotlin-logging-jvm.version>
         <logback-classic.version>1.5.18</logback-classic.version>
         <picocli.version>4.7.7</picocli.version>
@@ -44,7 +44,7 @@
         <!-- Versions for plugins -->
         <dokka-maven-plugin.version>2.0.0</dokka-maven-plugin.version>
         <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
-        <kotlin-maven-plugin.version>2.1.20</kotlin-maven-plugin.version>
+        <kotlin-maven-plugin.version>2.1.21</kotlin-maven-plugin.version>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
