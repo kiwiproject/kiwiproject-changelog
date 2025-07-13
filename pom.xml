@@ -39,7 +39,7 @@
 
         <!-- Versions for test dependencies -->
         <kiwi-test.version>3.11.0</kiwi-test.version>
-        <mockwebserver.version>5.0.0</mockwebserver.version>
+        <mockwebserver.version>5.1.0</mockwebserver.version>
 
         <!-- Versions for plugins -->
         <dokka-maven-plugin.version>2.0.0</dokka-maven-plugin.version>
