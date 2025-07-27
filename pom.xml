@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.kiwiproject</groupId>
         <artifactId>kiwi-parent</artifactId>
-        <version>3.0.28</version>
+        <version>3.0.29</version>
     </parent>
 
     <artifactId>changelog-generator</artifactId>
@@ -29,7 +29,7 @@
     <properties>
         <!-- Versions for required dependencies -->
         <jackson.version>2.19.2</jackson.version>
-        <kiwi.version>4.11.1</kiwi.version>
+        <kiwi.version>4.12.0</kiwi.version>
         <kotlin.version>2.2.0</kotlin.version>
         <kotlin-logging-jvm.version>7.0.7</kotlin-logging-jvm.version>
         <logback-classic.version>1.5.18</logback-classic.version>
