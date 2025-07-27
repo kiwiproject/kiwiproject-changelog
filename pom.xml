@@ -38,7 +38,7 @@
         <snakeyaml.version>2.4</snakeyaml.version>
 
         <!-- Versions for test dependencies -->
-        <kiwi-test.version>3.11.0</kiwi-test.version>
+        <kiwi-test.version>3.11.1</kiwi-test.version>
         <mockwebserver.version>5.1.0</mockwebserver.version>
 
         <!-- Versions for plugins -->
