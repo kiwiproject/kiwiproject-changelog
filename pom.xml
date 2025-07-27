@@ -28,18 +28,14 @@
 
     <properties>
         <!-- Versions for required dependencies -->
-        <jackson.version>2.19.2</jackson.version>
-        <kiwi.version>4.12.0</kiwi.version>
-        <kotlin.version>2.2.0</kotlin.version>
+        <kiwi-libraries-bom.version>1.0.0</kiwi-libraries-bom.version>
+        <kiwi-bom.version>2.0.29</kiwi-bom.version>
         <kotlin-logging-jvm.version>7.0.7</kotlin-logging-jvm.version>
-        <logback-classic.version>1.5.18</logback-classic.version>
         <picocli.version>4.7.7</picocli.version>
-        <slf4j-api.version>2.0.17</slf4j-api.version>
-        <snakeyaml.version>2.4</snakeyaml.version>
 
         <!-- Versions for test dependencies -->
-        <kiwi-test.version>3.11.1</kiwi-test.version>
-        <mockwebserver.version>5.1.0</mockwebserver.version>
+
+        <!-- Nothing to see here yet...move along... -->
 
         <!-- Versions for plugins -->
         <dokka-maven-plugin.version>2.0.0</dokka-maven-plugin.version>
@@ -64,31 +60,19 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>org.kiwiproject</groupId>
+                <artifactId>kiwi-libraries-bom</artifactId>
+                <version>${kiwi-libraries-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
             <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-bom</artifactId>
-                <version>${kotlin.version}</version>
+                <groupId>org.kiwiproject</groupId>
+                <artifactId>kiwi-bom</artifactId>
+                <version>${kiwi-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j-api.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -110,7 +94,6 @@
         <dependency>
             <groupId>org.kiwiproject</groupId>
             <artifactId>kiwi</artifactId>
-            <version>${kiwi.version}</version>
         </dependency>
 
         <dependency>
@@ -122,7 +105,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
         </dependency>
 
         <dependency>
@@ -141,7 +123,6 @@
         <dependency>
             <groupId>org.kiwiproject</groupId>
             <artifactId>kiwi-test</artifactId>
-            <version>${kiwi-test.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -149,22 +130,11 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit5</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.jupiter</groupId>
-                    <artifactId>junit-jupiter-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.junit.jupiter</groupId>
-                    <artifactId>junit-jupiter-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
-            <version>${mockwebserver.version}</version>
             <scope>test</scope>
         </dependency>
 
