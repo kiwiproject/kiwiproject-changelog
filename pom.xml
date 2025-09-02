@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.kiwiproject</groupId>
         <artifactId>kiwi-parent</artifactId>
-        <version>3.0.29</version>
+        <version>3.0.30</version>
     </parent>
 
     <artifactId>changelog-generator</artifactId>
@@ -29,7 +29,7 @@
     <properties>
         <!-- Versions for required dependencies -->
         <kiwi-libraries-bom.version>1.0.0</kiwi-libraries-bom.version>
-        <kiwi-bom.version>2.0.29</kiwi-bom.version>
+        <kiwi-bom.version>2.0.30</kiwi-bom.version>
         <kotlin-logging-jvm.version>7.0.13</kotlin-logging-jvm.version>
         <picocli.version>4.7.7</picocli.version>
 
