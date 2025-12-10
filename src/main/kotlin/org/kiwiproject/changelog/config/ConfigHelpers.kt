@@ -20,8 +20,7 @@ internal object ConfigHelpers {
         return mappings
             .asSequence()
             .map { opt -> opt.split(":") }
-            .map { parts -> parts[0] to parts[1] }
-            .toMap()
+            .associate { parts -> parts[0] to parts[1] }
     }
 
     fun externalConfig(

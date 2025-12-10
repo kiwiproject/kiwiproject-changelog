@@ -15,8 +15,8 @@ class HttpHeadersExtensionsTest {
 
     @BeforeEach
     fun setUp() {
-        val headerMap = mapOf<String, List<String>>(
-            "Content-Type" to listOf<String>("application/vnd.github+json"),
+        val headerMap = mapOf(
+            "Content-Type" to listOf("application/vnd.github+json"),
             "X-RateLimit-Limit" to listOf("5000"),
             "X-RateLimit-Remaining" to listOf("4997"),
             "X-RateLimit-Reset" to listOf("1729522050"),
