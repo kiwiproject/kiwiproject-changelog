@@ -32,7 +32,7 @@ class GitHubMilestoneManager(
         }
 
         // Uses "per_page" of 50, assuming there will never be anywhere close to that number.
-        // If there are, we'll see a link header, and will consider that an illegal state.
+        // If there are, we'll see a link header and will consider that an illegal state.
         check(response.linkHeader == null) {
             "We received a Link header when we were not expecting it!"
         }

@@ -26,7 +26,7 @@ fun MockWebServer.urlWithoutTrailingSlashAsString(path: String): String =
 
 /**
  * Calls [MockWebServer.takeRequest] method with a 1-second timeout.
- * This method expects there to be a request, and asserts that there
+ * This method expects there to be a request and asserts that there
  * is a non-null request.
  */
 fun MockWebServer.takeRequestWith1SecTimeout(): RecordedRequest =

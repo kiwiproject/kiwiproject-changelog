@@ -78,7 +78,7 @@ You can also _uninstall_ using the `-u` flag. You will be prompted for confirmat
 If you prefer a manual installation, first clone the repository.
 
 To run the changelog generator from the command line,
-you need to build the _shaded_ JAR which includes all dependencies.
+you need to build the _shaded_ JAR, which includes all dependencies.
 
 The default Maven build does not include dependencies, so you need to run the build using the `shaded-jar` profile:
 
@@ -94,7 +94,7 @@ $ git checkout <release-tag>
 $ mvn package -DskipTests -Pshaded-jar
 ```
 
-where `release-tag` is a valid tag, e.g., `v0.6.0`. You can also build from the latest commit, i.e. `HEAD`.
+`release-tag` must be a valid tag, e.g., `v0.6.0`. You can also build from the latest commit, i.e. `HEAD`.
 
 If you built from a tag, make sure to check out the main branch once you've built the JAR, and it's a good idea to move
 the JAR somewhere else so that it doesn't get deleted the next time a `mvn clean` happens.
@@ -119,7 +119,7 @@ For example, if tags use a format like `rel-1.4.2` then you can still generate t
 as long as you specify the milestone.
 
 Both the revision and the previous revision must be specified. The reason is so the
-changelog generator can find the unique _commit_ authors between these two revisions,
+changelog generator can find the unique _commit_ authors between these two revisions 
 and list them as contributors to the release. Note specifically that the contributors are
 the people who created the commits, not the people who created the issue or merged the pull
 request. Note also that issues and pull requests do not include any information about

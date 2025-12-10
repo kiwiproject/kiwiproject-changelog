@@ -56,7 +56,7 @@ fun formatChanges(
     val groupedChanges = gitHubChanges.groupBy { it.category }.toSortedMap()
     val changeCategories = groupedChanges.keys
 
-    // Ensure all categories exist, and add them if not
+    // Ensure all categories exist and add them if not
     // (otherwise, those changes won't be in the change log)
     val categories = ensureAllCategories(categoryOrder, changeCategories)
 
