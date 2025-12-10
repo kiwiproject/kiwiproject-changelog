@@ -7,17 +7,9 @@ import org.kiwiproject.changelog.config.ConfigHelpers.buildCategoryConfig
 import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
-import org.kiwiproject.changelog.github.GitHubApi
-import org.kiwiproject.changelog.github.GitHubMilestone
-import org.kiwiproject.changelog.github.GitHubMilestoneManager
-import org.kiwiproject.changelog.github.GitHubPagingHelper
-import org.kiwiproject.changelog.github.GitHubReleaseManager
-import org.kiwiproject.changelog.github.GitHubSearchManager
+import org.kiwiproject.changelog.github.*
 import picocli.CommandLine
-import picocli.CommandLine.Command
-import picocli.CommandLine.ITypeConverter
-import picocli.CommandLine.IVersionProvider
-import picocli.CommandLine.Option
+import picocli.CommandLine.*
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -65,14 +57,14 @@ class App : Runnable {
     // GitHub options
     @Option(
         names = ["-u", "--repo-host-url"],
-        description = ["GitHub URL (default: \${DEFAULT-VALUE}))"],
+        description = [$$"GitHub URL (default: ${DEFAULT-VALUE}))"],
         defaultValue = "https://github.com"
     )
     lateinit var repoHostUrl: String
 
     @Option(
         names = ["-a", "--repo-host-api-url"],
-        description = ["URL for GitHub API (default: \${DEFAULT-VALUE})"],
+        description = [$$"URL for GitHub API (default: ${DEFAULT-VALUE})"],
         defaultValue = "https://api.github.com"
     )
     lateinit var repoHostApi: String
@@ -110,7 +102,7 @@ class App : Runnable {
 
     @Option(
         names = ["-o", "--output-type"],
-        description = ["How the changelog should be output: \${COMPLETION-CANDIDATES}"],
+        description = [$$"How the changelog should be output: ${COMPLETION-CANDIDATES}"],
         converter = [OutputTypeConverter::class]
     )
     var outputType: OutputType = OutputType.CONSOLE
@@ -219,7 +211,7 @@ class App : Runnable {
             "GitHub token must be provided as command line option or KIWI_CHANGELOG_TOKEN environment variable"
         }
 
-        // Get external configuration if one exists
+        // Get an external configuration if one exists
         println("🛠️  Getting configuration information")
         val currentDirectory = File(".").absoluteFile.parentFile
         val userHomeDirectory = File(System.getProperty("user.home"))
