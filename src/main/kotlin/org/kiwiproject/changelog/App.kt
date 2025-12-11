@@ -111,8 +111,8 @@ class App : Runnable {
         override fun convert(value: String): OutputType {
             try {
                 return OutputType.valueOf(value.uppercase())
-            } catch (e: Exception) {
-                throw CommandLine.TypeConversionException(
+            } catch (_: Exception) {
+                throw TypeConversionException(
                     "expected one of ${OutputType.entriesAsString()} (case-insensitive) but was '${value}'")
             }
         }
