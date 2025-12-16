@@ -6,29 +6,20 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.junitpioneer.jupiter.StdIo
-import org.junitpioneer.jupiter.StdOut
 import org.kiwiproject.changelog.config.CategoryConfig
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
-import org.kiwiproject.changelog.github.GitHubIssue
-import org.kiwiproject.changelog.github.GitHubRelease
-import org.kiwiproject.changelog.github.GitHubReleaseManager
-import org.kiwiproject.changelog.github.GitHubSearchManager
+import org.kiwiproject.changelog.github.*
 import org.kiwiproject.changelog.github.GitHubSearchManager.CommitAuthorsResult
-import org.kiwiproject.changelog.github.GitHubUser
+import org.kiwiproject.changelog.junit.StdIoExtension
 import org.kiwiproject.test.junit.jupiter.ClearBoxTest
 import org.kiwiproject.test.util.Fixtures
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.verifyNoInteractions
-import org.mockito.Mockito.verifyNoMoreInteractions
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.ZoneOffset
@@ -37,12 +28,14 @@ import java.time.ZonedDateTime
 @DisplayName("ChangelogGenerator")
 class ChangelogGeneratorTest {
 
+    @RegisterExtension
+    private val stdIo = StdIoExtension()
+
     @Nested
     inner class Generate {
 
         @Test
-        @StdIo
-        fun shouldGenerateToConsole(stdout: StdOut) {
+        fun shouldGenerateToConsole() {
             val repoConfig = repoConfig()
 
             val releaseDateTime = releaseDateTime()
@@ -62,7 +55,7 @@ class ChangelogGeneratorTest {
 
             val result = changelogGenerator.generate()
 
-            val output = stdout.capturedLines().toList()
+            val output = stdIo.capturedLines().toList()
             assertAll(
                 { assertThat(result.changeCount).isEqualTo(issues.size) },
                 { assertThat(result.commitCount).isEqualTo(commitAuthorsResult.totalCommits) },
@@ -89,8 +82,7 @@ class ChangelogGeneratorTest {
         }
 
         @Test
-        @StdIo
-        fun shouldGenerateToFile(stdout: StdOut, @TempDir dir: Path) {
+        fun shouldGenerateToFile(@TempDir dir: Path) {
             val repoConfig = repoConfig()
 
             val releaseDateTime = releaseDateTime()
@@ -119,7 +111,7 @@ class ChangelogGeneratorTest {
 
             val expectedChangelogContent = expectedChangelogContent()
 
-            val output = stdout.capturedString()
+            val output = stdIo.capturedLines()
             assertAll(
                 { assertThat(result.changeCount).isEqualTo(issues.size) },
                 { assertThat(result.commitCount).isEqualTo(commitAuthorsResult.totalCommits) },
@@ -226,8 +218,7 @@ class ChangelogGeneratorTest {
     inner class WriteChangeLog {
 
         @Test
-        @StdIo
-        fun shouldWriteToStdOut(stdout: StdOut) {
+        fun shouldWriteToStdOut() {
             val repoConfig = repoConfig()
             val changelogConfig = changelogConfig(OutputType.CONSOLE)
             val releaseManager = mock(GitHubReleaseManager::class.java)
@@ -237,7 +228,7 @@ class ChangelogGeneratorTest {
             val changeLog = changeLogText()
             changelogGenerator.writeChangeLog(changeLog)
 
-            val output = stdout.capturedLines().toList()
+            val output = stdIo.capturedLines().toList()
             val expectedStdout = changeLog.split(System.lineSeparator())
             assertThat(output).containsSequence(expectedStdout)
 
