@@ -254,8 +254,23 @@ categories:
       - dependencies
 ```
 
+### Stripping the `v` prefix when creating the next milestone
+
+When using `--create-next-milestone`, the changelog generator strips a leading
+`v` from the milestone title by default. For example, creating a milestone
+from `v1.8.2` results in a milestone named `1.8.2`.
+
+If you prefer to keep the `v` prefix (for example, to match your tag naming
+convention), you can disable this behavior in the external configuration file:
+
+```yaml
+stripVPrefixFromNextMilestone: false
+```
+           
+### Additional configuration examples
+
 Here is another [sample](sample-kiwi-changelog.yml) changelog configuration. This is the one
-we are currently for kiwiproject releases.
+we are currently using for kiwiproject releases.
 
 Using a configuration file is more convenient when you have a common set of categories. Note that
 the default category is specified using the `default` property in _one_ of the categories.
@@ -277,6 +292,8 @@ use the `--ignore-config-files` (or `-g`) command line flag.
 You can also override the above and specify a custom configuration file using the
 `--config-file` (or `-n`) command line option, e.g. `--config-file /path/to/custom/changelog.yml`.
 
+## Example usage with configuration file
+
 If you export `KIWI_CHANGELOG_TOKEN` to your environment, and you use a configuration file, then
 generating change logs can be as simple as:
 
@@ -289,13 +306,28 @@ generating change logs can be as simple as:
     --create-next-milestone 0.13.0
 ```
 
-This generates the change log for the `kiwiproject-changelog` repository for milestone `0.12.0`.
-It posts the change log to GitHub, closes the `0.12.0` milestone, and creates the next milestone, `0.13.0`.
+This generates the changelog for the `kiwiproject-changelog` repository for milestone `0.12.0`.
+It posts the changelog to GitHub, closes the `0.12.0` milestone, and creates the next milestone, `0.13.0`.
+
+You can also include a summary at the top of the generated changelog.
+This can be provided directly on the command line using `--summary`, or
+read from a file using `--summary-file` (for longer text or when using an
+editor):
+
+```shell
+.generate-kiwi-changelog --repository kiwiproject/kiwiproject-changelog \
+    --previous-rev v0.11.0 \
+    --revision v0.12.0 \
+    --summary-file release-summary.md \
+    --output-type GITHUB \
+    --close-milestone \
+    --create-next-milestone 0.13.0
+```
 
 Using short argument names, it can be even shorter:
 
 ```shell
-.generate-kiwi-changelog -r kiwiproject/kiwiproject-changelog -p v0.11.0 -R v0.12.0 -o GITHUB -C -N 0.13.0
+.generate-kiwi-changelog -r kiwiproject/kiwiproject-changelog -p v0.11.0 -R v0.12.0 -y release-summary.md -o GITHUB -C -N 0.13.0
 ```
 
 Happy change log generating! 🤪
