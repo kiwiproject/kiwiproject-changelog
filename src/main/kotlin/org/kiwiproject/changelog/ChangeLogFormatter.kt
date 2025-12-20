@@ -19,10 +19,15 @@ fun formatChangeLog(
         ## Summary
         - @date@ - [@commitCount@ commit(s)](@repoUrl@/compare/@previousRev@...@newRev@) by @authors@
 
-        @changes@
+        @summary@@changes@
     """.trimIndent()
 
     val authors = commitAuthorsResult.authors.joinToString(", ") { author -> author.asMarkdown() }
+
+    val summaryText = when (val summary = changelogConfig.summary?.trim()) {
+        null, "" -> ""
+        else -> summary + "\n\n"
+    }
 
     val logData = mapOf(
         "date" to changelogConfig.dateString,
@@ -31,6 +36,7 @@ fun formatChangeLog(
         "previousRev" to repoConfig.previousRevision,
         "newRev" to repoConfig.revision,
         "authors" to authors,
+        "summary" to summaryText,
         "changes" to formatChanges(
             gitHubChanges,
             repoConfig.milestone(),

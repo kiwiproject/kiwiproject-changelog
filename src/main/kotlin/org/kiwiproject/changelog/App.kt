@@ -7,10 +7,14 @@ import org.kiwiproject.changelog.config.ConfigHelpers.buildCategoryConfig
 import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
+import org.kiwiproject.changelog.extension.preview
 import org.kiwiproject.changelog.github.*
 import picocli.CommandLine
 import picocli.CommandLine.*
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import kotlin.io.path.readText
 import kotlin.system.exitProcess
 
 @Command(
@@ -53,6 +57,9 @@ class App : Runnable {
             return arrayOf(version)
         }
     }
+
+    @Spec
+    lateinit var spec: Model.CommandSpec
 
     // GitHub options
     @Option(
@@ -187,6 +194,20 @@ class App : Runnable {
     )
     var createNextMilestone: String? = null
 
+    // Summary options
+
+    @Option(
+        names = ["-s", "--summary"],
+        description = ["Summary text to include at the top of the generated changelog"]
+    )
+    var summary: String? = null
+
+    @Option(
+        names = ["-y", "--summary-file"],
+        description = ["Path to a file containing summary text to include at the top of the generated changelog"]
+    )
+    var summaryFile: String? = null
+
     // Debug options
 
     @Option(
@@ -242,7 +263,8 @@ class App : Runnable {
         val changeLogConfig = ChangelogConfig(
             outputType = outputType,
             outputFile = out,
-            categoryConfig = categoryConfig
+            categoryConfig = categoryConfig,
+            summary = resolveSummary(summary, summaryFile, spec)
         )
 
         val githubApi = GitHubApi(githubToken)
@@ -288,6 +310,8 @@ class App : Runnable {
         println("✔ revision = $revision")
         println("✔ outputType = $outputType")
         println("✔ outputFile = $outputFile")
+        println("✔ summary = ${summary?.preview()}")
+        println("✔ summaryFile = $summaryFile")
         println("✔ defaultCategory = $defaultCategory")
         println("✔ labelToCategoryMappings = $labelToCategoryMappings")
         println("✔ categoryToEmojiMappings = $categoryToEmojiMappings")
@@ -312,6 +336,37 @@ class App : Runnable {
 
         @VisibleForTesting
         internal data class AppResult(val exitCode: Int, val app: App)
+
+        @VisibleForTesting
+        fun resolveSummary(summary: String?, summaryFile: String?, spec: Model.CommandSpec): String? {
+            val commandLine = spec.commandLine()
+
+            if (summary != null && summaryFile != null) {
+                throw ParameterException(commandLine, "Only one of --summary or --summary-file may be specified")
+            }
+
+            return when {
+                summary != null -> summary
+                summaryFile != null -> readSummaryFile(summaryFile, commandLine)
+                else -> null
+            }
+        }
+
+        private fun readSummaryFile(summaryFile: String, commandLine: CommandLine): String {
+            val path = Paths.get(summaryFile)
+            return when {
+                !Files.exists(path) ->
+                    throw ParameterException(commandLine, "Summary file does not exist: $summaryFile")
+
+                !Files.isRegularFile(path) ->
+                    throw ParameterException(commandLine, "Summary file is not a regular file: $summaryFile")
+
+                !Files.isReadable(path) ->
+                    throw ParameterException(commandLine, "Summary file is not readable: $summaryFile")
+
+                else -> path.readText()
+            }
+        }
 
         @VisibleForTesting
         fun closeMilestone(
