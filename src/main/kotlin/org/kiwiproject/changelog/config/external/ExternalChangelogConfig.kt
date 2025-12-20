@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.Nulls.AS_EMPTY
 
 data class ExternalChangelogConfig(
     @JsonSetter(nulls = AS_EMPTY) val categories: List<ExternalCategory> = listOf(),
+    val stripVPrefixFromNextMilestone: Boolean = true,
 ) {
 
     fun labelCategoryMap(): Map<String, String> {

@@ -1,0 +1,28 @@
+---
+
+stripVPrefixFromNextMilestone: false
+
+categories:
+
+  - name: Improvements
+    labels:
+      - "new feature"
+      - "enhancement"
+
+  - name: Bugs
+    labels:
+      - "bug"
+
+  - name: Infrastructure
+    labels:
+      - infrastructure
+      - github_actions
+
+  - name: Assorted
+    labels:
+      - "code cleanup"
+      - "refactoring"
+
+  - name: "Dependency Updates"
+    labels:
+      - dependencies
