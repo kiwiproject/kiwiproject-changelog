@@ -41,6 +41,11 @@ import kotlin.system.exitProcess
         "",
         "You can also close the milestone on GitHub and/or create a new milestone.",
         "",
+        "By default, a leading 'v' is stripped when creating the next milestone.",
+        "This behavior can be disabled via --strip-v-prefix-from-next-milestone",
+        "or by setting stripVPrefixFromNextMilestone to false in the external",
+        "configuration file.",
+        "",
         "For more information, see the README at",
         "https://github.com/kiwiproject/kiwiproject-changelog",
         "",
@@ -190,9 +195,17 @@ class App : Runnable {
 
     @Option(
         names = ["-N", "--create-next-milestone"],
-        description = ["The title of the milestone to create, e.g., 4.2.0"]
+        description = ["The title of the milestone to create, e.g., 4.2.0.",
+            "By default, a leading 'v' is stripped (see --strip-v-prefix-from-next-milestone)."]
     )
     var createNextMilestone: String? = null
+
+    @Option(
+        names = ["--strip-v-prefix-from-next-milestone"],
+        description = ["Whether to strip a leading 'v' from the next milestone title.",
+            "Only applies when --create-next-milestone is specified (default: true)."],
+    )
+    var stripVPrefixFromNextMilestone: Boolean? = null
 
     // Summary options
 
@@ -292,7 +305,9 @@ class App : Runnable {
 
         // Optional: create a new milestone
         if (createNextMilestone != null) {
-            val newMilestone = createMilestone(createNextMilestone!!, milestoneManager)
+            val shouldStripV = stripVPrefixFromNextMilestone ?: externalConfig.stripVPrefixFromNextMilestone
+            val finalNextMilestone = resolveNextMilestone(createNextMilestone!!, shouldStripV)
+            val newMilestone = createMilestone(finalNextMilestone, milestoneManager)
             println("✅ Created new milestone ${newMilestone.title}. See it at ${newMilestone.htmlUrl}")
         }
 
@@ -317,6 +332,7 @@ class App : Runnable {
         println("✔ categoryToEmojiMappings = $categoryToEmojiMappings")
         println("✔ categoryOrder = $categoryOrder")
         println("✔ configFile = $configFile")
+        println("✔ stripVPrefixFromNextMilestone = $stripVPrefixFromNextMilestone")
         println("----------")
     }
 
@@ -336,6 +352,15 @@ class App : Runnable {
 
         @VisibleForTesting
         internal data class AppResult(val exitCode: Int, val app: App)
+
+        @VisibleForTesting
+        fun resolveNextMilestone(title: String, stripVPrefix: Boolean): String {
+            return if (stripVPrefix && title.startsWith("v")) {
+                title.substring(1)
+            } else {
+                title
+            }
+        }
 
         @VisibleForTesting
         fun resolveSummary(summary: String?, summaryFile: String?, spec: Model.CommandSpec): String? {

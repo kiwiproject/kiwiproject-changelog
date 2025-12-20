@@ -363,6 +363,22 @@ class AppTest {
         }
 
         @Test
+        fun `should strip v-prefix from next milestone when enabled`() {
+            assertThat(App.resolveNextMilestone("v1.2.3", true)).isEqualTo("1.2.3")
+        }
+
+        @Test
+        fun `should NOT strip v-prefix from next milestone when disabled`() {
+            assertThat(App.resolveNextMilestone("v1.2.3", false)).isEqualTo("v1.2.3")
+        }
+
+        @Test
+        fun `should NOT strip anything if no v-prefix exists`() {
+            assertThat(App.resolveNextMilestone("1.2.3", true)).isEqualTo("1.2.3")
+            assertThat(App.resolveNextMilestone("1.2.3", false)).isEqualTo("1.2.3")
+        }
+
+        @Test
         fun shouldCreateNewMilestone() {
             val number = 3
             val title = "4.2.0"

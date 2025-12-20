@@ -65,7 +65,8 @@ class ExternalChangelogConfigTest {
                         "Infrastructure" to "🏗️"
                     )
                 )
-            }
+            },
+            { assertThat(config.stripVPrefixFromNextMilestone).isTrue() }
         )
     }
 
@@ -103,6 +104,14 @@ class ExternalChangelogConfigTest {
     }
 
     @Test
+    fun shouldReadConfig_ThatHasStripVPrefixFromNextMilestone() {
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-no-strip-v-prefix.yml")
+        val config = readConfig(yaml)
+
+        assertThat(config.stripVPrefixFromNextMilestone).isFalse()
+    }
+
+    @Test
     fun shouldReadEmptyConfig() {
         val yaml = Fixtures.fixture("kiwi-changelog-configs/empty-changelog.yml")
         val config = readConfig(yaml)
@@ -111,7 +120,8 @@ class ExternalChangelogConfigTest {
             { assertThat(config.categories).isEmpty() },
             { assertThat(config.labelCategoryMap()).isEmpty() },
             { assertThat(config.categoryOrder()).isEmpty() },
-            { assertThat(config.defaultCategory()).isNull() }
+            { assertThat(config.defaultCategory()).isNull() },
+            { assertThat(config.stripVPrefixFromNextMilestone).isTrue() }
         )
     }
 
