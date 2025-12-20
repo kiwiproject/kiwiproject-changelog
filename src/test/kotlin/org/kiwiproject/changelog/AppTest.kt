@@ -1,12 +1,9 @@
 package org.kiwiproject.changelog
 
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assumptions.assumeThat
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
@@ -14,14 +11,16 @@ import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.github.GitHubMilestone
 import org.kiwiproject.changelog.github.GitHubMilestoneManager
-import org.mockito.Mockito.anyInt
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.only
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.verifyNoMoreInteractions
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
+import picocli.CommandLine
 import picocli.CommandLine.TypeConversionException
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.PosixFileAttributeView
+import java.nio.file.attribute.PosixFilePermission
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.writeText
 
 @DisplayName("App")
 class AppTest {
@@ -114,7 +113,9 @@ class AppTest {
                 "-M",
                 "0.12.0",
                 "-N",
-                "0.13.0"
+                "0.13.0",
+                "-s",
+                "This is a cool summary of the release!"
             )
         )
 
@@ -173,7 +174,9 @@ class AppTest {
                 "--milestone",
                 "0.12.0",
                 "--create-next-milestone",
-                "0.13.0"
+                "0.13.0",
+                "--summary",
+                "This is a cool summary of the release!"
             )
         )
 
@@ -220,6 +223,31 @@ class AppTest {
             { assertThat(app.closeMilestone).isTrue() },
             { assertThat(app.milestone).isEqualTo("0.12.0") },
             { assertThat(app.createNextMilestone).isEqualTo("0.13.0") },
+            { assertThat(app.summary).isEqualTo("This is a cool summary of the release!") },
+            { assertThat(app.summaryFile).isNull() },
+        )
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["-y", "--summary-file"])
+    fun shouldAcceptSummaryFile(summaryArg: String) {
+        val (_, app) = App.execute(
+            arrayOf(
+                "--debug-args",  // prevent execution
+                "--repository",
+                "kiwiproject/kiwi",
+                "--previous-rev",
+                "v0.11.0",
+                "--revision",
+                "v0.12.0",
+                summaryArg,
+                "/tmp/summary.md"
+            )
+        )
+
+        assertAll(
+            { assertThat(app.summary).isNull() },
+            { assertThat(app.summaryFile).isEqualTo("/tmp/summary.md") }
         )
     }
 
@@ -365,6 +393,106 @@ class AppTest {
             assertThat(existingMilestone).isSameAs(milestone)
 
             verify(milestoneManager, only()).getOpenMilestoneByTitleOrNull(title)
+        }
+    }
+
+    @Nested
+    inner class ResolveSummary {
+
+        private lateinit var spec: CommandLine.Model.CommandSpec
+
+        @BeforeEach
+        fun setUpSpec() {
+            spec = CommandLine(App()).commandSpec
+        }
+
+        @Test
+        fun shouldReturnSummaryWhenSummaryIsProvided() {
+            val result = App.resolveSummary(summary = "My summary", summaryFile = null, spec = spec)
+
+            assertThat(result).isEqualTo("My summary")
+        }
+
+        @Test
+        fun shouldReturnFileContentsWhenSummaryFileIsProvided(@TempDir tempDir: Path) {
+            val file = tempDir.resolve("summary.txt").toFile()
+            file.writeText("Summary from file")
+
+            val result = App.resolveSummary(summary = null, summaryFile = file.absolutePath, spec = spec)
+
+            assertThat(result).isEqualTo("Summary from file")
+        }
+
+        @Test
+        fun shouldReturnNullWhenNeitherSummaryNorSummaryFileIsProvided() {
+            val result = App.resolveSummary(null, null, spec)
+
+            assertThat(result).isNull()
+        }
+
+        @Test
+        fun shouldThrowParameterExceptionWhenBothSummaryAndSummaryFileAreProvided(@TempDir tempDir: Path) {
+            val file = tempDir.resolve("summary.txt").toFile()
+            file.writeText("Summary from file")
+
+            assertThatThrownBy {
+                App.resolveSummary(
+                    summary = "Inline summary",
+                    summaryFile = file.absolutePath,
+                    spec = spec
+                )
+            }.isInstanceOf(CommandLine.ParameterException::class.java)
+                .hasMessage("Only one of --summary or --summary-file may be specified")
+        }
+
+        @Test
+        fun shouldThrowParameterExceptionWhenSummaryFileDoesNotExist() {
+            val missingFile = File("does-not-exist.txt").absolutePath
+
+            assertThatThrownBy { App.resolveSummary(summary = null, summaryFile = missingFile, spec = spec) }
+                .isInstanceOf(CommandLine.ParameterException::class.java)
+                .hasMessage("Summary file does not exist: $missingFile")
+        }
+
+        @Test
+        fun shouldThrowParameterExceptionWhenSummaryFileIsNotARegularFile(@TempDir tempDir: Path) {
+            val file = tempDir.toFile()
+
+            assertThatThrownBy {
+                App.resolveSummary(
+                    summary = null,
+                    summaryFile = file.absolutePath,
+                    spec = spec
+                )
+            }.isInstanceOf(CommandLine.ParameterException::class.java)
+                .hasMessage("Summary file is not a regular file: ${file.absolutePath}")
+        }
+
+        @Test
+        fun shouldThrowParameterExceptionWhenSummaryFileIsNotReadable(@TempDir tempDir: Path) {
+            val file = tempDir.resolve("summary.txt")
+            file.writeText("Secret summary")
+
+            val supportsPosix = Files.getFileStore(file).supportsFileAttributeView(PosixFileAttributeView::class.java)
+            assumeThat(supportsPosix)
+                .describedAs("POSIX file permissions not supported on this filesystem")
+                .isTrue()
+
+            // Remove read permission (POSIX only)
+            Files.setPosixFilePermissions(
+                file,
+                setOf(PosixFilePermission.OWNER_WRITE)
+            )
+
+            val summaryFilePath = file.absolutePathString()
+            assertThatThrownBy {
+                App.resolveSummary(
+                    summary = null,
+                    summaryFile = summaryFilePath,
+                    spec = spec
+                )
+            }.isInstanceOf(CommandLine.ParameterException::class.java)
+                .hasMessage("Summary file is not readable: $summaryFilePath")
         }
     }
 }

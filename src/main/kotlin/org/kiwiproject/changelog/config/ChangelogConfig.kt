@@ -13,10 +13,13 @@ enum class OutputType {
     }
 }
 
-data class ChangelogConfig(val date: ZonedDateTime = nowUtc(),
-                           val outputType: OutputType = OutputType.CONSOLE,
-                           val outputFile: File? = null,
-                           val categoryConfig: CategoryConfig) {
+data class ChangelogConfig(
+    val date: ZonedDateTime = nowUtc(),
+    val outputType: OutputType = OutputType.CONSOLE,
+    val outputFile: File? = null,
+    val categoryConfig: CategoryConfig,
+    val summary: String? = null
+) {
 
     val dateString: String = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX").format(date)
 }
