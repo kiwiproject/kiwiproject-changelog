@@ -317,22 +317,44 @@ class App : Runnable {
     private fun printArgValues() {
         println()
         println("ℹ️  Arguments:")
+
+        // GitHub options
         println("✔ repoHostUrl = $repoHostUrl")
         println("✔ repoHostApi = $repoHostApi")
         println("✔ token = $token")
+
+        // Repository options
         println("✔ repository = $repository")
         println("✔ previousRevision = $previousRevision")
         println("✔ revision = $revision")
+
+        // Output options
         println("✔ outputType = $outputType")
         println("✔ outputFile = $outputFile")
+
+        // Changelog content options
         println("✔ summary = ${summary?.preview()}")
         println("✔ summaryFile = $summaryFile")
+
+        // Category options
         println("✔ defaultCategory = $defaultCategory")
         println("✔ labelToCategoryMappings = $labelToCategoryMappings")
         println("✔ categoryToEmojiMappings = $categoryToEmojiMappings")
         println("✔ categoryOrder = $categoryOrder")
+
+        // External configuration
         println("✔ configFile = $configFile")
+        println("✔ ignoreConfigFiles = $ignoreConfigFiles")
+
+        // Milestone options
+        println("✔ milestone = $milestone")
+        println("✔ createNextMilestone = $createNextMilestone")
+        println("✔ closeMilestone = $closeMilestone")
         println("✔ stripVPrefixFromNextMilestone = $stripVPrefixFromNextMilestone")
+
+        // Debug options
+        println("✔ debugArgs = $debugArgs")
+
         println("----------")
     }
 
