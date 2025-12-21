@@ -119,7 +119,8 @@ class AppTest {
             )
         )
 
-        assertExecutionWithAllArgs(exitCode, app)
+        assertExecutionWithCommonArgs(exitCode, app)
+        assertThat(app.stripVPrefixFromNextMilestone).isNull()
     }
 
     @Test
@@ -175,15 +176,17 @@ class AppTest {
                 "0.12.0",
                 "--create-next-milestone",
                 "0.13.0",
+                "--strip-v-prefix-from-next-milestone",
                 "--summary",
                 "This is a cool summary of the release!"
             )
         )
 
-        assertExecutionWithAllArgs(exitCode, app)
+        assertExecutionWithCommonArgs(exitCode, app)
+        assertExecutionWithLongOnlyArgs(app)
     }
 
-    private fun assertExecutionWithAllArgs(exitCode: Int, app: App) {
+    private fun assertExecutionWithCommonArgs(exitCode: Int, app: App) {
         assertAll(
             { assertThat(exitCode).isZero() },
             { assertThat(app.debugArgs).isTrue() },
@@ -226,6 +229,10 @@ class AppTest {
             { assertThat(app.summary).isEqualTo("This is a cool summary of the release!") },
             { assertThat(app.summaryFile).isNull() },
         )
+    }
+
+    private fun assertExecutionWithLongOnlyArgs(app: App) {
+        assertThat(app.stripVPrefixFromNextMilestone).isTrue()
     }
 
     @ParameterizedTest
