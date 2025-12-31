@@ -405,7 +405,7 @@ class GitHubSearchManagerTest {
 
             assertThatIllegalStateException()
                 .isThrownBy { searchManager.findAnnotatedTag("v1.0.0") }
-                .withMessage("Expected object.type to be 'tag', but was 'THIS_IS_WRONG'")
+                .withMessage("Expected annotated tag for 'v1.0.0' but got type 'THIS_IS_WRONG'. Only annotated tags are supported (use git tag -a).")
 
             assertGetTagRefRequest()
             server.assertNoMoreRequests()

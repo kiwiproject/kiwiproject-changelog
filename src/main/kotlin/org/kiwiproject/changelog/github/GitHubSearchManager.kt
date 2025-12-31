@@ -162,7 +162,7 @@ class GitHubSearchManager(
         val objectData = tagRefData.getMap("object")
         val type = objectData.getString("type")
         check(type == "tag") {
-            "Expected object.type to be 'tag', but was '$type'"
+            "Expected annotated tag for '$tagName' but got type '$type'. Only annotated tags are supported (use git tag -a)."
         }
         val tagUrl = getTagObjectUrl(objectData)
 

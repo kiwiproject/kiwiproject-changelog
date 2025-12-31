@@ -134,6 +134,8 @@ By default, the release date shown in the generated changelog is the current UTC
 time at the moment the changelog is generated. If you want the release date to reflect when
 the version was actually tagged, you can use the `--use-tag-date-for-release` option. When
 specified, the release date is taken from the annotated Git tag associated with the revision.
+Note: This option requires the release tag to be an annotated Git tag. See
+[Annotated tags required for `--use-tag-date-for-release`](#annotated-tags-required-for---use-tag-date-for-release).
 
 ### How to prevent duplicates in change logs
 
@@ -149,6 +151,19 @@ straight to main?) should be linked to a milestone so that they are included in 
 
 Similarly, pull requests that are not associated with an issue, such as ones created by dependabot,
 should be linked to a milestone so that they are included in the change log.
+
+### Annotated tags required for --use-tag-date-for-release
+
+When you use `--use-tag-date-for-release`, the Git tag associated with the release **must** be
+an *annotated* tag. Lightweight tags (created with `git tag <name>`) do not contain tagger 
+metadata and are not currently supported.
+
+To create an annotated tag:
+
+```bash
+git tag -a v1.2.3 -m "Release v1.2.3"
+git push origin v1.2.3
+```
 
 ## Command line arguments
 
