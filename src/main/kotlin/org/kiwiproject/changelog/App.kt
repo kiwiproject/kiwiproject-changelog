@@ -8,9 +8,21 @@ import org.kiwiproject.changelog.config.ConfigHelpers.externalConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.extension.preview
-import org.kiwiproject.changelog.github.*
+import org.kiwiproject.changelog.github.GitHubApi
+import org.kiwiproject.changelog.github.GitHubMilestone
+import org.kiwiproject.changelog.github.GitHubMilestoneManager
+import org.kiwiproject.changelog.github.GitHubPagingHelper
+import org.kiwiproject.changelog.github.GitHubReleaseManager
+import org.kiwiproject.changelog.github.GitHubSearchManager
 import picocli.CommandLine
-import picocli.CommandLine.*
+import picocli.CommandLine.Command
+import picocli.CommandLine.ITypeConverter
+import picocli.CommandLine.IVersionProvider
+import picocli.CommandLine.Model
+import picocli.CommandLine.Option
+import picocli.CommandLine.ParameterException
+import picocli.CommandLine.Spec
+import picocli.CommandLine.TypeConversionException
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -221,6 +233,12 @@ class App : Runnable {
     )
     var summaryFile: String? = null
 
+    @Option(
+        names = ["--use-tag-date-for-release"],
+        description = ["Use the annotated Git tag date as the release date in the changelog."]
+    )
+    var useTagDateForRelease: Boolean? = null
+
     // Debug options
 
     @Option(
@@ -273,7 +291,9 @@ class App : Runnable {
         }
         val out = outputFile?.let { File(it) }
 
+        val useTagDate = useTagDateForRelease ?: externalConfig.useTagDateForRelease
         val changeLogConfig = ChangelogConfig(
+            useTagDateForRelease = useTagDate,
             outputType = outputType,
             outputFile = out,
             categoryConfig = categoryConfig,

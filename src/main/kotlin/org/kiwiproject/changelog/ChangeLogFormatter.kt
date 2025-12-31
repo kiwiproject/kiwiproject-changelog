@@ -5,14 +5,19 @@ import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.extension.doesNotContainKey
 import org.kiwiproject.changelog.github.GitHubChange
 import org.kiwiproject.changelog.github.GitHubSearchManager.CommitAuthorsResult
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
+
+private val CHANGELOG_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
 
 fun formatChangeLog(
     commitAuthorsResult: CommitAuthorsResult,
     gitHubChanges: List<GitHubChange>,
     repoConfig: RepoConfig,
     changelogConfig: ChangelogConfig,
-    githubRepoUrl: String
+    githubRepoUrl: String,
+    releaseDate: ZonedDateTime
 ) : String {
 
     val template = """
@@ -30,7 +35,7 @@ fun formatChangeLog(
     }
 
     val logData = mapOf(
-        "date" to changelogConfig.dateString,
+        "date" to CHANGELOG_DATE_FORMAT.format(releaseDate),
         "commitCount" to "${commitAuthorsResult.totalCommits}",
         "repoUrl" to githubRepoUrl,
         "previousRev" to repoConfig.previousRevision,

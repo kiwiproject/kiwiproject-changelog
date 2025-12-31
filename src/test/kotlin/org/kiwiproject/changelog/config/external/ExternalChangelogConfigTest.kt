@@ -66,7 +66,8 @@ class ExternalChangelogConfigTest {
                     )
                 )
             },
-            { assertThat(config.stripVPrefixFromNextMilestone).isTrue() }
+            { assertThat(config.stripVPrefixFromNextMilestone).isTrue() },
+            { assertThat(config.useTagDateForRelease).isFalse() }
         )
     }
 
@@ -112,6 +113,14 @@ class ExternalChangelogConfigTest {
     }
 
     @Test
+    fun shouldReadConfig_ThatHasUseTagDateForRelease() {
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-use-tag-date.yml")
+        val config = readConfig(yaml)
+
+        assertThat(config.useTagDateForRelease).isTrue()
+    }
+
+    @Test
     fun shouldReadEmptyConfig() {
         val yaml = Fixtures.fixture("kiwi-changelog-configs/empty-changelog.yml")
         val config = readConfig(yaml)
@@ -121,7 +130,8 @@ class ExternalChangelogConfigTest {
             { assertThat(config.labelCategoryMap()).isEmpty() },
             { assertThat(config.categoryOrder()).isEmpty() },
             { assertThat(config.defaultCategory()).isNull() },
-            { assertThat(config.stripVPrefixFromNextMilestone).isTrue() }
+            { assertThat(config.stripVPrefixFromNextMilestone).isTrue() },
+            { assertThat(config.useTagDateForRelease).isFalse() }
         )
     }
 

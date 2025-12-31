@@ -1,0 +1,24 @@
+{
+  "node_id": "TA_kwDOE8r0GNoAKGFlZmM2ZmIzNjFjNzA3NTcxNzYzZmZkZWYyYzJlOTg5MjdiOTI3MzI",
+  "sha": "aefc6fb361c707571763ffdef2c2e98927b92732",
+  "url": "https://api.github.com/repos/kiwiproject/kiwiproject-changelog/git/tags/aefc6fb361c707571763ffdef2c2e98927b92732",
+  "tagger": {
+    "name": "Scott Leberknight",
+    "email": "174812+sleberknight@users.noreply.github.com",
+    "date": "2024-08-10T18:45:39Z"
+  },
+  "object": {
+    "sha": "3cd8a5eca1e9e06e0ca098e355564ee38f25c185",
+    "type": "commit",
+    "url": "https://api.github.com/repos/kiwiproject/kiwiproject-changelog/git/commits/3cd8a5eca1e9e06e0ca098e355564ee38f25c185"
+  },
+  "tag": "v1.0.0",
+  "message": "[maven-release-plugin] copy for tag v1.0.0\n",
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null,
+    "verified_at": null
+  }
+}

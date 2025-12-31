@@ -38,7 +38,8 @@ class ChangeLogFormatterKtTest {
                 changes,
                 repoConfig,
                 changelogConfig,
-                repoConfig.repoUrl()
+                repoConfig.repoUrl(),
+                changelogConfig.date
             )
 
             assertThat(changelog.trim())
@@ -67,7 +68,8 @@ class ChangeLogFormatterKtTest {
                 changes,
                 repoConfig,
                 changelogConfig,
-                repoConfig.repoUrl()
+                repoConfig.repoUrl(),
+                changelogConfig.date
             )
 
             assertThat(changelog.trim()).isEqualTo(
@@ -109,7 +111,8 @@ class ChangeLogFormatterKtTest {
                 changes,
                 repoConfig,
                 changelogConfig,
-                repoConfig.repoUrl()
+                repoConfig.repoUrl(),
+                changelogConfig.date
             )
 
             assertThat(changelog.trim()).isEqualTo(

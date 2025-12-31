@@ -150,6 +150,36 @@ class GitHubSearchManager(
     private fun createCompareCommitsUrl(base: String, head: String): String =
         "${repoConfig.apiUrl}/repos/${repoConfig.repository}/compare/${base}...${head}?per_page=100&page=1"
 
+    fun findAnnotatedTag(tagName: String): GitHubTag {
+        // Get the tag reference and extract the tag object URL
+        val tagRefUrl = "${repoConfig.apiUrl}/repos/${repoConfig.repository}/git/refs/tags/$tagName"
+        val tagRefResponse = api.get(tagRefUrl)
+        check(tagRefResponse.statusCode == 200) {
+            "Get tag $tagName was unsuccessful. Status: ${tagRefResponse.statusCode}. Text: ${tagRefResponse.content}"
+        }
+
+        val tagRefData = mapper.readValue<Map<String, Any>>(tagRefResponse.content)
+        val objectData = tagRefData.getMap("object")
+        val type = objectData.getString("type")
+        check(type == "tag") {
+            "Expected object.type to be 'tag', but was '$type'"
+        }
+        val tagUrl = getTagObjectUrl(objectData)
+
+        // Now get the tag object and extract the tag date
+        val tagResponse = api.get(tagUrl)
+        check(tagResponse.statusCode == 200) {
+            "Get tag object was unsuccessful. Status: ${tagResponse.statusCode}. Text: ${tagResponse.content}"
+        }
+
+        val tagData = mapper.readValue<Map<String, Any>>(tagResponse.content)
+        val tagger = tagData.getMap("tagger")
+        val date = ZonedDateTime.parse(tagger.getString("date"))
+        return GitHubTag(tagName, date)
+    }
+
+    @VisibleForTesting
+    internal fun getTagObjectUrl(objectData: Map<String, Any>): String = objectData.getString("url")
 }
 
 data class GitHubIssue(
@@ -171,3 +201,6 @@ data class GitHubUser(
         return if (htmlUrl != null) "[$name](${htmlUrl})" else name
     }
 }
+
+data class GitHubTag(val name: String,
+                     val createdAt: ZonedDateTime)

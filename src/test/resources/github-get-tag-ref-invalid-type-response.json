@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v1.0.0",
+  "node_id": "MDM6UmVmMzMyMDY3ODY0OnJlZnMvdGFncy92MS4wLjA=",
+  "url": "https://api.github.com/repos/kiwiproject/kiwiproject-changelog/git/refs/tags/v1.0.0",
+  "object": {
+    "sha": "aefc6fb361c707571763ffdef2c2e98927b92732",
+    "type": "THIS_IS_WRONG",
+    "url": "https://api.github.com/repos/kiwiproject/kiwiproject-changelog/git/tags/aefc6fb361c707571763ffdef2c2e98927b92732"
+  }
+}

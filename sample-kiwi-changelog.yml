@@ -1,5 +1,7 @@
 ---
 
+useTagDateForRelease: true
+
 categories:
 
   - name: Breaking Changes

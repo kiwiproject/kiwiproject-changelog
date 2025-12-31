@@ -23,11 +23,15 @@ import org.kiwiproject.changelog.extension.takeRequestWith1SecTimeout
 import org.kiwiproject.changelog.extension.urlWithoutTrailingSlashAsString
 import org.kiwiproject.test.junit.jupiter.ClearBoxTest
 import org.kiwiproject.test.util.Fixtures
+import org.mockito.ArgumentMatchers.anyMap
+import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.spy
 
 @DisplayName("GitHubSearchManager")
 class GitHubSearchManagerTest {
 
     private lateinit var server: MockWebServer
+    private lateinit var repoConfig: RepoConfig
     private lateinit var searchManager: GitHubSearchManager
     private val mapper = jacksonObjectMapper()
 
@@ -39,7 +43,7 @@ class GitHubSearchManagerTest {
         server = mockWebServerExtension.server
 
         val token = RandomStringUtils.secure().nextAlphanumeric(40)
-        val repoConfig = RepoConfig(
+        repoConfig = RepoConfig(
             "https://fake-github.com",
             server.urlWithoutTrailingSlashAsString(),
             token,
@@ -333,5 +337,161 @@ class GitHubSearchManagerTest {
 
             assertThat(user.asMarkdown()).isEqualTo("Bob")
         }
+    }
+
+    @Nested
+    inner class FindAnnotatedTag {
+
+        val tagUrlPath = "/repos/kiwiproject/kiwiproject-changelog/git/tags/aefc6fb361c707571763ffdef2c2e98927b92732"
+
+        @Test
+        fun shouldFindTheTag() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(getTagRefResponseJson())
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(getTagObjectResponseJson())
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            val searchManagerSpy = searchManagerUsingMockServerForTagObject()
+
+            val gitHubTag = searchManagerSpy.findAnnotatedTag("v1.0.0")
+
+            assertAll(
+                { assertThat(gitHubTag.name).isEqualTo("v1.0.0") },
+                { assertThat(gitHubTag.createdAt).isEqualTo("2024-08-10T18:45:39Z") },
+            )
+
+            assertGetTagRefRequest()
+            assertTagObjectRequest()
+            server.assertNoMoreRequests()
+        }
+
+        @Test
+        fun shouldThrowIllegalState_IfGetTagRefRequestFails() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(404)
+                    .setBody("Not Found")
+                    .addGitHubRateLimitHeaders()
+            )
+
+            assertThatIllegalStateException()
+                .isThrownBy { searchManager.findAnnotatedTag("v1.0.0") }
+                .withMessage("Get tag v1.0.0 was unsuccessful. Status: 404. Text: Not Found")
+
+            assertGetTagRefRequest()
+            server.assertNoMoreRequests()
+        }
+
+        @Test
+        fun shouldThrowIllegalState_IfTagObjectTypeIsNotTag() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(getTagRefWithInvalidTypeResponseJson())
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            assertThatIllegalStateException()
+                .isThrownBy { searchManager.findAnnotatedTag("v1.0.0") }
+                .withMessage("Expected object.type to be 'tag', but was 'THIS_IS_WRONG'")
+
+            assertGetTagRefRequest()
+            server.assertNoMoreRequests()
+        }
+
+        @Test
+        fun shouldThrowIllegalState_IfGetTagObjectRequestFails() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(getTagRefResponseJson())
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(404)
+                    .setBody("Not Found")
+                    .addGitHubRateLimitHeaders()
+            )
+
+            val searchManagerSpy = searchManagerUsingMockServerForTagObject()
+
+            assertThatIllegalStateException()
+                .isThrownBy { searchManagerSpy.findAnnotatedTag("v1.0.0") }
+                .withMessage("Get tag object was unsuccessful. Status: 404. Text: Not Found")
+
+            assertGetTagRefRequest()
+            assertTagObjectRequest()
+            server.assertNoMoreRequests()
+        }
+
+        fun searchManagerUsingMockServerForTagObject(): GitHubSearchManager {
+            // Because the findAnnotatedTag function makes a second request to the URL
+            // it finds in the response, we need to tell it to use the URL of the mock server
+            // instead of going to the actual URL.
+            val searchManagerSpy = spy<GitHubSearchManager>(searchManager)
+            doReturn("${repoConfig.apiUrl}$tagUrlPath")
+                .`when`(searchManagerSpy)
+                .getTagObjectUrl(anyMap())
+
+            return searchManagerSpy
+        }
+
+        private fun assertGetTagRefRequest() {
+            val getTagRefRequest = server.takeRequestWith1SecTimeout()
+            assertAll(
+                { assertThat(getTagRefRequest.method).isEqualTo("GET") },
+                {
+                    assertThat(getTagRefRequest.path).isEqualTo(
+                        "/repos/kiwiproject/kiwiproject-changelog/git/refs/tags/v1.0.0"
+                    )
+                }
+            )
+        }
+
+        private fun assertTagObjectRequest() {
+            val getTagObjectRequest = server.takeRequestWith1SecTimeout()
+            assertAll(
+                { assertThat(getTagObjectRequest.method).isEqualTo("GET") },
+                { assertThat(getTagObjectRequest.path).isEqualTo(tagUrlPath) }
+            )
+        }
+
+        @Test
+        fun getTagObjectUrl_ShouldReturnValueForUrlKey() {
+            val url =
+                "https://api.github.com/repos/kiwiproject/kiwiproject-changelog/git/tags/aefc6fb361c707571763ffdef2c2e98927b92732"
+
+            val tagRefObject = mapOf<String, Any>(
+                "sha" to "aefc6fb361c707571763ffdef2c2e98927b92732",
+                "type" to "tag",
+                "url" to url
+            )
+
+            assertThat(searchManager.getTagObjectUrl(tagRefObject)).isEqualTo(url)
+        }
+
+        private fun getTagRefResponseJson() : String =
+            Fixtures.fixture("github-get-tag-ref-response.json")
+
+        private fun getTagRefWithInvalidTypeResponseJson() : String =
+            Fixtures.fixture("github-get-tag-ref-invalid-type-response.json")
+
+        private fun getTagObjectResponseJson() : String =
+            Fixtures.fixture("github-get-tag-object-response.json")
     }
 }
