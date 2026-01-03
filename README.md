@@ -130,6 +130,13 @@ Labels on the issues and pull requests are mapped to a category.
 For example, the label "enhancement" might map to the category "Improvements."
 And you can also specify an emoji for each category for a nicer-looking changelog.
 
+By default, the release date shown in the generated changelog is the current UTC date and
+time at the moment the changelog is generated. If you want the release date to reflect when
+the version was actually tagged, you can use the `--use-tag-date-for-release` option. When
+specified, the release date is taken from the annotated Git tag associated with the revision.
+Note: This option requires the release tag to be an annotated Git tag. See
+[Annotated tags required for `--use-tag-date-for-release`](#annotated-tags-required-for---use-tag-date-for-release).
+
 ### How to prevent duplicates in change logs
 
 Because change logs are generated from the issues and pull requests associated with
@@ -145,11 +152,29 @@ straight to main?) should be linked to a milestone so that they are included in 
 Similarly, pull requests that are not associated with an issue, such as ones created by dependabot,
 should be linked to a milestone so that they are included in the change log.
 
+### Annotated tags required for --use-tag-date-for-release
+
+When you use `--use-tag-date-for-release`, the Git tag associated with the release **must** be
+an *annotated* tag. Lightweight tags (created with `git tag <name>`) do not contain tagger 
+metadata and are not currently supported.
+
+To create an annotated tag:
+
+```bash
+git tag -a v1.2.3 -m "Release v1.2.3"
+git push origin v1.2.3
+```
+
 ## Command line arguments
 
 Here is a sample argument list that generates a changelog for the [kiwi](https://github.com/kiwiproject/kiwi)
 project (inside the kiwiproject organization on GitHub) for version 2.5.0.
 It creates the changelog comparing from revision v2.4.0 to v2.5.0.
+
+By using the `--use-tag-date-for-release` option, the release date in the
+changelog will be the date from the annotated Git tag associated with the revision
+instead of the current UTC date and time.
+
 It also maps several labels to categories, e.g., `-m bug:Bugs` maps from the GitHub label `bugs` to the
 changelog category "Bugs" (you can also use `--mapping`). The `-O` option (you can also use `--category-order`)
 specifies the order of the categories in the generated changelog.
@@ -160,6 +185,7 @@ specifies the order of the categories in the generated changelog.
 --repository kiwiproject/kiwi
 --previous-rev v2.4.0
 --revision v2.5.0
+--use-tag-date-for-release
 -m bug:Bugs
 -m "new feature:Improvements"
 -m enhancement:Improvements
@@ -266,6 +292,20 @@ convention), you can disable this behavior in the external configuration file:
 ```yaml
 stripVPrefixFromNextMilestone: false
 ```
+
+### Using the Git annotated tag date as the release date
+
+You can use the `useTagDateForRelease` option in the external configuration file
+to set the release date in the changelog to the annotated Git tag date:
+
+```yaml
+useTagDateForRelease: true
+```
+
+When false or unspecified, the current UTC date and time are used.
+
+Setting this to `true` is equivalent to specifying `--use-tag-date-for-release` on the
+command line.
            
 ### Additional configuration examples
 
@@ -292,7 +332,7 @@ use the `--ignore-config-files` (or `-g`) command line flag.
 You can also override the above and specify a custom configuration file using the
 `--config-file` (or `-n`) command line option, e.g. `--config-file /path/to/custom/changelog.yml`.
 
-## Example usage with configuration file
+## Example usage with a configuration file
 
 If you export `KIWI_CHANGELOG_TOKEN` to your environment, and you use a configuration file, then
 generating change logs can be as simple as:

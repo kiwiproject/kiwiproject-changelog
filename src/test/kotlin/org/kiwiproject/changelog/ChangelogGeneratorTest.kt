@@ -14,12 +14,23 @@ import org.kiwiproject.changelog.config.CategoryConfig
 import org.kiwiproject.changelog.config.ChangelogConfig
 import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
-import org.kiwiproject.changelog.github.*
+import org.kiwiproject.changelog.extension.nowUtc
+import org.kiwiproject.changelog.github.GitHubIssue
+import org.kiwiproject.changelog.github.GitHubRelease
+import org.kiwiproject.changelog.github.GitHubReleaseManager
+import org.kiwiproject.changelog.github.GitHubSearchManager
 import org.kiwiproject.changelog.github.GitHubSearchManager.CommitAuthorsResult
+import org.kiwiproject.changelog.github.GitHubTag
+import org.kiwiproject.changelog.github.GitHubUser
 import org.kiwiproject.changelog.junit.StdIoExtension
 import org.kiwiproject.test.junit.jupiter.ClearBoxTest
 import org.kiwiproject.test.util.Fixtures
-import org.mockito.Mockito.*
+import org.mockito.Mockito.anyString
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.Mockito.verifyNoMoreInteractions
+import org.mockito.Mockito.`when`
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.ZoneOffset
@@ -129,6 +140,42 @@ class ChangelogGeneratorTest {
                 repoConfig.previousRevision,
                 repoConfig.revision
             )
+            verify(searchManager).findIssuesByMilestone(repoConfig.milestone())
+            verifyNoMoreInteractions(searchManager)
+            verifyNoInteractions(releaseManager)
+        }
+
+        @Test
+        fun shouldUseTagDateAsReleaseDate() {
+            val repoConfig = repoConfig()
+
+            val releaseDateTime = releaseDateTime()
+            val categoryConfig = categoryConfig()
+            val changelogConfig = ChangelogConfig(
+                useTagDateForRelease = true,
+                date = nowUtc().minusDays(1),
+                categoryConfig = categoryConfig
+            )
+
+            val releaseManager = mock(GitHubReleaseManager::class.java)
+            val searchManager = mock(GitHubSearchManager::class.java)
+
+            val changelogGenerator = ChangelogGenerator(repoConfig, changelogConfig, releaseManager, searchManager)
+
+            mockFindUniqueAuthors(searchManager)
+            mockIssueSearch(searchManager, releaseDateTime)
+            `when`(searchManager.findAnnotatedTag(repoConfig.revision))
+                .thenReturn(GitHubTag("v1.0.0", releaseDateTime))
+
+            val result = changelogGenerator.generate()
+
+            assertThat(result.changelogText.trimEnd()).isEqualTo(expectedChangelogContent())
+
+            verify(searchManager).findUniqueAuthorsInCommitsBetween(
+                repoConfig.previousRevision,
+                repoConfig.revision
+            )
+            verify(searchManager).findAnnotatedTag(repoConfig.revision)
             verify(searchManager).findIssuesByMilestone(repoConfig.milestone())
             verifyNoMoreInteractions(searchManager)
             verifyNoInteractions(releaseManager)

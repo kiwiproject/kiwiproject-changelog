@@ -1,8 +1,14 @@
 package org.kiwiproject.changelog
 
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.Assumptions.assumeThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -11,7 +17,13 @@ import org.kiwiproject.changelog.config.OutputType
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.github.GitHubMilestone
 import org.kiwiproject.changelog.github.GitHubMilestoneManager
-import org.mockito.Mockito.*
+import org.mockito.Mockito.anyInt
+import org.mockito.Mockito.anyString
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.only
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyNoMoreInteractions
+import org.mockito.Mockito.`when`
 import picocli.CommandLine
 import picocli.CommandLine.TypeConversionException
 import java.io.File
@@ -228,6 +240,7 @@ class AppTest {
             { assertThat(app.createNextMilestone).isEqualTo("0.13.0") },
             { assertThat(app.summary).isEqualTo("This is a cool summary of the release!") },
             { assertThat(app.summaryFile).isNull() },
+            { assertThat(app.useTagDateForRelease).isNull() }
         )
     }
 

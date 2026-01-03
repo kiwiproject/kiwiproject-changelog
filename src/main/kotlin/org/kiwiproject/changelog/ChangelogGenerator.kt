@@ -9,6 +9,7 @@ import org.kiwiproject.changelog.github.GitHubChange
 import org.kiwiproject.changelog.github.GitHubReleaseManager
 import org.kiwiproject.changelog.github.GitHubSearchManager
 import java.io.File
+import java.time.ZonedDateTime
 
 class ChangelogGenerator(
     private val repoConfig: RepoConfig,
@@ -18,6 +19,8 @@ class ChangelogGenerator(
 ) {
 
     fun generate(): GenerateResult {
+        val releaseDate = determineReleaseDate()
+
         println("🔎 Finding commits between ${repoConfig.previousRevision}..${repoConfig.revision}")
         val commitAuthorsResult =
             searchManager.findUniqueAuthorsInCommitsBetween(repoConfig.previousRevision, repoConfig.revision)
@@ -31,7 +34,14 @@ class ChangelogGenerator(
 
         println("🛠 Generating changelog based on ${changes.size} issues and PRs from GitHub for milestone ${repoConfig.milestone()}")
         val githubUrl = repoConfig.repoUrl()
-        val changeLog = formatChangeLog(commitAuthorsResult, changes, repoConfig, changeLogConfig, githubUrl)
+        val changeLog = formatChangeLog(
+            commitAuthorsResult,
+            changes,
+            repoConfig,
+            changeLogConfig,
+            githubUrl,
+            releaseDate
+        )
 
         println("📝 Writing out changelog to ${changeLogConfig.outputType}")
         writeChangeLog(changeLog)
@@ -42,6 +52,14 @@ class ChangelogGenerator(
             changes.size,
             changeLog
         )
+    }
+
+    private fun determineReleaseDate(): ZonedDateTime = if (changeLogConfig.useTagDateForRelease) {
+        println("🔎 Finding release date from tag ${repoConfig.revision}")
+        val (_, createdAt) = searchManager.findAnnotatedTag(repoConfig.revision)
+        createdAt
+    } else {
+        changeLogConfig.date
     }
 
     data class GenerateResult(
