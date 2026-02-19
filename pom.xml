@@ -30,7 +30,7 @@
         <!-- Versions for required dependencies -->
         <kiwi-libraries-bom.version>2.1.0</kiwi-libraries-bom.version>
         <kiwi-bom.version>3.0.2</kiwi-bom.version>
-        <kotlin-logging-jvm.version>7.0.14</kotlin-logging-jvm.version>
+        <kotlin-logging-jvm.version>8.0.01</kotlin-logging-jvm.version>
         <picocli.version>4.7.7</picocli.version>
 
         <!-- Versions for test dependencies -->
