@@ -231,6 +231,17 @@ class App : Runnable {
     )
     var addVPrefixToRevisions: Boolean? = null
 
+    // Output formatting options
+
+    @Option(
+        names = ["--hyperlinks"],
+        negatable = true,
+        description = ["Whether to render URLs as OSC 8 hyperlinks in terminal status messages.",
+            "Only takes effect in terminals that support OSC 8 hyperlinks (default: false).",
+            "Use --no-hyperlinks to override a hyperlinks: true setting in the configuration file."]
+    )
+    var hyperlinks: Boolean? = null
+
     // Summary options
 
     @Option(
@@ -332,9 +343,10 @@ class App : Runnable {
         // Optional: close the milestone
         val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
         val shouldCloseMilestone = closeMilestone ?: externalConfig.closeMilestone
+        val shouldUseHyperlinks = hyperlinks ?: externalConfig.hyperlinks
         if (shouldCloseMilestone) {
             val closedMilestone = closeMilestone(repoConfig, milestone, milestoneManager)
-            println("✅ Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
+            println("✅ Closed milestone ${closedMilestone.title}. See it at ${formatUrl(closedMilestone.htmlUrl, shouldUseHyperlinks)}")
         }
 
         // Optional: create a new milestone
@@ -342,7 +354,7 @@ class App : Runnable {
             val shouldStripV = stripVPrefixFromNextMilestone ?: externalConfig.stripVPrefixFromNextMilestone
             val finalNextMilestone = resolveNextMilestone(createNextMilestone!!, shouldStripV)
             val newMilestone = createMilestone(finalNextMilestone, milestoneManager)
-            println("✅ Created new milestone ${newMilestone.title}. See it at ${newMilestone.htmlUrl}")
+            println("✅ Created new milestone ${newMilestone.title}. See it at ${formatUrl(newMilestone.htmlUrl, shouldUseHyperlinks)}")
         }
 
         println("🍻 Cheers!")
@@ -386,6 +398,7 @@ class App : Runnable {
         println("✔ closeMilestone = $closeMilestone")
         println("✔ stripVPrefixFromNextMilestone = $stripVPrefixFromNextMilestone")
         println("✔ addVPrefixToRevisions = $addVPrefixToRevisions")
+        println("✔ hyperlinks = $hyperlinks")
 
         // Debug options
         println("✔ debugArgs = $debugArgs")
@@ -409,6 +422,10 @@ class App : Runnable {
 
         @VisibleForTesting
         internal data class AppResult(val exitCode: Int, val app: App)
+
+        @VisibleForTesting
+        fun formatUrl(url: String, hyperlinks: Boolean): String =
+            if (hyperlinks) "\u001B]8;;$url\u001B\\$url\u001B]8;;\u001B\\" else url
 
         @VisibleForTesting
         fun normalizeRepository(repository: String): String = repository.trim('/')

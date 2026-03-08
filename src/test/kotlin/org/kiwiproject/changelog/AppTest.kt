@@ -71,6 +71,7 @@ class AppTest {
             { assertThat(app.milestone).isNull() },
             { assertThat(app.createNextMilestone).isNull() },
             { assertThat(app.addVPrefixToRevisions).isNull() },
+            { assertThat(app.hyperlinks).isNull() },
         )
     }
 
@@ -191,6 +192,7 @@ class AppTest {
                 "0.13.0",
                 "--strip-v-prefix-from-next-milestone",
                 "--add-v-prefix-to-revisions",
+                "--hyperlinks",
                 "--summary",
                 "This is a cool summary of the release!"
             )
@@ -249,6 +251,7 @@ class AppTest {
     private fun assertExecutionWithLongOnlyArgs(app: App) {
         assertThat(app.stripVPrefixFromNextMilestone).isTrue()
         assertThat(app.addVPrefixToRevisions).isTrue()
+        assertThat(app.hyperlinks).isTrue()
     }
 
     @ParameterizedTest
@@ -451,6 +454,41 @@ class AppTest {
         )
 
         assertThat(app.closeMilestone).isFalse()
+    }
+
+    @Nested
+    inner class FormatUrl {
+
+        private val url = "https://github.com/kiwiproject/kiwi/milestones/42"
+
+        @Test
+        fun shouldReturnPlainUrl_WhenHyperlinksDisabled() {
+            assertThat(App.formatUrl(url, hyperlinks = false)).isEqualTo(url)
+        }
+
+        @Test
+        fun shouldReturnOsc8HyperlinkUrl_WhenHyperlinksEnabled() {
+            val result = App.formatUrl(url, hyperlinks = true)
+            assertThat(result).isEqualTo("\u001B]8;;$url\u001B\\$url\u001B]8;;\u001B\\")
+        }
+    }
+
+    @Test
+    fun shouldSetHyperlinksToFalse_WhenNoHyperlinksIsSpecified() {
+        val (_, app) = App.execute(
+            arrayOf(
+                "--debug-args",  // prevent execution
+                "--repository",
+                "kiwiproject/kiwi",
+                "--previous-rev",
+                "v0.11.0",
+                "--revision",
+                "v0.12.0",
+                "--no-hyperlinks"
+            )
+        )
+
+        assertThat(app.hyperlinks).isFalse()
     }
 
     @Nested
