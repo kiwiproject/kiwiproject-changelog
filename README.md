@@ -384,6 +384,27 @@ use the `--ignore-config-files` (or `-g`) command line flag.
 You can also override the above and specify a custom configuration file using the
 `--config-file` (or `-n`) command line option, e.g. `--config-file /path/to/custom/changelog.yml`.
 
+## Logging configuration
+
+By default, logging is written to stdout. Application-level messages are logged at INFO and above;
+all other messages are logged at WARN and above.
+
+To customize logging (for example, to log to a file instead of stdout), place a `logback.xml` file
+in `~/.kiwi-changelog/`. The launcher script will detect it automatically and use it in place of
+the default configuration.
+
+A sample configuration file is included in the installation directory as `logback-sample.xml`. It
+configures a rolling file appender that writes to `~/.kiwi-changelog/logs/kiwi-changelog.log`,
+keeping up to 5 files of 10MB each (50MB total). To use it:
+
+```shell
+mkdir -p ~/.kiwi-changelog
+cp ~/kiwiproject-changelog-script/logback-sample.xml ~/.kiwi-changelog/logback.xml
+```
+
+Then customize `~/.kiwi-changelog/logback.xml` as needed. See the
+[Logback configuration documentation](https://logback.qos.ch/manual/configuration.html) for details.
+
 ## Example usage with a configuration file
 
 If you export `KIWI_CHANGELOG_TOKEN` to your environment, and you use a configuration file, then
