@@ -195,9 +195,11 @@ class App : Runnable {
 
     @Option(
         names = ["-C", "--close-milestone"],
-        description = ["When set, the milestone associated with the revision is closed"]
+        negatable = true,
+        description = ["When set, the milestone associated with the revision is closed.",
+            "Use --no-close-milestone to override a closeMilestone: true setting in the configuration file."]
     )
-    var closeMilestone: Boolean = false
+    var closeMilestone: Boolean? = null
 
     @Option(
         names = ["-M", "--milestone"],
@@ -329,7 +331,8 @@ class App : Runnable {
 
         // Optional: close the milestone
         val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
-        if (closeMilestone) {
+        val shouldCloseMilestone = closeMilestone ?: externalConfig.closeMilestone
+        if (shouldCloseMilestone) {
             val closedMilestone = closeMilestone(repoConfig, milestone, milestoneManager)
             println("✅ Closed milestone ${closedMilestone.title}. See it at ${closedMilestone.htmlUrl}")
         }

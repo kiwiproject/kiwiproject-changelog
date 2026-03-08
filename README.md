@@ -314,6 +314,21 @@ passing `1.4.2` is treated as `v1.4.2`. This option is disabled by default.
 Setting this to `true` is equivalent to specifying `--add-v-prefix-to-revisions` on the
 command line.
 
+### Always closing the milestone
+
+By default, the milestone is only closed when `--close-milestone` (or `-C`) is passed on the
+command line. If you almost always want to close the milestone, you can enable this by default
+in the external configuration file:
+
+```yaml
+closeMilestone: true
+```
+
+When enabled, the milestone is closed automatically without needing to pass `--close-milestone`
+on every run. You can still suppress it for a specific run using `--no-close-milestone`.
+
+Setting this to `true` is equivalent to always specifying `--close-milestone` on the command line.
+
 ### Using the Git annotated tag date as the release date
 
 You can use the `useTagDateForRelease` option in the external configuration file
