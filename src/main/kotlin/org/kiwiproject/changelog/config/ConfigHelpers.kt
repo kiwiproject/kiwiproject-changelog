@@ -1,8 +1,15 @@
 package org.kiwiproject.changelog.config
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler
+import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
+import com.google.common.annotations.VisibleForTesting
+import org.kiwiproject.yaml.RuntimeYamlException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.kiwiproject.changelog.config.external.ExternalChangelogConfig
 import org.kiwiproject.json.LoggingDeserializationProblemHandler
@@ -71,14 +78,34 @@ internal object ConfigHelpers {
         return when (externalConfigYaml) {
             null -> ExternalChangelogConfig()
             else -> {
-                // TODO How to report deserialization problems? Just the WARN log? Add to ExternalChangelogConfig?
                 val yamlFactory = YAMLFactory().disable(YAMLGenerator.Feature.SPLIT_LINES)
                 val mapper = ObjectMapper(yamlFactory)
-                val handler = LoggingDeserializationProblemHandler()
-                mapper.addHandler(handler)
-                YamlHelper(mapper).toObject(externalConfigYaml, ExternalChangelogConfig::class.java)
+                val collectingHandler = CollectingDeserializationProblemHandler()
+                // Jackson prepends each handler to an internal linked list, so the last handler
+                // added is the first one called. CollectingDeserializationProblemHandler must be
+                // called first (returns false to continue the chain) so that
+                // LoggingDeserializationProblemHandler is also called (returns true to handle it).
+                mapper.addHandler(LoggingDeserializationProblemHandler())
+                mapper.addHandler(collectingHandler)
+                try {
+                    val config = YamlHelper(mapper).toObject(externalConfigYaml, ExternalChangelogConfig::class.java)
+                    collectingHandler.problems.forEach { problem -> println("⚠️  $problem") }
+                    config
+                } catch (e: RuntimeYamlException) {
+                    val cause = e.cause
+                    if (cause is InvalidFormatException) {
+                        println("⚠️  ${invalidFormatMessage(cause)}")
+                    }
+                    throw e
+                }
             }
         }
+    }
+
+    @VisibleForTesting
+    internal fun invalidFormatMessage(cause: InvalidFormatException): String {
+        val location = if (cause.location != null) " (line ${cause.location.lineNr}, column ${cause.location.columnNr})" else ""
+        return "Invalid value in configuration file$location: ${cause.originalMessage}"
     }
 
     fun buildCategoryConfig(
@@ -108,5 +135,21 @@ internal object ConfigHelpers {
             finalCategoryOrder,
             mergedCategoryToEmojiMappings
         )
+    }
+}
+
+private class CollectingDeserializationProblemHandler : DeserializationProblemHandler() {
+
+    val problems = mutableListOf<String>()
+
+    override fun handleUnknownProperty(
+        ctxt: DeserializationContext,
+        p: JsonParser,
+        deserializer: JsonDeserializer<*>,
+        beanOrClass: Any,
+        propertyName: String
+    ): Boolean {
+        problems.add("Unknown property '$propertyName' in configuration file")
+        return false  // let LoggingDeserializationProblemHandler handle it next
     }
 }
