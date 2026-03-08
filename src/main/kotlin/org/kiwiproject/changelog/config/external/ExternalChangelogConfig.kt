@@ -10,6 +10,7 @@ data class ExternalChangelogConfig(
     val stripVPrefixFromNextMilestone: Boolean = true,
     val addVPrefixToRevisions: Boolean = false,
     val closeMilestone: Boolean = false,
+    val hyperlinks: Boolean = false,
     val useTagDateForRelease: Boolean = false
 ) {
 

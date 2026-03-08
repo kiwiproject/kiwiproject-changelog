@@ -69,6 +69,7 @@ class ExternalChangelogConfigTest {
             { assertThat(config.stripVPrefixFromNextMilestone).isTrue() },
             { assertThat(config.addVPrefixToRevisions).isFalse() },
             { assertThat(config.closeMilestone).isFalse() },
+            { assertThat(config.hyperlinks).isFalse() },
             { assertThat(config.useTagDateForRelease).isFalse() }
         )
     }
@@ -115,6 +116,14 @@ class ExternalChangelogConfigTest {
     }
 
     @Test
+    fun shouldReadConfig_ThatHasHyperlinks() {
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-hyperlinks.yml")
+        val config = readConfig(yaml)
+
+        assertThat(config.hyperlinks).isTrue()
+    }
+
+    @Test
     fun shouldReadConfig_ThatHasCloseMilestone() {
         val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-close-milestone.yml")
         val config = readConfig(yaml)
@@ -151,6 +160,7 @@ class ExternalChangelogConfigTest {
             { assertThat(config.stripVPrefixFromNextMilestone).isTrue() },
             { assertThat(config.addVPrefixToRevisions).isFalse() },
             { assertThat(config.closeMilestone).isFalse() },
+            { assertThat(config.hyperlinks).isFalse() },
             { assertThat(config.useTagDateForRelease).isFalse() }
         )
     }

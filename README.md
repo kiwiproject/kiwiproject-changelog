@@ -329,6 +329,22 @@ on every run. You can still suppress it for a specific run using `--no-close-mil
 
 Setting this to `true` is equivalent to always specifying `--close-milestone` on the command line.
 
+### Clickable URLs in terminal output
+
+When running in a terminal that supports [OSC 8 hyperlinks](https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda)
+(such as iTerm2, GNOME Terminal, Windows Terminal, Kitty, and WezTerm), URLs in status
+messages can be rendered as clickable links. This is disabled by default since unsupported
+terminals may display the raw escape sequences.
+
+To enable, set the following in the external configuration file:
+
+```yaml
+hyperlinks: true
+```
+
+Setting this to `true` is equivalent to specifying `--hyperlinks` on the command line.
+You can override a `hyperlinks: true` setting for a specific run using `--no-hyperlinks`.
+
 ### Using the Git annotated tag date as the release date
 
 You can use the `useTagDateForRelease` option in the external configuration file
