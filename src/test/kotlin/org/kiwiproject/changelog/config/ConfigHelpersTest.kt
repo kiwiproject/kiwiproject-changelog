@@ -1,16 +1,22 @@
 package org.kiwiproject.changelog.config
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwiproject.changelog.config.external.ExternalCategory
 import org.kiwiproject.changelog.config.external.ExternalChangelogConfig
+import org.kiwiproject.changelog.junit.StdIoExtension
 import org.kiwiproject.test.util.Fixtures.fixture
 import org.kiwiproject.test.util.Fixtures.fixturePath
+import org.kiwiproject.yaml.RuntimeYamlException
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -137,6 +143,77 @@ class ConfigHelpersTest {
                 "Assorted",
                 "Dependency Updates"
             )
+        }
+    }
+
+    @Nested
+    inner class ExternalConfigFromYaml {
+
+        @RegisterExtension
+        private val stdIo = StdIoExtension()
+
+        @Test
+        fun shouldPrintWarning_WhenConfigContainsUnknownProperty() {
+            val yaml = """
+                ---
+                unknownProperty: true
+            """.trimIndent()
+
+            ConfigHelpers.externalConfig(yaml)
+
+            assertThat(stdIo.capturedLines()).anyMatch { it.contains("Unknown property 'unknownProperty' in configuration file") }
+        }
+
+        @Test
+        fun shouldPrintWarningAndRethrow_WhenConfigContainsInvalidTypeForProperty() {
+            val yaml = """
+                ---
+                hyperlinks: not-a-boolean
+            """.trimIndent()
+
+            assertThatThrownBy { ConfigHelpers.externalConfig(yaml) }
+                .isInstanceOf(RuntimeYamlException::class.java)
+                .hasCauseInstanceOf(InvalidFormatException::class.java)
+
+            assertThat(stdIo.capturedLines()).anyMatch { it.contains("Invalid value in configuration file") }
+        }
+
+        @Test
+        fun shouldRethrowWithoutPrinting_WhenCauseIsNotInvalidFormatException() {
+            // "@" is a reserved character in YAML and causes a JsonParseException, not an InvalidFormatException
+            val yaml = "---\n@invalid"
+
+            val thrown = catchThrowable { ConfigHelpers.externalConfig(yaml) }
+            assertThat(thrown).isInstanceOf(RuntimeYamlException::class.java)
+            assertThat(thrown.cause).isNotInstanceOf(InvalidFormatException::class.java)
+            assertThat(stdIo.capturedLines()).noneMatch { it.contains("Invalid value in configuration file") }
+        }
+    }
+
+    @Nested
+    inner class InvalidFormatMessage {
+
+        @Test
+        fun shouldIncludeLineAndColumn_WhenLocationIsPresent() {
+            val yaml = "---\nhyperlinks: not-a-boolean"
+            val cause = runCatching { ConfigHelpers.externalConfig(yaml) }
+                .exceptionOrNull()
+                ?.cause as? InvalidFormatException
+                ?: error("Expected RuntimeYamlException with InvalidFormatException cause")
+
+            val message = ConfigHelpers.invalidFormatMessage(cause)
+
+            assertThat(message).contains("Invalid value in configuration file (line")
+            assertThat(message).contains("column")
+        }
+
+        @Test
+        fun shouldNotIncludeLineAndColumn_WhenLocationIsNull() {
+            val exception = InvalidFormatException.from(null, "test message", "bad-value", Boolean::class.java)
+
+            val message = ConfigHelpers.invalidFormatMessage(exception)
+
+            assertThat(message).isEqualTo("Invalid value in configuration file: test message")
         }
     }
 
