@@ -9,6 +9,7 @@ data class ExternalChangelogConfig(
     @JsonSetter(nulls = AS_EMPTY) val categories: List<ExternalCategory> = listOf(),
     val stripVPrefixFromNextMilestone: Boolean = true,
     val addVPrefixToRevisions: Boolean = false,
+    val closeMilestone: Boolean = false,
     val useTagDateForRelease: Boolean = false
 ) {
 

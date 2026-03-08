@@ -67,7 +67,7 @@ class AppTest {
             { assertThat(app.categoryToEmojiMappings).isEmpty() },
             { assertThat(app.configFile).isNull() },
             { assertThat(app.ignoreConfigFiles).isFalse() },
-            { assertThat(app.closeMilestone).isFalse() },
+            { assertThat(app.closeMilestone).isNull() },
             { assertThat(app.milestone).isNull() },
             { assertThat(app.createNextMilestone).isNull() },
             { assertThat(app.addVPrefixToRevisions).isNull() },
@@ -433,6 +433,24 @@ class AppTest {
 
             verify(milestoneManager, only()).getOpenMilestoneByTitleOrNull(title)
         }
+    }
+
+    @Test
+    fun shouldSetCloseMilestoneToFalse_WhenNoCloseMilestoneIsSpecified() {
+        val (_, app) = App.execute(
+            arrayOf(
+                "--debug-args",  // prevent execution
+                "--repository",
+                "kiwiproject/kiwi",
+                "--previous-rev",
+                "v0.11.0",
+                "--revision",
+                "v0.12.0",
+                "--no-close-milestone"
+            )
+        )
+
+        assertThat(app.closeMilestone).isFalse()
     }
 
     @Nested
