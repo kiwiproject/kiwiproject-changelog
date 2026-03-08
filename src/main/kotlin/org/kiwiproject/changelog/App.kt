@@ -284,7 +284,7 @@ class App : Runnable {
             repoHostUrl,
             repoHostApi,
             githubToken,
-            repository,
+            normalizeRepository(repository),
             previousRevision,
             revision,
             milestone
@@ -398,6 +398,9 @@ class App : Runnable {
 
         @VisibleForTesting
         internal data class AppResult(val exitCode: Int, val app: App)
+
+        @VisibleForTesting
+        fun normalizeRepository(repository: String): String = repository.trim('/')
 
         @VisibleForTesting
         fun resolveNextMilestone(title: String, stripVPrefix: Boolean): String {
