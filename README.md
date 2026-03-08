@@ -118,6 +118,11 @@ If the repository uses a different tag format, you need to specify the milestone
 For example, if tags use a format like `rel-1.4.2` then you can still generate the changelog
 as long as you specify the milestone.
 
+If you often forget to include the leading `v` when specifying revisions, you can use the
+`--add-v-prefix-to-revisions` option (or set `addVPrefixToRevisions: true` in the configuration
+file) to have it added automatically to both `--previous-rev` and `--revision` when not already
+present.
+
 Both the revision and the previous revision must be specified. The reason is so the
 changelog generator can find the unique _commit_ authors between these two revisions 
 and list them as contributors to the release. Note specifically that the contributors are
@@ -292,6 +297,22 @@ convention), you can disable this behavior in the external configuration file:
 ```yaml
 stripVPrefixFromNextMilestone: false
 ```
+
+### Adding the `v` prefix to revisions automatically
+
+When specifying `--previous-rev` and `--revision`, the values are expected to begin with `v`
+(e.g., `v1.4.2`). If you prefer to omit the `v` on the command line, you can enable automatic
+prefix addition in the external configuration file:
+
+```yaml
+addVPrefixToRevisions: true
+```
+
+When enabled, a leading `v` is added to both revisions if not already present. For example,
+passing `1.4.2` is treated as `v1.4.2`. This option is disabled by default.
+
+Setting this to `true` is equivalent to specifying `--add-v-prefix-to-revisions` on the
+command line.
 
 ### Using the Git annotated tag date as the release date
 
