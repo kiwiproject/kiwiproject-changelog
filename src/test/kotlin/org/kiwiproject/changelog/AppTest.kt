@@ -433,6 +433,35 @@ class AppTest {
     }
 
     @Nested
+    inner class NormalizeRepository {
+
+        @Test
+        fun shouldNotChangeRepositoryWithNoSlashes() {
+            assertThat(App.normalizeRepository("kiwiproject/kiwi")).isEqualTo("kiwiproject/kiwi")
+        }
+
+        @Test
+        fun shouldStripTrailingSlash() {
+            assertThat(App.normalizeRepository("kiwiproject/kiwi/")).isEqualTo("kiwiproject/kiwi")
+        }
+
+        @Test
+        fun shouldStripLeadingSlash() {
+            assertThat(App.normalizeRepository("/kiwiproject/kiwi")).isEqualTo("kiwiproject/kiwi")
+        }
+
+        @Test
+        fun shouldStripBothLeadingAndTrailingSlashes() {
+            assertThat(App.normalizeRepository("/kiwiproject/kiwi/")).isEqualTo("kiwiproject/kiwi")
+        }
+
+        @Test
+        fun shouldStripMultipleLeadingAndTrailingSlashes() {
+            assertThat(App.normalizeRepository("//kiwiproject/kiwi//")).isEqualTo("kiwiproject/kiwi")
+        }
+    }
+
+    @Nested
     inner class ResolveSummary {
 
         private lateinit var spec: CommandLine.Model.CommandSpec
