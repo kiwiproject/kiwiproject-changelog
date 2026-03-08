@@ -139,6 +139,7 @@ echo "📄  Copy files to installation directory"
 changelog_script_path="${install_dir}/${changelog_script_name}"
 cp "etc/install/README.txt" "$install_dir"
 cp "etc/install/generate-kiwi-changelog.sh" "$changelog_script_path"
+cp "etc/install/logback-sample.xml" "$install_dir"
 cp "$jar_file" "${install_dir}/kiwi-changelog-generator.jar"
 
 # Ensure the changelog script is executable
@@ -177,4 +178,12 @@ echo "${changelog_script_path} -V"
 echo
 echo "Or if you added the changelog script directory to PATH:"
 echo "${changelog_script_name} -h"
+echo
+echo "✅ To enable custom logging (e.g. log to a file), copy the sample Logback"
+echo "configuration to ~/.kiwi-changelog/logback.xml and customize it:"
+echo
+echo "mkdir -p ~/.kiwi-changelog"
+echo "cp ${install_dir}/logback-sample.xml ~/.kiwi-changelog/logback.xml"
+echo
+echo "See the README for more details on logging configuration."
 echo
