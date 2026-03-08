@@ -67,6 +67,7 @@ class ExternalChangelogConfigTest {
                 )
             },
             { assertThat(config.stripVPrefixFromNextMilestone).isTrue() },
+            { assertThat(config.addVPrefixToRevisions).isFalse() },
             { assertThat(config.useTagDateForRelease).isFalse() }
         )
     }
@@ -113,6 +114,14 @@ class ExternalChangelogConfigTest {
     }
 
     @Test
+    fun shouldReadConfig_ThatHasAddVPrefixToRevisions() {
+        val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-add-v-prefix.yml")
+        val config = readConfig(yaml)
+
+        assertThat(config.addVPrefixToRevisions).isTrue()
+    }
+
+    @Test
     fun shouldReadConfig_ThatHasUseTagDateForRelease() {
         val yaml = Fixtures.fixture("kiwi-changelog-configs/kiwi-changelog-use-tag-date.yml")
         val config = readConfig(yaml)
@@ -131,6 +140,7 @@ class ExternalChangelogConfigTest {
             { assertThat(config.categoryOrder()).isEmpty() },
             { assertThat(config.defaultCategory()).isNull() },
             { assertThat(config.stripVPrefixFromNextMilestone).isTrue() },
+            { assertThat(config.addVPrefixToRevisions).isFalse() },
             { assertThat(config.useTagDateForRelease).isFalse() }
         )
     }

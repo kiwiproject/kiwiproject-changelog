@@ -70,6 +70,7 @@ class AppTest {
             { assertThat(app.closeMilestone).isFalse() },
             { assertThat(app.milestone).isNull() },
             { assertThat(app.createNextMilestone).isNull() },
+            { assertThat(app.addVPrefixToRevisions).isNull() },
         )
     }
 
@@ -189,6 +190,7 @@ class AppTest {
                 "--create-next-milestone",
                 "0.13.0",
                 "--strip-v-prefix-from-next-milestone",
+                "--add-v-prefix-to-revisions",
                 "--summary",
                 "This is a cool summary of the release!"
             )
@@ -246,6 +248,7 @@ class AppTest {
 
     private fun assertExecutionWithLongOnlyArgs(app: App) {
         assertThat(app.stripVPrefixFromNextMilestone).isTrue()
+        assertThat(app.addVPrefixToRevisions).isTrue()
     }
 
     @ParameterizedTest
@@ -429,6 +432,31 @@ class AppTest {
             assertThat(existingMilestone).isSameAs(milestone)
 
             verify(milestoneManager, only()).getOpenMilestoneByTitleOrNull(title)
+        }
+    }
+
+    @Nested
+    inner class NormalizeRevision {
+
+        @ParameterizedTest
+        @ValueSource(strings = ["v1.4.2", "v2.0.0-beta", "v1.0.0"])
+        fun shouldNotChangeRevision_WhenAlreadyHasVPrefix(revision: String) {
+            assertThat(App.normalizeRevision(revision, addVPrefix = true)).isEqualTo(revision)
+        }
+
+        @ParameterizedTest
+        @CsvSource(textBlock = """
+            1.4.2, v1.4.2
+            2.0.0-beta, v2.0.0-beta
+            1.0.0, v1.0.0""")
+        fun shouldAddVPrefix_WhenEnabled(revision: String, expected: String) {
+            assertThat(App.normalizeRevision(revision, addVPrefix = true)).isEqualTo(expected)
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["1.4.2", "v1.4.2", "2.0.0-beta"])
+        fun shouldNotChangeRevision_WhenDisabled(revision: String) {
+            assertThat(App.normalizeRevision(revision, addVPrefix = false)).isEqualTo(revision)
         }
     }
 

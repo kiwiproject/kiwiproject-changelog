@@ -223,6 +223,12 @@ class App : Runnable {
     )
     var stripVPrefixFromNextMilestone: Boolean? = null
 
+    @Option(
+        names = ["--add-v-prefix-to-revisions"],
+        description = ["Whether to add a leading 'v' to the previous and current revision if not already present (default: false)."]
+    )
+    var addVPrefixToRevisions: Boolean? = null
+
     // Summary options
 
     @Option(
@@ -280,13 +286,14 @@ class App : Runnable {
             defaultCategory,
             externalConfig
         )
+        val shouldAddVPrefix = addVPrefixToRevisions ?: externalConfig.addVPrefixToRevisions
         val repoConfig = RepoConfig(
             repoHostUrl,
             repoHostApi,
             githubToken,
             normalizeRepository(repository),
-            previousRevision,
-            revision,
+            normalizeRevision(previousRevision, shouldAddVPrefix),
+            normalizeRevision(revision, shouldAddVPrefix),
             milestone
         )
 
@@ -375,6 +382,7 @@ class App : Runnable {
         println("✔ createNextMilestone = $createNextMilestone")
         println("✔ closeMilestone = $closeMilestone")
         println("✔ stripVPrefixFromNextMilestone = $stripVPrefixFromNextMilestone")
+        println("✔ addVPrefixToRevisions = $addVPrefixToRevisions")
 
         // Debug options
         println("✔ debugArgs = $debugArgs")
@@ -401,6 +409,10 @@ class App : Runnable {
 
         @VisibleForTesting
         fun normalizeRepository(repository: String): String = repository.trim('/')
+
+        @VisibleForTesting
+        fun normalizeRevision(revision: String, addVPrefix: Boolean): String =
+            if (addVPrefix && !revision.startsWith("v")) "v$revision" else revision
 
         @VisibleForTesting
         fun resolveNextMilestone(title: String, stripVPrefix: Boolean): String {

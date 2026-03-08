@@ -1,0 +1,23 @@
+---
+
+addVPrefixToRevisions: true
+
+categories:
+
+  - name: Improvements
+    labels:
+      - "new feature"
+      - "enhancement"
+
+  - name: Bugs
+    labels:
+      - "bug"
+
+  - name: Assorted
+    labels:
+      - "code cleanup"
+      - "refactoring"
+
+  - name: "Dependency Updates"
+    labels:
+      - dependencies
