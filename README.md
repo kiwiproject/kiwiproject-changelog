@@ -169,20 +169,9 @@ milestone.
 dependency update or a small direct fix — assign the milestone and label
 directly to the pull request so it is included in the changelog.
 
-### How to prevent duplicates in change logs
-
-Because change logs are generated from the issues and pull requests associated with
-a milestone, the resulting change log will contain duplicates if an issue _and its
-associated pull request_ are both linked to the milestone.
-
-To prevent this, link _either_ the issue to a milestone (this is our preference
-for our own repositories), _or_ link the pull request, but _not_ both.
-
-Issues which do not have an associated pull request (was that you who force-pushed 🔥 it
-straight to main?) should be linked to a milestone so that they are included in the change log.
-
-Similarly, pull requests that are not associated with an issue, such as ones created by dependabot,
-should be linked to a milestone so that they are included in the change log.
+The key rule: link _either_ the issue _or_ the pull request to the milestone,
+but _not_ both. Linking both will cause the same work to appear twice in the
+generated release notes.
 
 ### Annotated tags required for --use-tag-date-for-release
 
