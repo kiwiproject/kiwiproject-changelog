@@ -142,6 +142,33 @@ specified, the release date is taken from the annotated Git tag associated with 
 Note: This option requires the release tag to be an annotated Git tag. See
 [Annotated tags required for `--use-tag-date-for-release`](#annotated-tags-required-for---use-tag-date-for-release).
 
+### Setting up your workflow
+
+To get the most out of this tool, follow these conventions when working with
+issues and pull requests in GitHub:
+
+**Milestones** correspond directly to release versions. Create a milestone for
+each planned release using the version number without the leading `v` — for
+example, milestone `1.4.2` for tag `v1.4.2`. Assign the milestone to the items
+you want to appear in that release's changelog.
+
+**Labels** control how items are categorized in the changelog. Assign a label
+to each item so the tool knows which section it belongs to — for example,
+`enhancement` might map to an "Improvements" category, and `bug` to "Bugs".
+Items without a matching label are placed in the default category (if one is
+configured), or omitted.
+
+**When an issue has an associated pull request**, assign the milestone and label
+to the _issue_ only — not the pull request. The tool searches the milestone for
+both issues and pull requests, so assigning both would cause the same work to
+appear twice in the release notes. Using `Closes #NNN` or `Fixes #NNN` in the
+pull request description links them on GitHub without adding the PR to the
+milestone.
+
+**When a pull request has no associated issue** — such as a dependabot
+dependency update or a small direct fix — assign the milestone and label
+directly to the pull request so it is included in the changelog.
+
 ### How to prevent duplicates in change logs
 
 Because change logs are generated from the issues and pull requests associated with
