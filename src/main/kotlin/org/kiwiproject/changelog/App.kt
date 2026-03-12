@@ -14,6 +14,7 @@ import org.kiwiproject.changelog.github.GitHubMilestoneManager
 import org.kiwiproject.changelog.github.GitHubPagingHelper
 import org.kiwiproject.changelog.github.GitHubReleaseManager
 import org.kiwiproject.changelog.github.GitHubSearchManager
+import io.github.oshai.kotlinlogging.KotlinLogging
 import picocli.CommandLine
 import picocli.CommandLine.Command
 import picocli.CommandLine.ITypeConverter
@@ -69,6 +70,8 @@ import kotlin.system.exitProcess
         ""
     ]
 )
+private val LOG = KotlinLogging.logger {}
+
 class App : Runnable {
 
     class VersionProvider : IVersionProvider {
@@ -279,6 +282,15 @@ class App : Runnable {
             return
         }
 
+        try {
+            runChangelog()
+        } catch (e: Exception) {
+            LOG.error(e) { "Changelog generation failed: ${e.message}" }
+            throw e
+        }
+    }
+
+    private fun runChangelog() {
         println("⚙️  Generating change log for version $revision")
 
         val githubToken = token ?: System.getenv("KIWI_CHANGELOG_TOKEN")

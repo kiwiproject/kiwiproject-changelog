@@ -136,7 +136,9 @@ class GitHubSearchManager(
         return if (commitContainer["author"] != null) {
             gitHubUserFrom(authorName, commitContainer)
         } else {
-            println("⚠️  WARN: Commit has null author: API: ${commitContainer["url"]} , HTML: ${commitContainer["html_url"]}")
+            val message = "Commit has null author: API: ${commitContainer["url"]}, HTML: ${commitContainer["html_url"]}"
+            LOG.warn { message }
+            println("⚠️  WARN: $message")
             GitHubUser(authorName, null, null)
         }
     }
