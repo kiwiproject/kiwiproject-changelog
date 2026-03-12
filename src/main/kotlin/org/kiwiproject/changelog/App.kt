@@ -245,6 +245,12 @@ class App : Runnable {
     )
     var hyperlinks: Boolean? = null
 
+    @Option(
+        names = ["--add-milestone-link"],
+        description = ["When set, appends a link to the closed milestone issues at the end of the generated changelog."]
+    )
+    var addMilestoneLink: Boolean? = null
+
     // Summary options
 
     @Option(
@@ -327,17 +333,23 @@ class App : Runnable {
         }
         val out = outputFile?.let { File(it) }
 
+        val githubApi = GitHubApi(githubToken)
+        val mapper = jacksonObjectMapper()
+        val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
+
+        val shouldAddMilestoneLink = addMilestoneLink ?: externalConfig.addMilestoneLink
+        val milestoneLink = resolveMilestoneLink(shouldAddMilestoneLink, repoConfig, milestoneManager)
+
         val useTagDate = useTagDateForRelease ?: externalConfig.useTagDateForRelease
         val changeLogConfig = ChangelogConfig(
             useTagDateForRelease = useTagDate,
             outputType = outputType,
             outputFile = out,
             categoryConfig = categoryConfig,
-            summary = resolveSummary(summary, summaryFile, spec)
+            summary = resolveSummary(summary, summaryFile, spec),
+            milestoneLink = milestoneLink
         )
 
-        val githubApi = GitHubApi(githubToken)
-        val mapper = jacksonObjectMapper()
         val releaseManager = GitHubReleaseManager(repoConfig, githubApi, mapper)
         val gitHubPagingHelper = GitHubPagingHelper()
         val searchManager = GitHubSearchManager(repoConfig, githubApi, gitHubPagingHelper, mapper)
@@ -353,7 +365,6 @@ class App : Runnable {
         println("✔ Number of commits: ${generateResult.commitCount}")
 
         // Optional: close the milestone
-        val milestoneManager = GitHubMilestoneManager(repoConfig, githubApi, mapper)
         val shouldCloseMilestone = closeMilestone ?: externalConfig.closeMilestone
         val shouldUseHyperlinks = hyperlinks ?: externalConfig.hyperlinks
         if (shouldCloseMilestone) {
@@ -411,6 +422,7 @@ class App : Runnable {
         println("✔ stripVPrefixFromNextMilestone = $stripVPrefixFromNextMilestone")
         println("✔ addVPrefixToRevisions = $addVPrefixToRevisions")
         println("✔ hyperlinks = $hyperlinks")
+        println("✔ addMilestoneLink = $addMilestoneLink")
 
         // Debug options
         println("✔ debugArgs = $debugArgs")
@@ -512,6 +524,27 @@ class App : Runnable {
             }
 
             return milestoneManager.createMilestone(title)
+        }
+
+        @VisibleForTesting
+        fun resolveMilestoneLink(
+            shouldAddMilestoneLink: Boolean,
+            repoConfig: RepoConfig,
+            milestoneManager: GitHubMilestoneManager
+        ): String? {
+            if (!shouldAddMilestoneLink) return null
+
+            val milestoneTitle = repoConfig.milestone()
+            LOG.debug { "Looking up milestone '$milestoneTitle' to build milestone link" }
+            val milestone = milestoneManager.getOpenMilestoneByTitleOrNull(milestoneTitle)
+
+            return if (milestone != null) {
+                "${milestone.htmlUrl}?closed=1"
+            } else {
+                LOG.warn { "Milestone '$milestoneTitle' not found; milestone link will not be added to changelog" }
+                println("⚠️  Milestone '$milestoneTitle' not found; milestone link will not be added to changelog")
+                null
+            }
         }
     }
 }

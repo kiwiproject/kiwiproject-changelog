@@ -72,6 +72,7 @@ class AppTest {
             { assertThat(app.createNextMilestone).isNull() },
             { assertThat(app.addVPrefixToRevisions).isNull() },
             { assertThat(app.hyperlinks).isNull() },
+            { assertThat(app.addMilestoneLink).isNull() },
         )
     }
 
@@ -193,6 +194,7 @@ class AppTest {
                 "--strip-v-prefix-from-next-milestone",
                 "--add-v-prefix-to-revisions",
                 "--hyperlinks",
+                "--add-milestone-link",
                 "--summary",
                 "This is a cool summary of the release!"
             )
@@ -252,6 +254,7 @@ class AppTest {
         assertThat(app.stripVPrefixFromNextMilestone).isTrue()
         assertThat(app.addVPrefixToRevisions).isTrue()
         assertThat(app.hyperlinks).isTrue()
+        assertThat(app.addMilestoneLink).isTrue()
     }
 
     @ParameterizedTest
@@ -489,6 +492,60 @@ class AppTest {
         )
 
         assertThat(app.hyperlinks).isFalse()
+    }
+
+    @Nested
+    inner class ResolveMilestoneLink {
+
+        private val url = "https://fake-github.com"
+        private val apiUrl = "https://api.fake-github.com"
+        private val token = "abc-123"
+        private val repository = "fakeorg/fakerepo"
+        private val urlPrefix = "https://fake-github.com/fakeorg/fakerepo/milestones/"
+
+        private lateinit var milestoneManager: GitHubMilestoneManager
+
+        @BeforeEach
+        fun setUp() {
+            milestoneManager = mock(GitHubMilestoneManager::class.java)
+        }
+
+        @Test
+        fun shouldReturnNull_WhenAddMilestoneLinkIsFalse() {
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v1.5.0", milestone = null)
+            val result = App.resolveMilestoneLink(false, repoConfig, milestoneManager)
+
+            assertThat(result).isNull()
+            verifyNoMoreInteractions(milestoneManager)
+        }
+
+        @Test
+        fun shouldReturnClosedMilestoneUrl_WhenMilestoneFound() {
+            val number = 25
+            val title = "1.5.0"
+            val htmlUrl = urlPrefix + number
+            val milestone = GitHubMilestone(number, title, htmlUrl)
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(milestone)
+
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v${title}", milestone = null)
+            val result = App.resolveMilestoneLink(true, repoConfig, milestoneManager)
+
+            assertThat(result).isEqualTo("$htmlUrl?closed=1")
+            verify(milestoneManager).getOpenMilestoneByTitleOrNull(title)
+            verifyNoMoreInteractions(milestoneManager)
+        }
+
+        @Test
+        fun shouldReturnNull_WhenMilestoneNotFound() {
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(null)
+
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v1.5.0", milestone = null)
+            val result = App.resolveMilestoneLink(true, repoConfig, milestoneManager)
+
+            assertThat(result).isNull()
+            verify(milestoneManager).getOpenMilestoneByTitleOrNull("1.5.0")
+            verifyNoMoreInteractions(milestoneManager)
+        }
     }
 
     @Nested

@@ -18,5 +18,6 @@ data class ChangelogConfig(
     val outputType: OutputType = OutputType.CONSOLE,
     val outputFile: File? = null,
     val categoryConfig: CategoryConfig = CategoryConfig.empty(),
-    val summary: String? = null
+    val summary: String? = null,
+    val milestoneLink: String? = null
 )

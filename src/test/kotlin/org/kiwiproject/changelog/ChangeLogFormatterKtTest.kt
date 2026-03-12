@@ -190,10 +190,56 @@ class ChangeLogFormatterKtTest {
             return repoConfig
         }
 
-        private fun changelogConfig(categoryConfig: CategoryConfig, summary: String? = null) = ChangelogConfig(
+        @Test
+        fun shouldGenerateMarkdownFormattedChanges_WithMilestoneLink() {
+            val authors = gitHubUsers()
+            val authorsResult = CommitAuthorsResult(authors, 4)
+            val changes = gitHubChanges()
+            val repoConfig = repoConfig()
+            val categoryConfig = categoryConfig()
+            val milestoneLink = "https://fake-github.com/fakeorg/fakerepo/milestone/42?closed=1"
+            val changelogConfig = changelogConfig(categoryConfig, milestoneLink = milestoneLink)
+
+            val changelog = formatChangeLog(
+                authorsResult,
+                changes,
+                repoConfig,
+                changelogConfig,
+                repoConfig.repoUrl(),
+                changelogConfig.date
+            )
+
+            assertThat(changelog.trim()).isEqualTo(
+                """
+                ## Summary
+                - 2024-07-13T15:44:45Z - [4 commit(s)](https://fake-github.com/fakeorg/fakerepo/compare/v1.4.1...v1.4.2) by [Scott Leberknight](https://fake-github.com/sleberknight), [dependabot[bot]](https://fake-github.com/apps/dependabot)
+
+                ## Improvements 🚀
+                * Make the foo better [(#142)](https://fake-github.com/fakeorg/fakerepo/issues/142)
+
+                ## Bugs 🪲
+                * Fix the space modulator [(#154)](https://fake-github.com/fakeorg/fakerepo/issues/154)
+
+                ## Documentation 🗒️
+                * Add more documentation to the bar and baz [(#150)](https://fake-github.com/fakeorg/fakerepo/issues/150)
+
+                ## Dependency Updates ⚙️
+                * Bump quux-core from 1.6.0 to 1.7.2 [(#151)](https://fake-github.com/fakeorg/fakerepo/pull/151)
+
+                See associated milestone: $milestoneLink
+            """.trimIndent()
+            )
+        }
+
+        private fun changelogConfig(
+            categoryConfig: CategoryConfig,
+            summary: String? = null,
+            milestoneLink: String? = null
+        ) = ChangelogConfig(
             date = ZonedDateTime.of(2024, 7, 13, 15, 44, 45, 34567, ZoneOffset.UTC),
             categoryConfig = categoryConfig,
-            summary = summary
+            summary = summary,
+            milestoneLink = milestoneLink
         )
 
         private fun categoryConfig() = CategoryConfig(
