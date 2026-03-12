@@ -1,9 +1,12 @@
 package org.kiwiproject.changelog.github
 
 import com.google.common.annotations.VisibleForTesting
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.commons.lang3.StringUtils.abbreviate
 
 private const val NO_NEXT_PAGE = "none"
+
+private val LOG = KotlinLogging.logger {}
 
 class GitHubPagingHelper {
 
@@ -12,6 +15,7 @@ class GitHubPagingHelper {
         var page = 1
 
         while (hasNextPage(nextPageUrl)) {
+            LOG.debug { "Fetching page $page: $nextPageUrl" }
             val response = api.get(nextPageUrl)
             checkOkResponse(response)
 
