@@ -2,7 +2,10 @@ package org.kiwiproject.changelog.github
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.kiwiproject.changelog.config.RepoConfig
+
+private val LOG = KotlinLogging.logger {}
 
 /**
  * Provides a simple way to interact with GitHub releases.
@@ -27,6 +30,7 @@ class GitHubReleaseManager(
      * is not 201 Created.
      */
     fun createRelease(tagName: String, releaseContent: String): GitHubRelease {
+        LOG.debug { "Creating release for tag '$tagName'" }
         checkTagExists(tagName)
         checkReleaseDoesNotExist(tagName)
 
@@ -42,15 +46,19 @@ class GitHubReleaseManager(
         }
 
         val responseContent = mapper.readValue<Map<String, Any>>(response.content)
-        return GitHubRelease.from(responseContent)
+        val release = GitHubRelease.from(responseContent)
+        LOG.debug { "Created release for tag '$tagName': ${release.htmlUrl}" }
+        return release
     }
 
     private fun checkTagExists(tagName: String) {
         val tagUrl = tagUrlFor(tagName)
+        LOG.debug { "Checking tag exists: $tagUrl" }
         val getTagResponse = api.get(tagUrl)
         check(getTagResponse.statusCode == 200) {
             "Get tag was unsuccessful. Status: ${getTagResponse.statusCode}. Text: ${getTagResponse.content}"
         }
+        LOG.debug { "Tag '$tagName' exists" }
     }
 
     private fun tagUrlFor(tagName: String) =
@@ -70,6 +78,7 @@ class GitHubReleaseManager(
         }
 
         val releasesList = mapper.readValue<List<Map<String, Any>>>(listReleasesResponse.content)
+        LOG.debug { "Checking ${releasesList.size} releases to verify '$tagName' does not already exist" }
         val releases = releasesList.map { release ->
             mapOf("name" to release["name"], "tag_name" to release["tag_name"])
         }

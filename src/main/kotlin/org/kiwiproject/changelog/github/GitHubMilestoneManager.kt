@@ -2,7 +2,10 @@ package org.kiwiproject.changelog.github
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.kiwiproject.changelog.config.RepoConfig
+
+private val LOG = KotlinLogging.logger {}
 
 /**
  * Provides a simple way to interact with GitHub milestones.
@@ -41,12 +44,20 @@ class GitHubMilestoneManager(
         val foundMilestone: Map<String, Any>? = milestones.firstOrNull { it["title"] as String == title }
 
         return when (foundMilestone) {
-            null -> null
-            else -> GitHubMilestone.from(foundMilestone)
+            null -> {
+                LOG.debug { "No open milestone found with title '$title'" }
+                null
+            }
+            else -> {
+                val milestone = GitHubMilestone.from(foundMilestone)
+                LOG.debug { "Found open milestone: #${milestone.number} '${milestone.title}'" }
+                milestone
+            }
         }
     }
 
     fun closeMilestone(number: Int): GitHubMilestone {
+        LOG.debug { "Closing milestone #$number" }
         val closeUrl = closeMilestoneUrl(number)
         val bodyParameters = mapOf<String, Any>(
             "state" to "closed"
@@ -59,13 +70,16 @@ class GitHubMilestoneManager(
         }
 
         val responseContent = mapper.readValue<Map<String, Any>>(response.content)
-        return GitHubMilestone.from(responseContent)
+        val milestone = GitHubMilestone.from(responseContent)
+        LOG.debug { "Closed milestone: #${milestone.number} '${milestone.title}'" }
+        return milestone
     }
 
     private fun closeMilestoneUrl(number: Int): String =
         "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones/$number"
 
     fun createMilestone(title: String): GitHubMilestone {
+        LOG.debug { "Creating milestone '$title'" }
         val createUrl = createMilestoneUrl()
         val bodyParameters = mapOf<String, Any>(
             "title" to title
@@ -78,7 +92,9 @@ class GitHubMilestoneManager(
         }
 
         val responseContent = mapper.readValue<Map<String, Any>>(response.content)
-        return GitHubMilestone.from(responseContent)
+        val milestone = GitHubMilestone.from(responseContent)
+        LOG.debug { "Created milestone: #${milestone.number} '${milestone.title}'" }
+        return milestone
     }
 
     private fun createMilestoneUrl(): String =

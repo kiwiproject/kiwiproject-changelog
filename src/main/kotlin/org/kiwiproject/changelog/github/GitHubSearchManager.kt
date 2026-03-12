@@ -3,6 +3,7 @@ package org.kiwiproject.changelog.github
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.common.annotations.VisibleForTesting
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.kiwiproject.changelog.config.RepoConfig
 import org.kiwiproject.changelog.extension.getInt
 import org.kiwiproject.changelog.extension.getListOfMaps
@@ -10,6 +11,8 @@ import org.kiwiproject.changelog.extension.getMap
 import org.kiwiproject.changelog.extension.getString
 import java.time.ZonedDateTime
 import java.util.concurrent.atomic.AtomicInteger
+
+private val LOG = KotlinLogging.logger {}
 
 class GitHubSearchManager(
     private val repoConfig: RepoConfig,
@@ -52,7 +55,9 @@ class GitHubSearchManager(
             val responseContent = mapper.readValue<Map<String, Any>>(response.content)
 
             if (page == 1) {
-                totalCount.addAndGet(responseContent["total_count"] as Int)
+                val count = responseContent["total_count"] as Int
+                LOG.debug { "Search for ${type}s in milestone '$milestoneTitle' found $count total" }
+                totalCount.addAndGet(count)
             }
 
             val items = responseContent.getListOfMaps("items")
@@ -89,6 +94,7 @@ class GitHubSearchManager(
     }
 
     fun findUniqueAuthorsInCommitsBetween(base: String, head: String): CommitAuthorsResult {
+        LOG.debug { "Finding unique commit authors between $base and $head" }
         val authors = mutableSetOf<GitHubUser>()
         val firstPageUrl = createCompareCommitsUrl(base, head)
         var totalCommits = 0
@@ -105,6 +111,7 @@ class GitHubSearchManager(
             authors.addAll(pageOfUniqueAuthors)
         }
 
+        LOG.debug { "Found ${authors.size} unique authors across $totalCommits commits between $base and $head" }
         return CommitAuthorsResult(authors, totalCommits)
     }
 
@@ -151,6 +158,7 @@ class GitHubSearchManager(
         "${repoConfig.apiUrl}/repos/${repoConfig.repository}/compare/${base}...${head}?per_page=100&page=1"
 
     fun findAnnotatedTag(tagName: String): GitHubTag {
+        LOG.debug { "Finding annotated tag '$tagName'" }
         // Get the tag reference and extract the tag object URL
         val tagRefUrl = "${repoConfig.apiUrl}/repos/${repoConfig.repository}/git/refs/tags/$tagName"
         val tagRefResponse = api.get(tagRefUrl)
@@ -175,6 +183,7 @@ class GitHubSearchManager(
         val tagData = mapper.readValue<Map<String, Any>>(tagResponse.content)
         val tagger = tagData.getMap("tagger")
         val date = ZonedDateTime.parse(tagger.getString("date"))
+        LOG.debug { "Annotated tag '$tagName' has date $date" }
         return GitHubTag(tagName, date)
     }
 
