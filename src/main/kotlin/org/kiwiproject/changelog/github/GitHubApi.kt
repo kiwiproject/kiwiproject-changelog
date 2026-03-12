@@ -83,6 +83,12 @@ class GitHubApi(
                 " Resource: ${response.rateLimitResource}"
         LOG.at(humanTimeUntilReset.logLevel) { this.message = rateLimitLogMessage }
 
+        if (!response.belowRateLimit()) {
+            LOG.error {
+                "Rate limit exceeded for resource: ${response.rateLimitResource}." +
+                        " No more requests can be made to that resource until $rateLimitReset (${humanTimeUntilReset.message})"
+            }
+        }
         check(response.belowRateLimit()) {
             IllegalStateException(
                 "Rate limit exceeded for resource: ${response.rateLimitResource}." +
