@@ -24,7 +24,7 @@ fun formatChangeLog(
         ## Summary
         - @date@ - [@commitCount@ commit(s)](@repoUrl@/compare/@previousRev@...@newRev@) by @authors@
 
-        @summary@@changes@
+        @summary@@changes@@milestoneLink@
     """.trimIndent()
 
     val authors = commitAuthorsResult.authors.joinToString(", ") { author -> author.asMarkdown() }
@@ -47,7 +47,11 @@ fun formatChangeLog(
             repoConfig.milestone(),
             changelogConfig.categoryConfig.categoryOrder,
             changelogConfig.categoryConfig.categoryToEmoji
-        )
+        ),
+        "milestoneLink" to when (val link = changelogConfig.milestoneLink) {
+            null -> ""
+            else -> "See associated milestone: $link\n"
+        }
     )
 
     return replaceTokens(template, logData)
