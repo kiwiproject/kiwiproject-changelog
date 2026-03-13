@@ -30,6 +30,8 @@ import java.nio.file.Paths
 import kotlin.io.path.readText
 import kotlin.system.exitProcess
 
+private val LOG = KotlinLogging.logger {}
+
 @Command(
     name = "ChangelogGenerator",
     versionProvider = App.VersionProvider::class,
@@ -70,8 +72,6 @@ import kotlin.system.exitProcess
         ""
     ]
 )
-private val LOG = KotlinLogging.logger {}
-
 class App : Runnable {
 
     class VersionProvider : IVersionProvider {
