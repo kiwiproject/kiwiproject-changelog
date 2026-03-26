@@ -38,7 +38,7 @@
         <!-- Nothing to see here yet...move along... -->
 
         <!-- Versions for plugins -->
-        <dokka-maven-plugin.version>2.1.0</dokka-maven-plugin.version>
+        <dokka-maven-plugin.version>2.2.0</dokka-maven-plugin.version>
         <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
         <kotlin-maven-plugin.version>2.3.20</kotlin-maven-plugin.version>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
