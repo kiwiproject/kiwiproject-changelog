@@ -186,6 +186,35 @@ git tag -a v1.2.3 -m "Release v1.2.3"
 git push origin v1.2.3
 ```
 
+### Generating the first changelog (initial release)
+
+When generating a changelog for the very first release of a repository, there
+is no previous release tag to use as `--previous-rev`. However, a previous
+revision is still required because the changelog generator uses the commit
+range between the two revisions to discover unique commit authors and list
+them as contributors to the release.
+
+The workaround is to create a synthetic annotated tag at the very first commit
+in the repository before generating the changelog:
+
+```bash
+git tag -a v0.0.0 $(git rev-list --max-parents=0 HEAD) -m "Initial synthetic tag for changelog baseline"
+git push origin v0.0.0
+```
+
+This creates an annotated tag named `v0.0.0` at the root commit (the very
+first commit). Once pushed, you can generate the changelog for your first
+real release using `v0.0.0` as the previous revision:
+
+```bash
+--previous-rev v0.0.0
+--revision v0.5.0
+```
+
+Replace `v0.5.0` with whatever your first real release tag is. Because
+`v0.0.0` is a synthetic baseline with no real content, it will not appear
+as a meaningful release in your history.
+
 ## Command line arguments
 
 Here is a sample argument list that generates a changelog for the [kiwi](https://github.com/kiwiproject/kiwi)
