@@ -331,49 +331,96 @@ class AppTest {
         }
 
         @Test
-        fun shouldClose_BasedOnRevision() {
+        fun shouldReturnClosed_BasedOnRevision() {
             val number = 1
             val title = "1.4.2"
             val htmlUrl = urlPrefix + number
             val milestone = GitHubMilestone(number, title, htmlUrl)
-            `when`(milestoneManager.getOpenMilestoneByTitle(anyString())).thenReturn(milestone)
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(milestone)
             `when`(milestoneManager.closeMilestone(anyInt())).thenReturn(milestone)
 
             val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v${title}", milestone = null)
-            val closedMilestone = App.closeMilestone(
+            val result = App.closeMilestone(
                 repoConfig = repoConfig,
                 maybeMilestoneTitle = null,
                 milestoneManager = milestoneManager
             )
 
-            assertThat(closedMilestone).isSameAs(milestone)
+            assertThat(result).isInstanceOf(CloseMilestoneResult.Closed::class.java)
+            assertThat((result as CloseMilestoneResult.Closed).milestone).isSameAs(milestone)
 
             verifyMilestoneManagerCalls(title, number)
         }
 
         @Test
-        fun shouldClose_UsingExplicitMilestone() {
+        fun shouldReturnClosed_UsingExplicitMilestone() {
             val number = 4
             val title = "1.5.0"
             val htmlUrl = urlPrefix + number
             val milestone = GitHubMilestone(number, title, htmlUrl)
-            `when`(milestoneManager.getOpenMilestoneByTitle(anyString())).thenReturn(milestone)
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(milestone)
             `when`(milestoneManager.closeMilestone(anyInt())).thenReturn(milestone)
 
             val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.4.1", "v${title}", milestone = null)
-            val closedMilestone = App.closeMilestone(
+            val result = App.closeMilestone(
                 repoConfig = repoConfig,
                 maybeMilestoneTitle = "1.5.0",
                 milestoneManager = milestoneManager
             )
 
-            assertThat(closedMilestone).isSameAs(milestone)
+            assertThat(result).isInstanceOf(CloseMilestoneResult.Closed::class.java)
+            assertThat((result as CloseMilestoneResult.Closed).milestone).isSameAs(milestone)
 
             verifyMilestoneManagerCalls(title, number)
         }
 
+        @Test
+        fun shouldReturnAlreadyClosed_WhenMilestoneIsAlreadyClosed() {
+            val number = 2
+            val title = "1.4.0"
+            val htmlUrl = urlPrefix + number
+            val milestone = GitHubMilestone(number, title, htmlUrl)
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(null)
+            `when`(milestoneManager.getClosedMilestoneByTitleOrNull(anyString())).thenReturn(milestone)
+
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.3.9", "v${title}", milestone = null)
+            val result = App.closeMilestone(
+                repoConfig = repoConfig,
+                maybeMilestoneTitle = null,
+                milestoneManager = milestoneManager
+            )
+
+            assertThat(result).isInstanceOf(CloseMilestoneResult.AlreadyClosed::class.java)
+            assertThat((result as CloseMilestoneResult.AlreadyClosed).milestone).isSameAs(milestone)
+
+            verify(milestoneManager).getOpenMilestoneByTitleOrNull(title)
+            verify(milestoneManager).getClosedMilestoneByTitleOrNull(title)
+            verifyNoMoreInteractions(milestoneManager)
+        }
+
+        @Test
+        fun shouldReturnNotFound_WhenMilestoneDoesNotExist() {
+            val title = "1.4.0"
+            `when`(milestoneManager.getOpenMilestoneByTitleOrNull(anyString())).thenReturn(null)
+            `when`(milestoneManager.getClosedMilestoneByTitleOrNull(anyString())).thenReturn(null)
+
+            val repoConfig = RepoConfig(url, apiUrl, token, repository, "v1.3.9", "v${title}", milestone = null)
+            val result = App.closeMilestone(
+                repoConfig = repoConfig,
+                maybeMilestoneTitle = null,
+                milestoneManager = milestoneManager
+            )
+
+            assertThat(result).isInstanceOf(CloseMilestoneResult.NotFound::class.java)
+            assertThat((result as CloseMilestoneResult.NotFound).title).isEqualTo(title)
+
+            verify(milestoneManager).getOpenMilestoneByTitleOrNull(title)
+            verify(milestoneManager).getClosedMilestoneByTitleOrNull(title)
+            verifyNoMoreInteractions(milestoneManager)
+        }
+
         private fun verifyMilestoneManagerCalls(title: String, number: Int) {
-            verify(milestoneManager).getOpenMilestoneByTitle(title)
+            verify(milestoneManager).getOpenMilestoneByTitleOrNull(title)
             verify(milestoneManager).closeMilestone(number)
             verifyNoMoreInteractions(milestoneManager)
         }

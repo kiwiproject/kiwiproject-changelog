@@ -19,6 +19,9 @@ class GitHubMilestoneManager(
     private val listOpenMilestonesUrl =
         "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones?state=open&per_page=50"
 
+    private val listClosedMilestonesUrl =
+        "${repoConfig.apiUrl}/repos/${repoConfig.repository}/milestones?state=closed&per_page=50"
+
     fun getOpenMilestoneByTitle(title: String): GitHubMilestone {
         val maybeMilestone = getOpenMilestoneByTitleOrNull(title)
         check(maybeMilestone != null) {
@@ -28,8 +31,14 @@ class GitHubMilestoneManager(
         return maybeMilestone
     }
 
-    fun getOpenMilestoneByTitleOrNull(title: String): GitHubMilestone? {
-        val response = api.get(listOpenMilestonesUrl)
+    fun getOpenMilestoneByTitleOrNull(title: String): GitHubMilestone? =
+        getMilestoneByTitleOrNull(title, listOpenMilestonesUrl, "open")
+
+    fun getClosedMilestoneByTitleOrNull(title: String): GitHubMilestone? =
+        getMilestoneByTitleOrNull(title, listClosedMilestonesUrl, "closed")
+
+    private fun getMilestoneByTitleOrNull(title: String, listUrl: String, state: String): GitHubMilestone? {
+        val response = api.get(listUrl)
         check(response.statusCode == 200) {
             "List milestones request failed. Status: ${response.statusCode}. Text: ${response.content}"
         }
@@ -45,12 +54,12 @@ class GitHubMilestoneManager(
 
         return when (foundMilestone) {
             null -> {
-                LOG.debug { "No open milestone found with title '$title'" }
+                LOG.debug { "No $state milestone found with title '$title'" }
                 null
             }
             else -> {
                 val milestone = GitHubMilestone.from(foundMilestone)
-                LOG.debug { "Found open milestone: #${milestone.number} '${milestone.title}'" }
+                LOG.debug { "Found $state milestone: #${milestone.number} '${milestone.title}'" }
                 milestone
             }
         }

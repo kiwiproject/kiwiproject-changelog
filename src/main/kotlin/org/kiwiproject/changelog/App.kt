@@ -368,8 +368,15 @@ class App : Runnable {
         val shouldCloseMilestone = closeMilestone ?: externalConfig.closeMilestone
         val shouldUseHyperlinks = hyperlinks ?: externalConfig.hyperlinks
         if (shouldCloseMilestone) {
-            val closedMilestone = closeMilestone(repoConfig, milestone, milestoneManager)
-            println("✅ Closed milestone ${closedMilestone.title}. See it at ${formatUrl(closedMilestone.htmlUrl, shouldUseHyperlinks)}")
+            println("⚙️  Closing milestone ${repoConfig.milestone()}")
+            when (val result = closeMilestone(repoConfig, milestone, milestoneManager)) {
+                is CloseMilestoneResult.Closed ->
+                    println("✅ Closed milestone ${result.milestone.title}. See it at ${formatUrl(result.milestone.htmlUrl, shouldUseHyperlinks)}")
+                is CloseMilestoneResult.AlreadyClosed ->
+                    println("⚠️  Milestone ${result.milestone.title} is already closed. Skipping.")
+                is CloseMilestoneResult.NotFound ->
+                    println("⚠️  Milestone ${result.title} not found. Skipping.")
+            }
         }
 
         // Optional: create a new milestone
@@ -503,14 +510,21 @@ class App : Runnable {
             repoConfig: RepoConfig,
             maybeMilestoneTitle: String?,
             milestoneManager: GitHubMilestoneManager
-        ): GitHubMilestone {
+        ): CloseMilestoneResult {
             val milestoneTitle = maybeMilestoneTitle ?: repoConfig.milestone()
-            println("⚙️  Closing milestone $milestoneTitle")
 
-            val milestone = milestoneManager.getOpenMilestoneByTitle(milestoneTitle)
-            val closedMilestone = milestoneManager.closeMilestone(milestone.number)
+            val openMilestone = milestoneManager.getOpenMilestoneByTitleOrNull(milestoneTitle)
+            if (openMilestone != null) {
+                val closed = milestoneManager.closeMilestone(openMilestone.number)
+                return CloseMilestoneResult.Closed(closed)
+            }
 
-            return closedMilestone
+            val closedMilestone = milestoneManager.getClosedMilestoneByTitleOrNull(milestoneTitle)
+            if (closedMilestone != null) {
+                return CloseMilestoneResult.AlreadyClosed(closedMilestone)
+            }
+
+            return CloseMilestoneResult.NotFound(milestoneTitle)
         }
 
         @VisibleForTesting
@@ -547,4 +561,10 @@ class App : Runnable {
             }
         }
     }
+}
+
+sealed class CloseMilestoneResult {
+    data class Closed(val milestone: GitHubMilestone) : CloseMilestoneResult()
+    data class AlreadyClosed(val milestone: GitHubMilestone) : CloseMilestoneResult()
+    data class NotFound(val title: String) : CloseMilestoneResult()
 }

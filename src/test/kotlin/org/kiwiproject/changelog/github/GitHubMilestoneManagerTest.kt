@@ -190,8 +190,93 @@ class GitHubMilestoneManagerTest {
         }
     }
 
+    @Nested
+    inner class GetClosedMilestoneByTitleOrNull {
+
+        @Test
+        fun shouldGetMilestone() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(getClosedMilestonesResponseJson())
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            val milestone = milestoneManager.getClosedMilestoneByTitleOrNull("0.9.0-alpha")!!
+
+            assertMilestone(milestone)
+            assertListClosedMilestonesRequest()
+        }
+
+        @Test
+        fun shouldReturnNull_WhenDoesNotExist() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(getClosedMilestonesResponseJson())
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            val milestone = milestoneManager.getClosedMilestoneByTitleOrNull("0.10.0")
+            assertThat(milestone).isNull()
+
+            assertListClosedMilestonesRequest()
+        }
+
+        @Test
+        fun shouldThrowIllegalState_WhenListMilestoneRequestFails() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(500)
+                    .setBody("List milestones failed")
+                    .addGitHubRateLimitHeaders()
+            )
+
+            assertThatIllegalStateException()
+                .isThrownBy { milestoneManager.getClosedMilestoneByTitleOrNull("0.9.0-alpha") }
+                .withMessage("List milestones request failed. Status: 500. Text: List milestones failed")
+
+            assertListClosedMilestonesRequest()
+        }
+
+        @Test
+        fun shouldThrowIllegalState_WhenGetLinkHeader() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody("[]")
+                    .addHeader("Link", "")
+                    .addJsonContentTypeHeader()
+                    .addGitHubRateLimitHeaders()
+            )
+
+            assertThatIllegalStateException()
+                .isThrownBy { milestoneManager.getClosedMilestoneByTitleOrNull("0.9.0-alpha") }
+                .withMessage("We received a Link header when we were not expecting it!")
+
+            assertListClosedMilestonesRequest()
+        }
+
+        private fun assertListClosedMilestonesRequest() {
+            val listMilestonesRequest = server.takeRequestWith1SecTimeout()
+
+            assertAll(
+                { assertThat(listMilestonesRequest.method).isEqualTo("GET") },
+                {
+                    assertThat(listMilestonesRequest.path)
+                        .isEqualTo("/repos/sleberknight/kotlin-scratch-pad/milestones?state=closed&per_page=50")
+                }
+            )
+        }
+    }
+
     private fun getOpenMilestonesResponseJson() =
         Fixtures.fixture("github-list-open-milestones-response.json")
+
+    private fun getClosedMilestonesResponseJson() =
+        Fixtures.fixture("github-list-closed-milestones-response.json")
 
     private fun assertListMilestonesRequest() {
         val listMilestonesRequest = server.takeRequestWith1SecTimeout()
