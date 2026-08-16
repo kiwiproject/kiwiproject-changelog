@@ -162,6 +162,7 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
+                        <configuration/>
                     </execution>
                     <execution>
                         <id>test-compile</id>
@@ -171,6 +172,21 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-lombok</artifactId>
+                        <version>${kotlin-maven-plugin.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <compilerPlugins>
+                        <plugin>lombok</plugin>
+                    </compilerPlugins>
+                    <pluginOptions>
+                        <option>lombok:config=${project.basedir}/lombok.config</option>
+                    </pluginOptions>
+                </configuration>
             </plugin>
 
             <plugin>
