@@ -1,7 +1,7 @@
 package org.kiwiproject.changelog.extension
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -50,8 +50,8 @@ class HttpHeadersExtensionsTest {
         }
 
         @Test
-        fun shouldThrowIllegalState_WhenHeaderDoesNotExist() {
-            assertThatIllegalStateException()
+        fun shouldThrowHttpHeaderException_WhenHeaderDoesNotExist() {
+            assertThatExceptionOfType(HttpHeaderException::class.java)
                 .isThrownBy { httpHeaders.firstValueOrThrow("Link") }
                 .withMessage("Link header was expected, but does not exist (case-insensitive)")
         }
@@ -67,15 +67,15 @@ class HttpHeadersExtensionsTest {
         }
 
         @Test
-        fun shouldThrowIllegalState_WhenHeaderDoesNotExist() {
-            assertThatIllegalStateException()
+        fun shouldThrowHttpHeaderException_WhenHeaderDoesNotExist() {
+            assertThatExceptionOfType(HttpHeaderException::class.java)
                 .isThrownBy { httpHeaders.firstValueAsLongOrThrow("Some-Custom-Header") }
                 .withMessage("Some-Custom-Header header was expected, but does not exist (case-insensitive)")
         }
 
         @Test
-        fun shouldThrowIllegalState_WhenHeaderExists_ButValueIsNotConvertibleToLong() {
-            assertThatIllegalStateException()
+        fun shouldThrowHttpHeaderException_WhenHeaderExists_ButValueIsNotConvertibleToLong() {
+            assertThatExceptionOfType(HttpHeaderException::class.java)
                 .isThrownBy { httpHeaders.firstValueAsLongOrThrow("X-RateLimit-Resource") }
                 .withMessage("X-RateLimit-Resource header exists, but its value does not parse as a Long")
                 .havingCause()
