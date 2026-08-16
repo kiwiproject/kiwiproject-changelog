@@ -1,5 +1,7 @@
 package org.kiwiproject.changelog.github
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.kiwiproject.changelog.extension.HttpHeaderException
 import org.kiwiproject.changelog.extension.firstValueAsLongOrThrow
 import org.kiwiproject.changelog.extension.firstValueOrNull
 import org.kiwiproject.changelog.extension.firstValueOrThrow
@@ -8,6 +10,14 @@ import java.net.URI
 import java.net.http.HttpResponse
 import java.time.Duration
 import java.time.ZonedDateTime
+
+private val LOG = KotlinLogging.logger {}
+
+// GitHub error bodies are typically well under 300 characters, e.g.,
+// {"message": "Bad credentials","documentation_url": "..."}. Allow roughly
+// 4x that in the exception message, so most real error bodies, including
+// larger 422 validation payloads, come through without truncation.
+internal const val MAX_ERROR_BODY_LENGTH = 1200
 
 /**
  * Represents a generic GitHub response.
@@ -47,25 +57,70 @@ data class GitHubResponse(
 
         /**
          * Create a new GitHubResponse from the given HttpResponse.
+         *
+         * Throws [IllegalStateException] if the GitHub rate-limit headers cannot be parsed
+         * from the response, e.g., because the request failed (they are typically absent on
+         * an authentication failure) or an expected header was otherwise missing or malformed.
          */
         fun from(httpResponse: HttpResponse<String>): GitHubResponse {
-            val responseHeaders = httpResponse.headers()
-            val rateLimitLimit = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Limit")
-            val rateLimitRemaining = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Remaining")
-            val rateLimitResetEpochSeconds = responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Reset")
-            val rateLimitResource = responseHeaders.firstValueOrThrow("X-RateLimit-Resource")
-            val link = responseHeaders.firstValueOrNull("Link")
+            val rateLimit = parseRateLimitHeaders(httpResponse)
+            val link = httpResponse.headers().firstValueOrNull("Link")
 
             return GitHubResponse(
                 httpResponse.statusCode(),
                 httpResponse.uri(),
                 httpResponse.body(),
                 link,
-                rateLimitLimit,
-                rateLimitRemaining,
-                rateLimitResetEpochSeconds,
-                rateLimitResource
+                rateLimit.limit,
+                rateLimit.remaining,
+                rateLimit.resetEpochSeconds,
+                rateLimit.resource
             )
         }
+
+        private fun parseRateLimitHeaders(httpResponse: HttpResponse<String>): RateLimitHeaders {
+            val responseHeaders = httpResponse.headers()
+            return try {
+                RateLimitHeaders(
+                    responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Limit"),
+                    responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Remaining"),
+                    responseHeaders.firstValueAsLongOrThrow("X-RateLimit-Reset"),
+                    responseHeaders.firstValueOrThrow("X-RateLimit-Resource")
+                )
+            } catch (e: HttpHeaderException) {
+                val statusCode = httpResponse.statusCode()
+                val uri = httpResponse.uri()
+                val body = httpResponse.body()
+
+                val message = if (statusCode in 200..299) {
+                    "GitHub API response from $uri was HTTP $statusCode but is missing an expected header:" +
+                            " ${e.message}. Body: ${truncateBody(body)}"
+                } else {
+                    val tokenHint = if (statusCode == 401 || statusCode == 403) {
+                        " Verify that the GitHub token is correct, complete, and not expired."
+                    } else {
+                        ""
+                    }
+                    "GitHub API request to $uri failed with HTTP $statusCode: ${truncateBody(body)}.$tokenHint"
+                }
+
+                LOG.error { "$message (untruncated body: $body)" }
+                throw IllegalStateException(message, e)
+            }
+        }
+
+        private fun truncateBody(body: String): String =
+            if (body.length <= MAX_ERROR_BODY_LENGTH) {
+                body
+            } else {
+                "${body.take(MAX_ERROR_BODY_LENGTH)}...(truncated, ${body.length} bytes total)"
+            }
     }
 }
+
+private data class RateLimitHeaders(
+    val limit: Long,
+    val remaining: Long,
+    val resetEpochSeconds: Long,
+    val resource: String
+)

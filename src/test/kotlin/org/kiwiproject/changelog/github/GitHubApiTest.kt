@@ -208,6 +208,77 @@ class GitHubApiTest {
     }
 
     @Nested
+    inner class RateLimitHeaderParsing {
+
+        @ParameterizedTest
+        @ValueSource(ints = [401, 403])
+        fun shouldThrowIllegalState_AndSuggestCheckingToken_WhenAuthFailureIsMissingRateLimitHeaders(statusCode: Int) {
+            val errorBody = """{"message":"Bad credentials","documentation_url":"https://docs.github.com/rest"}"""
+
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(statusCode)
+                    .setBody(errorBody)
+                    .addJsonContentTypeHeader()
+            )
+
+            val url = server.urlWithoutTrailingSlashAsString(ISSUES_PATH)
+            assertThatIllegalStateException()
+                .isThrownBy { githubApi.get(url) }
+                .withMessageContaining(url)
+                .withMessageContaining("HTTP $statusCode")
+                .withMessageContaining(errorBody)
+                .withMessageContaining("Verify that the GitHub token is correct, complete, and not expired.")
+
+            server.takeRequestWith1SecTimeout()
+            server.assertNoMoreRequests()
+        }
+
+        @Test
+        fun shouldNotSuggestCheckingToken_WhenNonAuthFailureIsMissingRateLimitHeaders() {
+            val errorBody = """{"message":"${"x".repeat(2_000)}"}"""
+
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(422)
+                    .setBody(errorBody)
+                    .addJsonContentTypeHeader()
+            )
+
+            val url = server.urlWithoutTrailingSlashAsString(ISSUES_PATH)
+            assertThatIllegalStateException()
+                .isThrownBy { githubApi.get(url) }
+                .withMessageContaining("HTTP 422")
+                .withMessageContaining("...(truncated, ${errorBody.length} bytes total)")
+                .withMessageNotContaining(errorBody)
+                .withMessageNotContaining("Verify that the GitHub token")
+
+            server.takeRequestWith1SecTimeout()
+            server.assertNoMoreRequests()
+        }
+
+        @Test
+        fun shouldThrowIllegalState_WhenSuccessfulResponseIsMissingRateLimitHeaders() {
+            server.enqueue(
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody("[]")
+                    .addJsonContentTypeHeader()
+            )
+
+            val url = server.urlWithoutTrailingSlashAsString(ISSUES_PATH)
+            assertThatIllegalStateException()
+                .isThrownBy { githubApi.get(url) }
+                .withMessageContaining(url)
+                .withMessageContaining("was HTTP 200 but is missing an expected header")
+                .withMessageContaining("X-RateLimit-Limit header was expected, but does not exist")
+
+            server.takeRequestWith1SecTimeout()
+            server.assertNoMoreRequests()
+        }
+    }
+
+    @Nested
     inner class HumanTimeUntilReset {
 
         @ParameterizedTest
